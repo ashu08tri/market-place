@@ -21,23 +21,23 @@ function page({ params }) {
         <>
         <div>
           <div className='md:flex justify-evenly'>
-          <div className='h-1/2 md:w-5/12 md:mr-10'>
+          <div className='md:w-5/12 md:mr-10'>
           <p className='text-xs p-5 text-gray-400'><Link href='/' className='hover:underline pr-2'>Home</Link>/ <span className='pl-1 cursor-pointer'>{item[0].title}</span></p>
           <img src={item[0].img} alt={item[0].title} className='h-[calc(100vh-7rem)] w-full'/>
           </div>
-          <div className='h-1/2 md:w-4/12 px-6 pt-8 md:pt-20'>
+          <div className='md:w-4/12 px-6 pt-8 md:pt-20'>
           <h1 className='text-2xl font-bold tracking-widest'>{item[0].title}</h1>
           <p className='font-semibold py-2'>&#x20B9; {item[0].amount}</p>
           <p className='text-xs py-1 md:text-sm'>Tax included. Shipping calculated at checkout.</p>
           <div className='py-4'>
             <p className='text-sm pb-2'>SIZE:</p>
-            <SizeSelector sizes={item[0].quantity.size} />
+            <SizeSelector id={item[0].id} sizes={item[0].quantity.size} amount={item[0].amount} title={item[0].title} img={item[0].img} />
           </div>
           </div>
           </div>
           <div>
-          <div className='flex flex-col justify-center items-center px-20 mt-20'>
-          <p className='text-xl md:text-3xl tracking-widest pb-10'>EXPLORE THE SEASON</p>
+          <div className='flex flex-col justify-center items-center px-20'>
+          <p className='text-xl md:text-3xl tracking-widest pb-10 mt-16'>EXPLORE THE SEASON</p>
           <p className='text-center w-full md:w-3/4'>Our bikinis combine glamour and sustainability, giving you a look that will turn heads. With our luxuriously soft and sustainable fabrics, you can feel confident that you’re making an ethical choice while looking your best. Whether you’re hitting the beach or lounging by the pool, our bikinis are sure to make you feel your most confident and stylish self.</p>
         </div>
         <div className='px-12 md:px-28 mt-20 h-[75vh] flex justify-center gap-20'>

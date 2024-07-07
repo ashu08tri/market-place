@@ -11,3 +11,40 @@ const userSchema = new mongoose.Schema({
 })
 
 export const User = mongoose.models.users || mongoose.model('users',userSchema)
+
+const cartItemSchema = new mongoose.Schema({
+    id: Number,
+    title: {
+      type: String,
+      required: true
+    },
+    quantity: {
+      type: Number,
+      required: true,
+      min: 1
+    },
+    img: {
+      type: String,
+      required: true
+    },
+    amount: {
+      type: Number,
+      required: true
+    },
+    size: {
+      type: String,
+      required: true
+    },
+    availableQuantity: {
+      type: Number,
+      required: true
+    },
+    unitPrice: {
+        type: Number,
+        required: true
+    },
+    sessionId: String,
+  });
+  
+export const CartItem = mongoose.models.CartItem || mongoose.model('CartItem', cartItemSchema);
+  
