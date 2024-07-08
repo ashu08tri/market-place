@@ -19,8 +19,6 @@ export async function GET(request) {
     // Find all payments with the matching sessionId
     const payments = await Payment.find({ sessionId });
 
-    console.log(payments);
-
     return NextResponse.json(payments);
   } catch (err) {
     return NextResponse.json({ error: err });
@@ -31,7 +29,7 @@ export async function GET(request) {
 export async function POST(request, response) {
   try {
     const payload = await request.json();
-    console.log(payload);
+    //console.log(payload);
 
     // Validate payload structure
     if (!Array.isArray(payload) || payload.length === 0) {
