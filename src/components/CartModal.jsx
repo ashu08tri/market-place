@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { HiMiniArrowUturnRight } from "react-icons/hi2";
 import BeatLoader from "react-spinners/BeatLoader";
+import { useRouter } from 'next/navigation';
 
 function CartModal({ isOpen, onClose }) {
   const [cartData, setCartData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,7 +56,7 @@ function CartModal({ isOpen, onClose }) {
     );
   };
 
-  const handleIncrease = (id,size) => {
+  const handleIncrease = (id, size) => {
     setCartData(prevData =>
       prevData.map(item =>
         item.id === id && item.size === size
@@ -61,6 +64,41 @@ function CartModal({ isOpen, onClose }) {
           : item
       )
     );
+  };
+
+  const paymentPage = async () => {
+    try {
+     
+      // Prepare the data to be sent
+      const paymentData = cartData.map(item => ({
+        id: item.id,
+        title: item.title,
+        quantity: item.quantity,
+        img: item.img,
+        amount: item.amount,
+        size: item.size,
+        sessionId: item.sessionId,
+      }));
+
+      const res = await fetch('/api/payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          credentials: 'include'
+        },
+        body: JSON.stringify(paymentData),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to complete payment');
+      }
+
+      // Close the cart modal and redirect to the payment page
+      onClose();
+      router.push('/payment');
+    } catch (error) {
+      console.error('Error posting payment data:', error.message);
+    }
   };
 
   return (
@@ -72,7 +110,7 @@ function CartModal({ isOpen, onClose }) {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ duration: 0.3 }}
-            className="fixed right-0 top-0 h-full w-8/12 md:w-4/12 bg-white shadow-xl z-50 p-6"
+            className="fixed right-0 top-0 h-full w-8/12 md:w-4/12 bg-white shadow-xl z-50 p-6 overflow-y-scroll scrollbar-hide"
           >
             <button
               onClick={onClose}
@@ -80,7 +118,7 @@ function CartModal({ isOpen, onClose }) {
             >
               <HiMiniArrowUturnRight />
             </button>
-            <div className="flex flex-col mt-8 text-black">
+            <div className="flex flex-col mt-8 text-black ">
               <h1 className="py-2 border-b text-2xl">Your Cart</h1>
               {/* Cart Data rendering */}
               {loading ? (
@@ -92,7 +130,7 @@ function CartModal({ isOpen, onClose }) {
               ) : cartData.length > 0 ? (
                 cartData.map((item, i) => (
                   <div key={i} className="flex items-center p-4 border-b border-gray-200">
-                    <img src={item.img} alt={item.title} className="w-20 h-20 object-cover rounded mr-4" />
+                    <img src={item.img} alt={item.title} className="w-20 h-28 object-cover rounded mr-4" />
                     <ul className="flex-1">
                       <li className="mb-2">
                         <p className="text-lg font-semibold">{item.title}</p>
@@ -127,12 +165,22 @@ function CartModal({ isOpen, onClose }) {
               ) : (
                 <p className="py-2">Your cart is empty!</p>
               )}
-              <button
-                onClick={onClose}
-                className="text-white bg-black py-2 px-20 mt-5 text-xs md:text-base hover:bg-white border border-black hover:text-black"
-              >
-                Continue Shopping
-              </button>
+              {cartData.length === 0 ? (
+                <Link
+                  href='/'
+                  onClick={onClose}
+                  className="text-white bg-black py-2 px-20 mt-5 text-center text-xs md:text-base hover:bg-white border border-black hover:text-black"
+                >
+                  Continue Shopping
+                </Link>
+              ) : (
+                <button
+                  onClick={paymentPage}
+                  className="text-white bg-black py-2 px-20  mt-5 text-xs md:text-base hover:bg-white border border-black hover:text-black"
+                >
+                  Complete Payment
+                </button>
+              )}
             </div>
           </motion.div>
         </div>
