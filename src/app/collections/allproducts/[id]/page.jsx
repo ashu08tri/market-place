@@ -1,19 +1,44 @@
 import React from 'react';
 import Link from 'next/link';
-import { allProducts } from '@/utils/data';
 import SizeSelector from '@/components/SizeSelector';
 import Options from "@/components/Options";
 
-const combinedProducts = [
-  ...allProducts[0].sale,
-  ...allProducts[1].bestSeller,
-  ...allProducts[2].newArrival
-];
+const getData = async () => {
+  try {
+    let res = await fetch('http://localhost:3000/api/products',{cache: 'no-store'});
+    res = await res.json();
 
-function page({ params }) {
+    // Assuming `res` is an array of objects containing `bestSeller`, `sale`, `newArrival`
+    let combinedProducts = [];
+
+    res.forEach(product => {
+      combinedProducts.push(...product.bestSeller, ...product.sale, ...product.newArrival);
+    });
+
+    return combinedProducts;
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+};
+
+const getProductData = async (id) => {
+  try {
+    let res = await fetch('http://localhost:3000/api/products/'+id,{cache: 'no-store'});
+    res = await res.json();
+    return res;
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+};
+
+async function page({ params }) {
   const { id } = params;
-  const item = combinedProducts.filter(item => item.id === parseInt(id));
-  
+  const combinedProducts = await getData();
+  const data = await getProductData(id);
+  let item = []
+  item.push(data)
   
   return (
     <div className='pt-24'>
@@ -31,7 +56,7 @@ function page({ params }) {
           <p className='text-xs py-1 md:text-sm'>Tax included. Shipping calculated at checkout.</p>
           <div className='py-4'>
             <p className='text-sm pb-2'>SIZE:</p>
-            <SizeSelector id={item[0].id} sizes={item[0].quantity.size} amount={item[0].amount} title={item[0].title} img={item[0].img} />
+            <SizeSelector id={item[0]._id} sizes={item[0].quantity.size} amount={item[0].amount} title={item[0].title} img={item[0].img} />
           </div>
           </div>
           </div>

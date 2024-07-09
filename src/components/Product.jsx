@@ -47,9 +47,9 @@ function Product({ product, img, title }) {
         </div>
         <div className='md:w-10/12 flex flex-wrap justify-center md:pl-8'>
           {product.slice(0, visibleItems).map((item, i) => (
-            <div key={i} className='w-1/2 md:w-1/4 px-2 mb-4' onClick={() => router.push(`/collections/allproducts/${item.id}`)}>
+            <div key={i} className='w-1/2 md:w-1/4 px-2 mb-4' onClick={() => router.push(`/collections/allproducts/${item._id}`)}>
               <div className='rounded overflow-hidden shadow-lg'>
-                <img className='h-64 w-56 object-cover' src={item.img} alt={item.title} />
+                <img className='h-64 w-56 object-cover' src={item.img[0]} alt={item.title} />
                 <div className='px-6 py-4'>
                   <p className='font-bold text-xl mb-2'>{item.title}</p>
                   <p className='text-gray-700 text-base'>{item.amount}</p>

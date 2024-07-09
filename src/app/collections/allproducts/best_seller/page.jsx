@@ -1,9 +1,17 @@
-import { allProducts } from '@/utils/data';
 import Product from '@/components/Product';
 
-const bestSeller = allProducts.flatMap(product => product.bestSeller || [])
+const getData = async() => {
+  try{
+    let res = await fetch('http://localhost:3000/api/products/best_seller', {cache: 'no-store'});
+    res = await res.json();
+    return res;
+  }catch(err){
+    console.log(err);
+  }
+}
 
-function page() {
+async function page() {
+  const bestSeller = await getData();
   return (
     <Product product={bestSeller} img={'https://sahara-theme.myshopify.com/cdn/shop/collections/duo.jpg'} title={'Best Sellers'}/>
   )

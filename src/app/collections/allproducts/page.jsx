@@ -1,17 +1,38 @@
-import { allProducts } from '@/utils/data';
 import Product from '@/components/Product';
 
-function page() {
+const getData = async () => {
+  try {
+    let res = await fetch('http://localhost:3000/api/products',{cache: 'no-store'});
+    res = await res.json();
 
-  const combinedProducts = [
-    ...allProducts[0].sale,
-    ...allProducts[1].bestSeller,
-    ...allProducts[2].newArrival
-  ];
+    // Assuming `res` is an array of objects containing `bestSeller`, `sale`, `newArrival`
+    let combinedProducts = [];
+
+    res.forEach(product => {
+      combinedProducts.push(...product.bestSeller, ...product.sale, ...product.newArrival);
+    });
+
+    return combinedProducts;
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+};
+
+
+async function Page() {
+  const combinedProducts = await getData();
 
   return (
-    <Product product={combinedProducts} img={"https://sahara-theme.myshopify.com/cdn/shop/collections/sale.webp?v=1675923072&width=1440"} title={'Shop All'}/>
+    <Product
+      product={combinedProducts}
+      img={
+        'https://sahara-theme.myshopify.com/cdn/shop/collections/sale.webp?v=1675923072&width=1440'
+      }
+      title={'Shop All'}
+    />
   );
 }
 
-export default page;
+export default Page;
+

@@ -49,7 +49,7 @@ function CartModal({ isOpen, onClose }) {
   const handleDecrease = (id, size) => {
     setCartData(prevData =>
       prevData.map(item =>
-        item.id === id && item.quantity > 1 && item.size === size
+        item._id === id && item.quantity > 1 && item.size === size
           ? { ...item, quantity: item.quantity - 1, amount: (item.quantity - 1) * item.unitPrice }
           : item
       )
@@ -59,7 +59,7 @@ function CartModal({ isOpen, onClose }) {
   const handleIncrease = (id, size) => {
     setCartData(prevData =>
       prevData.map(item =>
-        item.id === id && item.size === size
+        item._id === id && item.size === size
           ? { ...item, quantity: item.quantity + 1, amount: (item.quantity + 1) * item.unitPrice }
           : item
       )
@@ -71,7 +71,7 @@ function CartModal({ isOpen, onClose }) {
      
       // Prepare the data to be sent
       const paymentData = cartData.map(item => ({
-        id: item.id,
+        id: item._id,
         title: item.title,
         quantity: item.quantity,
         img: item.img,
@@ -139,14 +139,14 @@ function CartModal({ isOpen, onClose }) {
                         
                         <div className="flex items-center space-x-2">
                           <button
-                            onClick={() => handleDecrease(item.id, item.size)}
+                            onClick={() => handleDecrease(item._id, item.size)}
                             className="bg-black text-white px-2 py-1 rounded"
                           >
                             -
                           </button>
                           <p className='px-6'>{item.quantity}</p>
                           <button
-                            onClick={() => handleIncrease(item.id, item.size)}
+                            onClick={() => handleIncrease(item._id, item.size)}
                             className="bg-black text-white px-2 py-1 rounded"
                           >
                             +

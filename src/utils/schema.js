@@ -12,10 +12,79 @@ const userSchema = new mongoose.Schema({
   accessToken: String
 })
 
-export const User = mongoose.models.users || mongoose.model('users', userSchema)
+export const User = mongoose.models.users || mongoose.model('users', userSchema);
+
+if (mongoose.models.NewArrival) {
+  delete mongoose.models.NewArrival;
+}
+
+export const newArrivalSchema = new mongoose.Schema({
+    title: String,
+    amount: Number,
+    img: [String],
+    quantity : {
+      size: [
+        {
+          quantity: Number,
+          size: String
+        }
+      ]
+    }
+});
+export const NewArrival = mongoose.models.newarrivals || mongoose.model('NewArrival', newArrivalSchema); 
+
+if (mongoose.models.Sale) {
+  delete mongoose.models.Sale
+}
+
+export const saleSchema = new mongoose.Schema({
+  title: String,
+  amount: Number,
+  img: [String],
+  quantity : {
+    size: [
+      {
+        quantity: Number,
+        size: String
+      }
+    ]
+  }
+});
+export const Sale = mongoose.models.sales || mongoose.model('Sale', saleSchema);
+
+if (mongoose.models.BestSeller) {
+  delete mongoose.models.BestSeller;
+}
+
+export const bestsellerSchema = new mongoose.Schema({
+  title: String,
+  amount: Number,
+  img: [String],
+  quantity : {
+    size: [
+      {
+        quantity: Number,
+        size: String
+      }
+    ]
+  }
+});
+export const BestSeller = mongoose.models.bestsellers || mongoose.model('BestSeller', bestsellerSchema);
+
+if (mongoose.models.Allproduct) {
+  delete mongoose.models.Allproduct;
+}
+
+const allproductSchema = new mongoose.Schema({
+  sale: [{type: mongoose.Schema.Types.ObjectId, ref: 'Sale'}],
+  bestSeller: [{type: mongoose.Schema.Types.ObjectId, ref: 'BestSeller'}],
+  newArrival: [{type: mongoose.Schema.Types.ObjectId, ref: 'NewArrival'}]
+  })
+  
+export const Allproduct = mongoose.models.allproducts || mongoose.model('Allproduct', allproductSchema);
 
 const cartItemSchema = new mongoose.Schema({
-  id: Number,
+  id: String,
   title: {
     type: String,
     required: true
@@ -25,10 +94,7 @@ const cartItemSchema = new mongoose.Schema({
     required: true,
     min: 1
   },
-  img: {
-    type: String,
-    required: true
-  },
+  img: [String],
   amount: {
     type: Number,
     required: true
@@ -53,7 +119,7 @@ export const CartItem = mongoose.models.CartItem || mongoose.model('CartItem', c
 
 
 const paymentSchema = new mongoose.Schema({
-  id: Number,
+  id: String,
   title: {
     type: String,
     required: true,
@@ -63,10 +129,7 @@ const paymentSchema = new mongoose.Schema({
     required: true,
     min: 1,
   },
-  img: {
-    type: String,
-    required: true,
-  },
+  img: [String],
   amount: {
     type: Number,
     required: true,
