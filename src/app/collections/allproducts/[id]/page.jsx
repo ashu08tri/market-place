@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { allProducts } from '@/utils/data';
-import SizeSelector from './SizeSelector';
+import SizeSelector from '@/components/SizeSelector';
 import Options from "@/components/Options";
 
 const combinedProducts = [

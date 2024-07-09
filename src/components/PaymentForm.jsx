@@ -54,75 +54,78 @@ function PaymentForm() {
             products: data.map(item => item._id) // assuming data has the _id of Payment documents
         };
 
-        let resOrder = await fetch('/api/orders', {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify(updatedFormData)
-        });
-
-        resOrder = await resOrder.json();
-        if (resOrder.ok) {
-            router.push('/orders/' + resOrder.order._id);
+        if (!isFormValid()) {
+            alert("Please fill out all the fields.");
+            return;
         }
 
-        // if (!isFormValid()) {
-        //     alert("Please fill out all the fields.");
-        //     return;
-        // }
+        const res = await initializeRazorpay();
+        if (!res) {
+          alert("Razorpay SDK Failed to load");
+          return;
+        }
 
-        // const res = await initializeRazorpay();
-        // if (!res) {
-        //   alert("Razorpay SDK Failed to load");
-        //   return;
-        // }
+        try {
+          const response = await fetch("/api/razorpay", {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              taxAmt: payAmount
+            })
+          });
 
-        // try {
-        //   const response = await fetch("/api/razorpay", {
-        //     method: "POST",
-        //     headers: {
-        //       'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //       taxAmt: payAmount
-        //     })
-        //   });
-
-        //   if (!response.ok) {
-        //     const errorData = await response.json();
-        //     console.error('Server error:', errorData);
-        //     alert(`Server error: ${errorData.error}`);
-        //     return;
-        //   }
+          if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Server error:', errorData);
+            alert(`Server error: ${errorData.error}`);
+            return;
+          }
 
         //   const data = await response.json();
         //   console.log('Payment data:', data);
-        setProcessLoad(false);
 
-        //   var options = {
-        //     key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        //     name: "ECOM Website",
-        //     currency: data.currency,
-        //     amount: data.amount,
-        //     order_id: data.id,
-        //     description: "Thank you for your purchase",
-        //     handler: function (response) {
-        //       alert("Razorpay Response: " + response.razorpay_payment_id);
+        //   let resOrder = await fetch('/api/orders', {
+        //     method: 'POST',
+        //     headers: {
+        //         'content-type': 'application/json'
         //     },
-        //     prefill: {
-        //       name: "Alok Anand",
-        //       email: "admin@ECOM",
-        //       contact: '9999999999'
-        //     },
-        //   };
+        //     body: JSON.stringify(updatedFormData)
+        // });
 
-        //   const paymentObject = new window.Razorpay(options);
-        //   paymentObject.open();
-        // } catch (err) {
-        //   console.error('Fetch error:', err);
-        //   alert(`Fetch error: ${err.message}`);
+        // resOrder = await resOrder.json();
+        // if (resOrder.ok) {
+        //     router.push('/orders/' + resOrder.order._id);
         // }
+        
+
+          var options = {
+            key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+            name: "ECOM Website",
+            currency: data.currency,
+            amount: data.amount,
+            order_id: data.id,
+            description: "Thank you for your purchase",
+            handler: function (response) {
+              alert("Razorpay Response: " + response.razorpay_payment_id);
+            },
+            prefill: {
+              name: "Alok Anand",
+              email: "admin@ECOM",
+              contact: '9999999999'
+            },
+          };
+
+          const paymentObject = new window.Razorpay(options);
+          paymentObject.open();
+        } catch (err) {
+          console.error('Fetch error:', err);
+          alert(`Fetch error: ${err.message}`);
+        }
+        finally{
+            setProcessLoad(false);
+        }
     };
 
     const handleChange = (e) => {
