@@ -87,12 +87,13 @@ const orderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  createdAt: {type: Date, default: Date.now()},
   address: String,
   phoneNumber: Number,
   state: String,
   city: String,
   zipcode: Number,
-  products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Payment' }], // Reference to Payment documents
+  products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Payment' }], 
 });
 
 export const Order = mongoose.models.Order || mongoose.model('Order', orderSchema);

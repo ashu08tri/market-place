@@ -2,12 +2,14 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import FadeLoader from "react-spinners/FadeLoader";
+import BeatLoader from "react-spinners/BeatLoader";
 
 function PaymentForm() {
 
     const router = useRouter();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [processLoad, setProcessLoad] = useState(false)
 
     let payAmount = data.reduce((total, payment) => total + payment.amount, 0);
 
@@ -25,17 +27,17 @@ function PaymentForm() {
 
     const initializeRazorpay = () => {
         return new Promise((resolve) => {
-          const script = document.createElement("script");
-          script.src = "https://checkout.razorpay.com/v1/checkout.js";
-          script.onload = () => {
-            resolve(true);
-          };
-          script.onerror = () => {
-            resolve(false);
-          };
-          document.body.appendChild(script);
+            const script = document.createElement("script");
+            script.src = "https://checkout.razorpay.com/v1/checkout.js";
+            script.onload = () => {
+                resolve(true);
+            };
+            script.onerror = () => {
+                resolve(false);
+            };
+            document.body.appendChild(script);
         });
-      };
+    };
 
     const isFormValid = () => {
         const { firstName, lastName, phoneNumber, address, state, city, zipcode, email } = formData;
@@ -44,6 +46,7 @@ function PaymentForm() {
 
     const makePayment = async (e) => {
         e.preventDefault();
+        setProcessLoad(true);
 
         // Add products IDs to formData
         const updatedFormData = {
@@ -51,73 +54,75 @@ function PaymentForm() {
             products: data.map(item => item._id) // assuming data has the _id of Payment documents
         };
 
-        // let res = await fetch('/api/orders', {
-        //     method: 'POST',
-        //     headers: {
-        //         'content-type': 'application/json'
-        //     },
-        //     body: JSON.stringify(updatedFormData)
-        // });
-        
-        // res = await res.json();
-        
-
-        
-        if (!isFormValid()) {
-            alert("Please fill out all the fields.");
-            return;
-        }
-
-        const res = await initializeRazorpay();
-        if (!res) {
-          alert("Razorpay SDK Failed to load");
-          return;
-        }
-    
-        try {
-          const response = await fetch("/api/razorpay", {
-            method: "POST",
+        let resOrder = await fetch('/api/orders', {
+            method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+                'content-type': 'application/json'
             },
-            body: JSON.stringify({
-              taxAmt: payAmount
-            })
-          });
-    
-          if (!response.ok) {
-            const errorData = await response.json();
-            console.error('Server error:', errorData);
-            alert(`Server error: ${errorData.error}`);
-            return;
-          }
-    
-          const data = await response.json();
-          console.log('Payment data:', data);
-    
-          var options = {
-            key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-            name: "ECOM Website",
-            currency: data.currency,
-            amount: data.amount,
-            order_id: data.id,
-            description: "Thank you for your purchase",
-            handler: function (response) {
-              alert("Razorpay Response: " + response.razorpay_payment_id);
-            },
-            prefill: {
-              name: "Alok Anand",
-              email: "admin@ECOM",
-              contact: '9999999999'
-            },
-          };
-    
-          const paymentObject = new window.Razorpay(options);
-          paymentObject.open();
-        } catch (err) {
-          console.error('Fetch error:', err);
-          alert(`Fetch error: ${err.message}`);
+            body: JSON.stringify(updatedFormData)
+        });
+
+        resOrder = await resOrder.json();
+        if (resOrder.ok) {
+            router.push('/orders/' + resOrder.order._id);
         }
+
+        // if (!isFormValid()) {
+        //     alert("Please fill out all the fields.");
+        //     return;
+        // }
+
+        // const res = await initializeRazorpay();
+        // if (!res) {
+        //   alert("Razorpay SDK Failed to load");
+        //   return;
+        // }
+
+        // try {
+        //   const response = await fetch("/api/razorpay", {
+        //     method: "POST",
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({
+        //       taxAmt: payAmount
+        //     })
+        //   });
+
+        //   if (!response.ok) {
+        //     const errorData = await response.json();
+        //     console.error('Server error:', errorData);
+        //     alert(`Server error: ${errorData.error}`);
+        //     return;
+        //   }
+
+        //   const data = await response.json();
+        //   console.log('Payment data:', data);
+        setProcessLoad(false);
+
+        //   var options = {
+        //     key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        //     name: "ECOM Website",
+        //     currency: data.currency,
+        //     amount: data.amount,
+        //     order_id: data.id,
+        //     description: "Thank you for your purchase",
+        //     handler: function (response) {
+        //       alert("Razorpay Response: " + response.razorpay_payment_id);
+        //     },
+        //     prefill: {
+        //       name: "Alok Anand",
+        //       email: "admin@ECOM",
+        //       contact: '9999999999'
+        //     },
+        //   };
+
+        //   const paymentObject = new window.Razorpay(options);
+        //   paymentObject.open();
+        // } catch (err) {
+        //   console.error('Fetch error:', err);
+        //   alert(`Fetch error: ${err.message}`);
+        // }
     };
 
     const handleChange = (e) => {
@@ -198,19 +203,19 @@ function PaymentForm() {
                             <div className="grid md:grid-cols-2 gap-4">
                                 <div>
                                     <input type="text" placeholder="First Name" name='firstName' value={formData.firstName} onChange={handleChange}
-                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required/>
+                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required />
                                 </div>
                                 <div>
                                     <input type="text" placeholder="Last Name" name="lastName" value={formData.lastName} onChange={handleChange}
-                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required/>
+                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required />
                                 </div>
                                 <div>
                                     <input type="email" placeholder="Email" name='email' value={formData.email} onChange={handleChange}
-                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required/>
+                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required />
                                 </div>
                                 <div>
                                     <input type="number" placeholder="Phone No." name='phoneNumber' value={formData.phoneNumber} onChange={handleChange}
-                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required/>
+                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required />
                                 </div>
                             </div>
                         </div>
@@ -219,24 +224,26 @@ function PaymentForm() {
                             <div className="grid md:grid-cols-2 gap-4">
                                 <div>
                                     <input type="text" placeholder="Address" name='address' value={formData.address} onChange={handleChange}
-                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required/>
+                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required />
                                 </div>
                                 <div>
                                     <input type="text" placeholder="City" name='city' value={formData.city} onChange={handleChange}
-                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required/>
+                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required />
                                 </div>
                                 <div>
                                     <input type="text" placeholder="State" name='state' value={formData.state} onChange={handleChange}
-                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required/>
+                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required />
                                 </div>
                                 <div>
                                     <input type="text" placeholder="Zip Code" name='zipcode' value={formData.zipcode} onChange={handleChange}
-                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required/>
+                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required />
                                 </div>
                             </div>
                             <div className="flex gap-4 max-md:flex-col mt-8">
                                 <button type="button" className="rounded-md px-6 py-3 w-full text-sm tracking-wide bg-transparent border hover:bg-gray-300 border-gray-400 text-black max-md:order-1" onClick={() => router.back()}>Cancel</button>
-                                <button type="submit" className="rounded-md px-6 py-3 w-full text-sm tracking-wide border border-black bg-black hover:bg-white text-white hover:text-black">Complete Purchase</button>
+                                <button type="submit" className="rounded-md px-6 py-3 w-full text-sm tracking-wide border border-black bg-black hover:bg-white text-white hover:text-black" disabled={processLoad}>{processLoad ? <BeatLoader loading={processLoad} size={10} color='white'
+                                    aria-label="Loading Spinner"
+                                    data-testid="loader" /> : 'Complete Purchase'}</button>
                             </div>
                         </div>
                     </form>

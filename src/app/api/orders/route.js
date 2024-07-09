@@ -12,7 +12,7 @@ if (!mongoose.connection.readyState) {
 
   export async function GET(request){
     try{
-      const populatedOrder = await Order.findById('668be6c9093ed1c309ca9936').populate('products').exec();
+      const populatedOrder = await Order.find().populate('products').exec();
       return NextResponse.json(populatedOrder)
     }catch(err){
       return NextResponse.json({err})
@@ -35,7 +35,7 @@ if (!mongoose.connection.readyState) {
       const order = new Order({ ...orderData, products: paymentIds.map(p => p._id) });
       await order.save();
   
-      return NextResponse.json(populatedOrder);
+      return NextResponse.json({order, ok: true});
     } catch (err) {
       console.error('Error creating order:', err);
       return NextResponse.json({ ok: false, error: err.message });
