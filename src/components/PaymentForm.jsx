@@ -156,6 +156,20 @@ function PaymentForm() {
         getData();
     }, []);
 
+    const cancelHandler = async() => {
+       try{
+        let res = await fetch('/api/payment',{
+            method: 'DELETE',
+            cache: 'no-store'
+        })
+        if(res.ok){
+            router.back()
+        }  
+       }catch(err){
+        console.log(err);
+       }
+    }
+
     return (
         <div className="font-[sans-serif] bg-white pt-24">
             <div className="flex max-sm:flex-col gap-12 max-lg:gap-4">
@@ -243,7 +257,7 @@ function PaymentForm() {
                                 </div>
                             </div>
                             <div className="flex gap-4 max-md:flex-col mt-8">
-                                <button type="button" className="rounded-md px-6 py-3 w-full text-sm tracking-wide bg-transparent border hover:bg-gray-300 border-gray-400 text-black max-md:order-1" onClick={() => router.back()}>Cancel</button>
+                                <button type="button" className="rounded-md px-6 py-3 w-full text-sm tracking-wide bg-transparent border hover:bg-gray-300 border-gray-400 text-black max-md:order-1" onClick={cancelHandler}>Cancel</button>
                                 <button type="submit" className="rounded-md px-6 py-3 w-full text-sm tracking-wide border border-black bg-black hover:bg-white text-white hover:text-black" disabled={processLoad}>{processLoad ? <BeatLoader loading={processLoad} size={10} color='white'
                                     aria-label="Loading Spinner"
                                     data-testid="loader" /> : 'Complete Purchase'}</button>

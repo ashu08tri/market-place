@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { HiMiniArrowUturnRight } from "react-icons/hi2";
+import { RiDeleteBinLine } from "react-icons/ri";
 import BeatLoader from "react-spinners/BeatLoader";
 import { useRouter } from 'next/navigation';
 
 function CartModal({ isOpen, onClose }) {
   const [cartData, setCartData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState();
+  const [del, setDel] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -30,7 +32,7 @@ function CartModal({ isOpen, onClose }) {
     };
 
     fetchData();
-  }, []);
+  }, [del]);
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -101,6 +103,24 @@ function CartModal({ isOpen, onClose }) {
     }
   };
 
+  const deleteItem = async(id) => {
+    setLoading(true)
+    try{
+      let res = await fetch(`http://localhost:3000/api/cart/${id}`,{
+        method: 'DELETE',
+        cache: 'no-store'
+      })
+      res = await res.json();
+      if(res.ok){
+        setDel(!del);
+        setLoading(false);
+      }
+    }catch(err){
+      console.log(err);
+      setLoading(false);
+    }
+  }
+
   return (
     <>
       {isOpen && (
@@ -131,6 +151,7 @@ function CartModal({ isOpen, onClose }) {
                 cartData.map((item, i) => (
                   <div key={i} className="flex items-center p-4 border-b border-gray-200">
                     <img src={item.img} alt={item.title} className="w-20 h-28 object-cover rounded mr-4" />
+                    <div className='flex justify-between w-full'>
                     <ul className="flex-1">
                       <li className="mb-2">
                         <p className="text-lg font-semibold">{item.title}</p>
@@ -160,6 +181,8 @@ function CartModal({ isOpen, onClose }) {
                         <p>Amount: ₹{item.amount}</p>
                       </li>
                     </ul>
+                    <button className='text-xl self-start' onClick={() => deleteItem(item._id)}><RiDeleteBinLine /></button>
+                    </div>
                   </div>
                 ))
               ) : (

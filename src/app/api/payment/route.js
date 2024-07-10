@@ -25,6 +25,20 @@ export async function GET(request) {
   }
 }
 
+export async function DELETE(request) {
+  try {
+    // Get the sessionId from cookies
+    let sessionId = cookies().get('sessionId').value;
+
+    // Delete all payments with the matching sessionId
+    await Payment.deleteMany({ sessionId });
+
+    return NextResponse.json({ok: true});
+  } catch (err) {
+    return NextResponse.json({ error: err });
+  }
+}
+
 
 export async function POST(request, response) {
   try {
