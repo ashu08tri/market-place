@@ -27,20 +27,24 @@ export const links = [
                 title: 'Types',  
                 sublink:[
                     {
-                        url: '/2nd items',
-                        title: '2nd items'
+                        url: '/types/type1',
+                        title: 'One Piece Swimsuits'
                     },
                     {
-                        url: '/3rd item',
-                        title: '3rd item'
+                        url: '/types/type2',
+                        title: 'Two Piece Swimsuits'
                     },
                     {
-                        url: '/4th',
-                        title: '4th'
+                        url: '/types/type3',
+                        title: 'Bikini Tops'
                     },
                     {
-                        url: '/5th',
-                        title: '5th'
+                        url: '/types/type4',
+                        title: 'Bikini Bottoms'
+                    },
+                    {
+                        url: '/shop_all',
+                        title: 'Shop All'
                     },
                 ]
             },

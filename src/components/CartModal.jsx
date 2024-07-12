@@ -13,6 +13,7 @@ function CartModal({ isOpen, onClose }) {
   const router = useRouter();
 
   useEffect(() => {
+    setLoading(true);
     const fetchData = async () => {
       try {
         const res = await fetch('/api/cart', {

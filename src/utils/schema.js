@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
   accessToken: String
 })
 
-export const User = mongoose.models.users || mongoose.model('users', userSchema);
+export const User = mongoose.models.User || mongoose.model('User', userSchema);
 
 if (mongoose.models.NewArrival) {
   delete mongoose.models.NewArrival;
@@ -31,7 +31,7 @@ export const newArrivalSchema = new mongoose.Schema({
       ]
     }
 });
-export const NewArrival = mongoose.models.newarrivals || mongoose.model('NewArrival', newArrivalSchema); 
+export const NewArrival = mongoose.models.NewArrival || mongoose.model('NewArrival', newArrivalSchema); 
 
 if (mongoose.models.Sale) {
   delete mongoose.models.Sale
@@ -50,7 +50,7 @@ export const saleSchema = new mongoose.Schema({
     ]
   }
 });
-export const Sale = mongoose.models.sales || mongoose.model('Sale', saleSchema);
+export const Sale = mongoose.models.Sale || mongoose.model('Sale', saleSchema);
 
 if (mongoose.models.BestSeller) {
   delete mongoose.models.BestSeller;
@@ -69,7 +69,7 @@ export const bestsellerSchema = new mongoose.Schema({
     ]
   }
 });
-export const BestSeller = mongoose.models.bestsellers || mongoose.model('BestSeller', bestsellerSchema);
+export const BestSeller = mongoose.models.Bestseller || mongoose.model('BestSeller', bestsellerSchema);
 
 if (mongoose.models.Allproduct) {
   delete mongoose.models.Allproduct;
@@ -81,7 +81,7 @@ const allproductSchema = new mongoose.Schema({
   newArrival: [{type: mongoose.Schema.Types.ObjectId, ref: 'NewArrival'}]
   })
   
-export const Allproduct = mongoose.models.allproducts || mongoose.model('Allproduct', allproductSchema);
+export const Allproduct = mongoose.models.Allproducts || mongoose.model('Allproduct', allproductSchema);
 
 const cartItemSchema = new mongoose.Schema({
   id: String,

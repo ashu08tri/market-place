@@ -3,25 +3,49 @@ import Link from 'next/link';
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname, useRouter } from 'next/navigation';
-import { links } from '../utils/navLinks';
+import { getAuth, signOut,onAuthStateChanged } from 'firebase/auth';
+import { app } from '../../firebase';
+import { Toaster,toast } from 'sonner';
 import SearchModal from './SearchModal';
 import CartModal from './CartModal';
 import { CiSearch, CiUser, CiMenuBurger } from "react-icons/ci";
 import { IoBagOutline } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { CiLogout } from "react-icons/ci";
+
+
+
 
 function Navbar() {
+  const [links, setLinks] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [activeLink, setActiveLink] = useState(null);
   const [activeSublink, setActiveSublink] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [logOut, setLogOut] = useState(true);
   const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMainPage, setIsMainPage] = useState(true);
+  const auth = getAuth(app);
   const path = usePathname();
   const router = useRouter();
+
+  useEffect(() => {
+    const getData = async() => {
+      try{
+        let res = await fetch('/api/navlink');
+        res = await res.json();
+        setLinks(res);
+      }catch(err){
+        console.log(err);
+      }
+    }
+    getData();
+  },[])
+
+  console.log(links)
 
   const determineIsMainPage = (path) => {
     if (path === '/') {
@@ -30,6 +54,19 @@ function Navbar() {
       setIsMainPage(false);
     }
   };
+
+  const logOutHandler = async() => {
+    try{
+      await signOut(auth)
+      toast.success('User Logged Out!')
+      setTimeout(() => {
+        router.push('/')
+      },1500)
+    }catch(err){
+      toast.error('User Logged Out!')
+      console.error(err)
+    }
+  }
 
   useEffect(() => {
     determineIsMainPage(path);
@@ -44,6 +81,12 @@ function Navbar() {
       router.events?.off('routeChangeComplete', handleRouteChange);
     };
   }, [path]);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+        return user ? setLogOut(false) : setLogOut(true)
+    })
+},[auth])
 
   const toggle = () => {
     setIsOpen(!isOpen);
@@ -108,6 +151,7 @@ function Navbar() {
 
   return (
     <div className={dynamicStyles.navbar}>
+      <Toaster closeButton position="bottom-right"/>
       <AnimatePresence>
         {isDrawerOpen && <SearchModal isOpen={isDrawerOpen} onClose={toggleDrawer} />}
         {isCartDrawerOpen && <CartModal isOpen={isCartDrawerOpen} onClose={toggleCartDrawer} />}
@@ -116,7 +160,7 @@ function Navbar() {
         <ul className="hidden md:flex gap-6 z-50">
           <li className={`${dynamicStyles.menuItem} group relative`}>New in
             <ul className='w-[calc(90.7vw)] bg-white text-black h-72 hidden group-hover:flex absolute top-20 -left-8 mt-4 justify-between px-6 py-4'>
-              {links[0].subLinks.map((link, i) => (
+              {links.length > 0 && links[0].subLinks.map((link, i) => (
                 <li key={i} className='font-semi-bold'>{link.title}
                   {link.sublink.map((l, j) => (
                     <Link href={l.url} key={j} className='block text-sm py-2 hover:underline underline-offset-2'>{l.title}</Link>
@@ -124,7 +168,7 @@ function Navbar() {
                 </li>
               ))}
               <ul className='h-full flex gap-3 relative'>
-                {links[0].images.map((img, i) => (
+                {links.length > 0 && links[0].images.map((img, i) => (
                   <div key={i} className='relative'>
                     <img src={img.img} alt={img.alt} className='w-64 h-full object-cover' />
                     <p className='absolute bottom-0 left-0 right-0 text-center text-white bg-black bg-opacity-50 py-2'>
@@ -138,7 +182,7 @@ function Navbar() {
           </li>
           <li className={`${dynamicStyles.menuItem} group relative`}>Swimwear
             <ul className='w-[calc(90.7vw)] bg-white text-black h-80 hidden group-hover:flex absolute top-20 -left-[calc(106px)] mt-4 justify-evenly px-4 pt-4'>
-              {links[1].images.map((img, i) => (
+              {links.length > 0 && links[1].images.map((img, i) => (
                 <div key={i} className='relative'>
                   <img src={img.img} alt={img.alt} className='w-64 h-72 object-cover' />
                   <p className='absolute bottom-4 left-0 right-0 text-center text-white bg-black bg-opacity-50 py-2'>
@@ -170,7 +214,9 @@ function Navbar() {
           <li className={dynamicStyles.menuItem}>Ethics</li>
           <li className={dynamicStyles.menuItem}>About</li>
           <li className="text-2xl py-9" onClick={toggleDrawer}><CiSearch /></li>
-          <li className="text-2xl py-9"><Link href='/login'><CiUser /></Link></li>
+          {logOut ? <li className="text-2xl py-9"><Link href='/customer_login'><CiUser/></Link></li> :
+          <li className="text-2xl py-9" onClick={logOutHandler}><CiLogout /></li>
+          }
           <li className="text-2xl py-9" onClick={toggleCartDrawer}><IoBagOutline /></li>
         </ul>
       </nav>
@@ -203,7 +249,7 @@ function Navbar() {
 
             <div className="self-start px-6 w-full text-black">
               <ul>
-                {links.map((link, index) => (
+                {links.length > 0 && links.map((link, index) => (
                   <li key={index} className={dynamicStyles.navListItem}>
                     <div className='flex items-center justify-between w-full' onClick={() => handleClick(index)}>
                       <div>
