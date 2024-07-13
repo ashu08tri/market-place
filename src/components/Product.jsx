@@ -28,26 +28,26 @@ function Product({ product, img, title }) {
       <div className='p-8 border-y flex flex-col justify-center gap-6 items-center'>
         <div className='md:hidden border-b pb-10'>
           <ul className='flex justify-center gap-2 text-left'>
-            <li className='group'><Link href='/collections/allproducts/sale' className='text-sm whitespace-nowrap group-hover:underline underline-offset-2'>Sale</Link></li>
-            <li className='group'><Link href='/collections/allproducts/new_arrivals' className='text-sm whitespace-nowrap px-2 py-10 border-x group-hover:underline underline-offset-2'>New Arrivals</Link></li>
-            <li className='group'><Link href='/collections/allproducts/best_seller' className='text-sm whitespace-nowrap pr-2 py-10 border-r group-hover:underline underline-offset-2'>Summer Wear</Link></li>
-            <li className='group'><Link href='/collections/allproducts' className='text-sm whitespace-nowrap border-x group-hover:underline underline-offset-2'>Shop All</Link></li>
+            <li className='group'><Link href='/featured/allproducts/sale' className='text-sm whitespace-nowrap group-hover:underline underline-offset-2'>Sale</Link></li>
+            <li className='group'><Link href='/featured/allproducts/new_arrivals' className='text-sm whitespace-nowrap px-2 py-10 border-x group-hover:underline underline-offset-2'>New Arrivals</Link></li>
+            <li className='group'><Link href='/featured/allproducts/best_seller' className='text-sm whitespace-nowrap pr-2 py-10 border-r group-hover:underline underline-offset-2'>Summer Wear</Link></li>
+            <li className='group'><Link href='/featured/allproducts' className='text-sm whitespace-nowrap border-x group-hover:underline underline-offset-2'>Shop All</Link></li>
           </ul>
         </div>
         <p className='text-xl text-center'>{`${product.length} Products`}</p>
       </div>
       <div className='flex'>
         <div className='hidden md:flex justify-center md:w-2/12'>
-          <ul className='flex flex-col justify-center gap-4 text-left h-96 sticky top-8'>
-            <li className='group'><Link href='/collections/allproducts/sale' className='group-hover:underline underline-offset-2'>Sale</Link></li>
-            <li className='group'><Link href='/collections/allproducts/new_arrivals' className='group-hover:underline underline-offset-2'>New Arrivals</Link></li>
-            <li className='group'><Link href='/collections/allproducts/best_seller' className='group-hover:underline underline-offset-2'>Summer Wear</Link></li>
-            <li className='group'><Link href='/collections/allproducts' className='group-hover:underline underline-offset-2'>Shop All</Link></li>
+          <ul className='flex flex-col justify-center gap-4 text-left h-96 sticky top-8 border-r px-16'>
+            <li className='group'><Link href='/featured/allproducts/sale' className='group-hover:underline underline-offset-2'>Sale</Link></li>
+            <li className='group'><Link href='/featured/allproducts/new_arrivals' className='group-hover:underline underline-offset-2'>New Arrivals</Link></li>
+            <li className='group'><Link href='/featured/allproducts/best_seller' className='group-hover:underline underline-offset-2'>Summer Wear</Link></li>
+            <li className='group'><Link href='/featured/allproducts' className='group-hover:underline underline-offset-2'>Shop All</Link></li>
           </ul>
         </div>
         <div className='md:w-10/12 flex flex-wrap justify-center md:pl-8'>
           {(product.length > 10 ? product.slice(0, visibleItems) : product).map((item, i) => (
-            <div key={i} className='w-1/2 md:w-1/4 px-2 mb-4' onClick={() => router.push(`/types/${item._id}`)}>
+            <div key={i} className='w-1/2 md:w-1/4 px-2 mb-4' onClick={() => router.push(`/featured/allproducts/${item._id}`)}>
               <div className='rounded overflow-hidden shadow-lg'>
                 <img className='h-64 w-56 object-cover' src={item.img[0]} alt={item.title} />
                 <div className='px-6 py-4'>

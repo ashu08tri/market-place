@@ -8,7 +8,6 @@ const getData = async () => {
     let res = await fetch('http://localhost:3000/api/products',{cache: 'no-store'});
     res = await res.json();
 
-    // Assuming `res` is an array of objects containing `bestSeller`, `sale`, `newArrival`
     let combinedProducts = [];
 
     res.forEach(product => {
