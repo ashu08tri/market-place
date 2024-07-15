@@ -45,8 +45,6 @@ function Navbar() {
     getData();
   },[])
 
-  console.log(links)
-
   const determineIsMainPage = (path) => {
     if (path === '/') {
       setIsMainPage(true);

@@ -9,7 +9,8 @@ const userSchema = new mongoose.Schema({
     unique: true,
   },
   password: String,
-  accessToken: String
+  accessToken: String,
+  isAdmin: {type: Boolean, default: true}
 })
 
 export const User = mongoose.models.User || mongoose.model('User', userSchema);
@@ -18,7 +19,9 @@ if (mongoose.models.NewArrival) {
   delete mongoose.models.NewArrival;
 }
 
-export const newArrivalSchema = new mongoose.Schema({
+export const allProductSchema = new mongoose.Schema({
+  mainTitle: String,
+  product : [{
     title: String,
     amount: Number,
     img: [String],
@@ -30,58 +33,10 @@ export const newArrivalSchema = new mongoose.Schema({
         }
       ]
     }
-});
-export const NewArrival = mongoose.models.NewArrival || mongoose.model('NewArrival', newArrivalSchema); 
+  }]
+})
 
-if (mongoose.models.Sale) {
-  delete mongoose.models.Sale
-}
-
-export const saleSchema = new mongoose.Schema({
-  title: String,
-  amount: Number,
-  img: [String],
-  quantity : {
-    size: [
-      {
-        quantity: Number,
-        size: String
-      }
-    ]
-  }
-});
-export const Sale = mongoose.models.Sale || mongoose.model('Sale', saleSchema);
-
-if (mongoose.models.BestSeller) {
-  delete mongoose.models.BestSeller;
-}
-
-export const bestsellerSchema = new mongoose.Schema({
-  title: String,
-  amount: Number,
-  img: [String],
-  quantity : {
-    size: [
-      {
-        quantity: Number,
-        size: String
-      }
-    ]
-  }
-});
-export const BestSeller = mongoose.models.Bestseller || mongoose.model('BestSeller', bestsellerSchema);
-
-if (mongoose.models.Allproduct) {
-  delete mongoose.models.Allproduct;
-}
-
-const allproductSchema = new mongoose.Schema({
-  sale: [{type: mongoose.Schema.Types.ObjectId, ref: 'Sale'}],
-  bestSeller: [{type: mongoose.Schema.Types.ObjectId, ref: 'BestSeller'}],
-  newArrival: [{type: mongoose.Schema.Types.ObjectId, ref: 'NewArrival'}]
-  })
-  
-export const Allproduct = mongoose.models.Allproducts || mongoose.model('Allproduct', allproductSchema);
+export const AllProduct = mongoose.models.AllProduct || mongoose.model('AllProduct', allProductSchema); 
 
 const cartItemSchema = new mongoose.Schema({
   id: String,

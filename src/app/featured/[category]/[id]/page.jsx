@@ -1,29 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
 import SizeSelector from '@/components/SizeSelector';
-import Options from "@/components/Options";
 
-const getData = async () => {
+
+const getProductData = async (category, id) => {
   try {
-    let res = await fetch('http://localhost:3000/api/products',{cache: 'no-store'});
-    res = await res.json();
-
-    let combinedProducts = [];
-
-    res.forEach(product => {
-      combinedProducts.push(...product.bestSeller, ...product.sale, ...product.newArrival);
-    });
-
-    return combinedProducts;
-  } catch (err) {
-    console.log(err);
-    return [];
-  }
-};
-
-const getProductData = async (id) => {
-  try {
-    let res = await fetch('http://localhost:3000/api/products/'+id,{cache: 'no-store'});
+    let res = await fetch(`http://localhost:3000/api/products/${category}/${id}`,{cache: 'no-store'});
     res = await res.json();
     return res;
   } catch (err) {
@@ -33,9 +15,8 @@ const getProductData = async (id) => {
 };
 
 async function page({ params }) {
-  const { id } = params;
-  const combinedProducts = await getData();
-  const data = await getProductData(id);
+  const { category ,id } = params;
+  const data = await getProductData(category, id);
   let item = []
   item.push(data)
   
@@ -83,7 +64,7 @@ async function page({ params }) {
         <button className='px-8 py-3 bg-transparent text-white border border-white hover:bg-white hover:text-black'>Explore All Products</button>
         </div>
         <div className='bg-orange-50 mt-16 md:mt-20 pb-10 md:pb-0'>
-        <Options items={combinedProducts} />
+        
         </div>
           </div>
         </div>
