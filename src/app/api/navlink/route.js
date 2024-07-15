@@ -44,10 +44,10 @@ export async function POST(request) {
           {
             title: 'Collections',
             sublink: [
-              { url: '/Collections/havana', title: 'Havana' },
-              { url: '/Collections/bali_dreams', title: 'Bali Dreams' },
-              { url: '/Collections/glitz_on_the_beach', title: 'Glitz on the beach' },
-              { url: '/Collections/mediterranean_love', title: 'Mediterranean Love' },
+              { url: '/collections/havana', title: 'Havana' },
+              { url: '/collections/bali_dreams', title: 'Bali Dreams' },
+              { url: '/collections/glitz_on_the_beach', title: 'Glitz on the beach' },
+              { url: '/collections/mediterranean_love', title: 'Mediterranean Love' },
             ],
           },
         ],

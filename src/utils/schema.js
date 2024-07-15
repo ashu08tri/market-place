@@ -15,9 +15,6 @@ const userSchema = new mongoose.Schema({
 
 export const User = mongoose.models.User || mongoose.model('User', userSchema);
 
-if (mongoose.models.NewArrival) {
-  delete mongoose.models.NewArrival;
-}
 
 export const allProductSchema = new mongoose.Schema({
   mainTitle: String,
@@ -36,7 +33,9 @@ export const allProductSchema = new mongoose.Schema({
   }]
 })
 
-export const AllProduct = mongoose.models.AllProduct || mongoose.model('AllProduct', allProductSchema); 
+export const Featured = mongoose.models.Featured || mongoose.model( 'Featured', allProductSchema); 
+export const Type = mongoose.models.Type || mongoose.model( 'Type', allProductSchema); 
+export const Collection = mongoose.models.Collection || mongoose.model( 'Collection', allProductSchema); 
 
 const cartItemSchema = new mongoose.Schema({
   id: String,

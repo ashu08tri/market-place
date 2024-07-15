@@ -2,9 +2,10 @@ import React from 'react';
 import Link from 'next/link';
 import SizeSelector from '@/components/SizeSelector';
 
-const getProductData = async (id) => {
+
+const getProductData = async (category, id) => {
   try {
-    let res = await fetch('http://localhost:3000/api/collections/'+id,{cache: 'no-store'});
+    let res = await fetch(`http://localhost:3000/api/types/${category}/${id}`,{cache: 'no-store'});
     res = await res.json();
     return res;
   } catch (err) {
@@ -14,8 +15,8 @@ const getProductData = async (id) => {
 };
 
 async function page({ params }) {
-  const { id } = params;
-  const data = await getProductData(id);
+  const { category ,id } = params;
+  const data = await getProductData(category, id);
   let item = []
   item.push(data)
   

@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import { NextResponse } from 'next/server';
-import { Featured } from '@/utils/schema'; 
+import { Type } from '@/utils/schema'; // Adjust path as per your schema location
 
-
+// Ensure mongoose connects only once
 if (!mongoose.connection.readyState) {
   mongoose.connect('mongodb://127.0.0.1:27017/ecom').then(() => {
     console.log('Connected to MongoDB');
@@ -14,7 +14,7 @@ if (!mongoose.connection.readyState) {
 export async function GET(request,{params}){
   try{
     const {category} = params;
-    const product = await Featured.findOne({mainTitle: category});
+    const product = await Type.findOne({mainTitle: category});
     if(product){
       return NextResponse.json(product)
     }else{
@@ -28,9 +28,9 @@ export async function GET(request,{params}){
 export async function POST(request,{params}) {
   const {category} = params;
   const data =  {
-   mainTitle: 'best_seller',
+   mainTitle: 'bikini_tops',
      product: [{
-        title: 'HONEY TOP IVORY',
+        title: 'TOP HIBISCUS',
         quantity: {
           size: [
             { quantity: 5, size: "S" },
@@ -39,19 +39,19 @@ export async function POST(request,{params}) {
             { quantity: 6, size: "XL" }
           ]
         },
-        amount: 450,
-        img: ['https://sahara-theme.myshopify.com/cdn/shop/products/Photo29-8-2022_115044am.jpg']
+        amount: 250,
+        img: ['https://sahara-theme.myshopify.com/cdn/shop/products/FAEStudio-363.jpg']
       }]
     }
 
   try {
 
-    const existingData = await Featured.findOne({mainTitle: category})
+    const existingData = await Type.findOne({mainTitle: category})
     if(existingData){
       existingData.product.push(data.product[0]);
       await existingData.save();
     }else{
-      const newData = new Featured(data)
+      const newData = new Type(data)
       await newData.save();
     }
 

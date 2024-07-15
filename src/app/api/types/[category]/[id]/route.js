@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { Featured } from '@/utils/schema'; 
+import { Type } from '@/utils/schema'; 
 import mongoose from 'mongoose';
 
 // Ensure mongoose connects only once
@@ -21,7 +21,7 @@ export async function GET(request, { params }) {
     }
 
     // Find the product by id within the specified category
-    const product = await Featured.findOne(
+    const product = await Type.findOne(
       { mainTitle: category, 'product._id': id },
       { 'product.$': 1 } // This will only return the matched product in the array
     );

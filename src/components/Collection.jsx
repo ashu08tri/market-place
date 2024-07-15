@@ -5,72 +5,73 @@ import Link from 'next/link';
 
 
 function Collection({ product, img, title }) {
-    const router = useRouter();
-    const [visibleItems, setVisibleItems] = useState(10);
+  const router = useRouter();
+  const [visibleItems, setVisibleItems] = useState(10);
 
-    const handleViewMore = () => {
-        setVisibleItems(prevVisibleItems => prevVisibleItems + 10);
-    };
+  const handleViewMore = () => {
+    setVisibleItems(prevVisibleItems => prevVisibleItems + 10);
+  };
+  //console.log(product);
 
-    return (
-        <div className='pt-24'>
-            <div className='h-80 relative'>
-                <img
-                    src={img}
-                    alt="img"
-                    className='h-full w-full object-cover'
-                />
-                <p className='text-white text-2xl  uppercase font-semibold md:text-4xl tracking-wider absolute top-1/2 left-1/2 transform -translate-x-1/2 translate-y-[100%]'>
-                    {title}
-                </p>
-            </div>
+  return (
+    <div className='pt-24'>
+      <div className='h-80 relative'>
+        <img
+          src={img}
+          alt="img"
+          className='h-full w-full object-cover'
+        />
+        <p className='text-white text-2xl uppercase font-semibold md:text-4xl tracking-wider absolute top-1/2 left-1/2 transform -translate-x-1/2 translate-y-[100%]'>
+          {title.replace(/_/g, ' ')}
+        </p>
+      </div>
 
-            <div className='p-8 border-y flex flex-col justify-center gap-6 items-center'>
-                <div className='md:hidden border-b pb-10'>
-                    <ul className='flex justify-center gap-2 text-left'>
-                        <li className='group'><Link href='/collections/itemOne' className='text-sm whitespace-nowrap group-hover:underline underline-offset-2'>Item 1</Link></li>
-                        <li className='group'><Link href='/collections/itemTwo' className='text-sm whitespace-nowrap px-2 py-10 border-x group-hover:underline underline-offset-2'>Item 2</Link></li>
-                        <li className='group'><Link href='/collections/itemThree' className='text-sm whitespace-nowrap px-2 py-10 border-r group-hover:underline underline-offset-2'>Item 3</Link></li>
-                        <li className='group'><Link href='/collections/itemFour' className='text-sm whitespace-nowrap group-hover:underline underline-offset-2'>Item 4</Link></li>
-                    </ul>
-                </div>
-                <p className='text-xl text-center'>{`${product.length} Products`}</p>
-            </div>
-            <div className='flex'>
-                <div className='hidden md:flex justify-center md:w-2/12'>
-                    <ul className='flex flex-col justify-center gap-4 text-left h-96 sticky top-8 border-r px-16'>
-                        <li className='group'><Link href='/collections/itemOne' className='group-hover:underline underline-offset-2'>Item 1</Link></li>
-                        <li className='group'><Link href='/collections/itemTwo' className='group-hover:underline underline-offset-2'>Item 2</Link></li>
-                        <li className='group'><Link href='/collections/itemThree' className='group-hover:underline underline-offset-2'>Item 3</Link></li>
-                        <li className='group'><Link href='/collections/itemFour' className='group-hover:underline underline-offset-2'>Item 4</Link></li>
-                    </ul>
-                </div>
-                <div className='md:w-10/12 flex flex-wrap justify-center md:pl-8'>
-                    {(product.length > 10 ? product.slice(0, visibleItems) : product).map((item, i) => (
-                        <div key={i} className='w-1/2 md:w-1/4 px-2 mb-4' onClick={() => router.push(`/collections/${item._id}`)}>
-                            <div className='rounded overflow-hidden shadow-lg'>
-                                <img className='h-64 w-56 object-cover' src={item.img[0]} alt={item.title} />
-                                <div className='px-6 py-4'>
-                                    <p className='font-bold text-xl mb-2'>{item.title}</p>
-                                    <p className='text-gray-700 text-base'>{item.amount}</p>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-            {visibleItems < product.length && (
-                <div className='flex justify-center mt-4'>
-                    <button
-                        className='bg-black text-white px-4 py-2'
-                        onClick={handleViewMore}
-                    >
-                        View More
-                    </button>
-                </div>
-            )}
+      <div className='p-8 border-y flex flex-col justify-center gap-6 items-center'>
+        <div className='md:hidden border-b pb-10'>
+          <ul className='flex justify-center gap-2 text-left'>
+            <li className='group'><Link href='/collections/havana' className='text-sm whitespace-nowrap group-hover:underline underline-offset-2'>Havana</Link></li>
+            <li className='group'><Link href='/collections/bali_dreams' className='text-sm whitespace-nowrap px-2 py-10 border-x group-hover:underline underline-offset-2'>Bali Dreams</Link></li>
+            <li className='group'><Link href='/collections/glitz_on_the_beach' className='text-sm whitespace-nowrap pr-2 py-10 border-r group-hover:underline underline-offset-2'>Glitz</Link></li>
+            <li className='group'><Link href='/collections/mediterranean_love' className='text-sm whitespace-nowrap border-x group-hover:underline underline-offset-2'>Mediterranean Love</Link></li>
+          </ul>
         </div>
-    );
+        <p className='text-xl text-center'>{`${product.product.length} Products`}</p>
+      </div>
+      <div className='flex'>
+        <div className='hidden md:flex justify-center md:w-2/12'>
+          <ul className='flex flex-col justify-center gap-4 text-left h-96 sticky top-8 border-r px-16'>
+            <li className='group'><Link href='/collections/havana' className='group-hover:underline underline-offset-2'>Havana</Link></li>
+            <li className='group'><Link href='/collections/bali_dreams' className='group-hover:underline underline-offset-2'>Bali Dreams</Link></li>
+            <li className='group'><Link href='/collections/glitz_on_the_beach' className='group-hover:underline underline-offset-2'>Glitz</Link></li>
+            <li className='group'><Link href='/collections/mediterranean_love' className='group-hover:underline underline-offset-2'>Mediterranean Love</Link></li>
+          </ul>
+        </div>
+        <div className='md:w-10/12 flex flex-wrap justify-center md:pl-8'>
+          {(product.product.length > 10 ? product.product.slice(0, visibleItems) : product.product).map((item, i) => (
+            <div key={i} className='w-1/2 md:w-1/4 px-2 mb-4 cursor-pointer' onClick={() => router.push(`/collections/${title}/${item._id}`)}>
+              <div className='rounded overflow-hidden shadow-lg'>
+                <img className='h-64 w-56 object-cover' src={item.img[0]} alt={item.title} />
+                <div className='px-6 py-4'>
+                  <p className='font-bold text-xl mb-2'>{item.title}</p>
+                  <p className='text-gray-700 text-base'>{item.amount}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      {visibleItems < product.product.length && (
+        <div className='flex justify-center mt-4'>
+          <button
+            className='bg-black text-white px-4 py-2'
+            onClick={handleViewMore}
+          >
+            View More
+          </button>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default Collection;
