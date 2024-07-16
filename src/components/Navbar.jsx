@@ -3,16 +3,14 @@ import Link from 'next/link';
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname, useRouter } from 'next/navigation';
-import { Toaster,toast } from 'sonner';
+import { Toaster, toast } from 'sonner';
 import SearchModal from './SearchModal';
 import CartModal from './CartModal';
 import { CiSearch, CiUser, CiMenuBurger } from "react-icons/ci";
 import { IoBagOutline } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
-
-
-
+import BeatLoader from "react-spinners/BeatLoader";
 
 function Navbar() {
   const [links, setLinks] = useState([]);
@@ -20,9 +18,11 @@ function Navbar() {
   const [search, setSearch] = useState('');
   const [activeLink, setActiveLink] = useState(null);
   const [activeSublink, setActiveSublink] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [logOut, setLogOut] = useState(true);
   const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false);
+  const [results, setResults] = useState({ featured: [], type: [], collection: [] });
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMainPage, setIsMainPage] = useState(true);
 
@@ -30,17 +30,17 @@ function Navbar() {
   const router = useRouter();
 
   useEffect(() => {
-    const getData = async() => {
-      try{
+    const getData = async () => {
+      try {
         let res = await fetch('/api/navlink');
         res = await res.json();
         setLinks(res);
-      }catch(err){
+      } catch (err) {
         console.log(err);
       }
     }
     getData();
-  },[])
+  }, [])
 
   const determineIsMainPage = (path) => {
     if (path === '/') {
@@ -81,10 +81,6 @@ function Navbar() {
     setIsOpen(!isOpen);
   };
 
-  const deleteSearch = () => {
-    setSearch('');
-  };
-
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
@@ -121,6 +117,55 @@ function Navbar() {
     };
   }, []);
 
+  const handleSearch = async () => {
+    if (!search) return;
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/search?query=${encodeURIComponent(search)}`);
+      const data = await response.json();
+      setResults(data);
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const displayUniqueProducts = (products, uniqueTitles, category) => {
+    return products.map((items, index) => {
+      const uniqueProducts = items.product.filter((p) => {
+        if (uniqueTitles.has(p.title)) {
+          return false;
+        } else {
+          uniqueTitles.add(p.title);
+          return true;
+        }
+      });
+
+      return (
+        uniqueProducts.length > 0 && (
+          <div key={index} className="p-2">
+            {uniqueProducts.map(item => (
+              <div className='flex items-center cursor-pointer' onClick={() => {
+                router.push(`/${category}/${items.mainTitle}/${item._id}`);
+                setResults({ featured: [], type: [], collection: [] });
+                setSearch('')
+                setIsOpen(!open);
+              }}>
+                <div>
+                  <img src={item.img[0]} alt={item.title} className='h-20 w-20 border rounded-md mr-2' />
+                </div>
+                <p className='text-black'>{item.title}</p>
+              </div>
+            ))}
+          </div>
+        )
+      );
+    });
+  };
+
+  const uniqueTitles = new Set();
+
   const dynamicStyles = {
     navbar: `fixed top-0 md:flex justify-center text-black w-full transition-colors duration-300 z-50 ${isMainPage ? (isScrolled ? 'bg-white' : 'bg-transparent text-white') : 'bg-white'
       }`,
@@ -140,7 +185,7 @@ function Navbar() {
 
   return (
     <div className={dynamicStyles.navbar}>
-      <Toaster closeButton position="bottom-right"/>
+      <Toaster closeButton position="bottom-right" />
       <AnimatePresence>
         {isDrawerOpen && <SearchModal isOpen={isDrawerOpen} onClose={toggleDrawer} />}
         {isCartDrawerOpen && <CartModal isOpen={isCartDrawerOpen} onClose={toggleCartDrawer} />}
@@ -203,7 +248,7 @@ function Navbar() {
           <li className={dynamicStyles.menuItem}>Ethics</li>
           <li className={dynamicStyles.menuItem}>About</li>
           <li className="text-2xl py-9" onClick={toggleDrawer}><CiSearch /></li>
-          <li className="text-2xl py-9"><Link href='/customer_login'><CiUser/></Link></li>
+          <li className="text-2xl py-9"><Link href='/customer_login'><CiUser /></Link></li>
           <li className="text-2xl py-9" onClick={toggleCartDrawer}><IoBagOutline /></li>
         </ul>
       </nav>
@@ -219,21 +264,43 @@ function Navbar() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              {search.length === 0 && (
-                <button className={dynamicStyles.searchButton}>
-                  <CiSearch />
-                </button>
-              )}
-              {search.length > 0 && (
-                <button
-                  className={dynamicStyles.searchDeleteButton}
-                  onClick={deleteSearch}
-                >
-                  <RxCross1 />
-                </button>
-              )}
+              <button className={dynamicStyles.searchButton} onClick={handleSearch}>
+                <CiSearch />
+              </button>
             </div>
-
+            {results.featured.length > 0 || results.type.length > 0 || results.collection.length > 0 ?
+              <div className="self-start ml-8">
+                {loading ? (
+                  <div className="flex justify-center items-center">
+                    <BeatLoader loading={loading} size={10} color='white' aria-label="Loading Spinner" data-testid="loader" />
+                  </div>
+                ) : (
+                  <>
+                    {results.featured.length > 0 && (
+                      <div>
+                        <h3 className="font-bold text-lg text-black">Featured</h3>
+                        {displayUniqueProducts(results.featured, uniqueTitles, 'featured')}
+                      </div>
+                    )}
+                    {results.type.length > 0 && (
+                      <div>
+                        <h3 className="font-bold text-lg">Type</h3>
+                        {displayUniqueProducts(results.type, uniqueTitles, 'types')}
+                      </div>
+                    )}
+                    {results.collection.length > 0 && (
+                      <div>
+                        <h3 className="font-bold text-lg">Collection</h3>
+                        {displayUniqueProducts(results.collection, uniqueTitles, 'collections')}
+                      </div>
+                    )}
+                    {results.featured.length === 0 && results.type.length === 0 && results.collection.length === 0 && (
+                      <div>No results found</div>
+                    )}
+                  </>
+                )}
+              </div> : <></>
+            }
             <div className="self-start px-6 w-full text-black">
               <ul>
                 {links.length > 0 && links.map((link, index) => (
