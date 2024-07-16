@@ -146,7 +146,7 @@ function Navbar() {
         uniqueProducts.length > 0 && (
           <div key={index} className="p-2">
             {uniqueProducts.map(item => (
-              <div className='flex items-center cursor-pointer' onClick={() => {
+              <div className='flex items-center cursor-pointer my-2' onClick={() => {
                 router.push(`/${category}/${items.mainTitle}/${item._id}`);
                 setResults({ featured: [], type: [], collection: [] });
                 setSearch('')
@@ -155,7 +155,7 @@ function Navbar() {
                 <div>
                   <img src={item.img[0]} alt={item.title} className='h-20 w-20 border rounded-md mr-2' />
                 </div>
-                <p className='text-black'>{item.title}</p>
+                <p>{item.title}</p>
               </div>
             ))}
           </div>
@@ -237,7 +237,9 @@ function Navbar() {
 
         {/* LOGO */}
         <p onClick={() => {
-          toggle()
+          if(isOpen){
+            setIsOpen(false)
+          }
           router.push('/')
         }} className='text-2xl font-semibold cursor-pointer'>Ecom</p>
 
@@ -255,7 +257,7 @@ function Navbar() {
 
       {isOpen && (
         <div className={dynamicStyles.drawerContainer}>
-          <div className="flex flex-col items-center justify-between gap-10">
+          <div className="flex flex-col items-center justify-between gap-10 relative">
             <div className="flex border hover:border-black justify-center mt-6">
               <input
                 type="text"
@@ -269,7 +271,7 @@ function Navbar() {
               </button>
             </div>
             {results.featured.length > 0 || results.type.length > 0 || results.collection.length > 0 ?
-              <div className="self-start ml-8">
+              <div className="absolute top-28 flex flex-col items-center bg-black w-full">
                 {loading ? (
                   <div className="flex justify-center items-center">
                     <BeatLoader loading={loading} size={10} color='white' aria-label="Loading Spinner" data-testid="loader" />
@@ -277,20 +279,36 @@ function Navbar() {
                 ) : (
                   <>
                     {results.featured.length > 0 && (
-                      <div>
-                        <h3 className="font-bold text-lg text-black">Featured</h3>
+                      <div className='p-4 bg-gray-200 w-10/12 my-2 rounded-md'>
+                       <div className='flex justify-between px-4'>
+                       <h3 className="font-bold text-lg">Featured</h3>
+                       <button onClick={()=> {
+                        setSearch('')
+                        setResults({...results, featured: []})}}>X</button>
+                       </div>
                         {displayUniqueProducts(results.featured, uniqueTitles, 'featured')}
                       </div>
                     )}
                     {results.type.length > 0 && (
                       <div>
+                        <div className='flex justify-between px-4'>
                         <h3 className="font-bold text-lg">Type</h3>
+                       <button onClick={()=> {
+                        setSearch('')
+                        setResults({...results, type: []})}}>X</button>
+                       </div>
+                        
                         {displayUniqueProducts(results.type, uniqueTitles, 'types')}
                       </div>
                     )}
                     {results.collection.length > 0 && (
                       <div>
+                        <div className='flex justify-between px-4'>
                         <h3 className="font-bold text-lg">Collection</h3>
+                       <button onClick={()=> {
+                        setSearch('')
+                        setResults({...results, collection: []})}}>X</button>
+                       </div>
                         {displayUniqueProducts(results.collection, uniqueTitles, 'collections')}
                       </div>
                     )}
