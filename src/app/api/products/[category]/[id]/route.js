@@ -11,28 +11,38 @@ if (!mongoose.connection.readyState) {
     });
   }
 
-export async function GET(request, { params }) {
-  try {
-    const { category, id } = params;
-
-    // Validate if the id is a valid ObjectId
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return NextResponse.json({ error: 'Invalid product ID' }, { status: 400 });
+  export async function GET(request, { params }) {
+    try {
+      const { category, id } = params;
+  
+      // Validate if the id is a valid ObjectId
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return NextResponse.json({ error: 'Invalid product ID' }, { status: 400 });
+      }
+      
+      if (category === 'shop_all') {
+        const products = await Featured.find();
+        const allProducts = products.flatMap(item => item.product);
+        const singleItem = allProducts.find(item => item._id.toString() === id);
+        if (singleItem) {
+          return NextResponse.json(singleItem);
+        } else {
+          return NextResponse.json({ error: 'Product not found' }, { status: 404 });
+        }
+      }
+     
+      const product = await Featured.findOne(
+        { mainTitle: category, 'product._id': id },
+        { 'product.$': 1 } // This will only return the matched product in the array
+      );
+  
+      if (product && product.product.length > 0) {
+        return NextResponse.json(product.product[0]);
+      } else {
+        return NextResponse.json({ error: 'Product not found' }, { status: 404 });
+      }
+    } catch (err) {
+      console.error(err);
+      return NextResponse.json({ error: 'Something went wrong', details: err.message }, { status: 500 });
     }
-
-    // Find the product by id within the specified category
-    const product = await Featured.findOne(
-      { mainTitle: category, 'product._id': id },
-      { 'product.$': 1 } // This will only return the matched product in the array
-    );
-
-    if (product) {
-      return NextResponse.json(product.product[0]);
-    } else {
-      return NextResponse.json({ error: 'Product not found' }, { status: 404 });
-    }
-  } catch (err) {
-    console.error(err);
-    return NextResponse.json({ error: 'Something went wrong', details: err.message }, { status: 500 });
   }
-}

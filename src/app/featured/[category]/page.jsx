@@ -1,5 +1,6 @@
 import React from 'react';
 import Product from '@/components/Product';
+import ShopAll from '@/components/ShopAll';
 
 const getData = async(category) => {
     try{
@@ -17,7 +18,10 @@ async function page({params}) {
     //console.log(data);
 
   return (
-    <Product product={data} img={'https://sahara-theme.myshopify.com/cdn/shop/collections/duo.jpg'} title={data.mainTitle}/>
+    <>
+      {category === 'shop_all' ? <ShopAll product={data} img={'https://sahara-theme.myshopify.com/cdn/shop/collections/duo.jpg'} title={'Shop All'} url={'featured'}/> : 
+      <Product product={data} img={'https://sahara-theme.myshopify.com/cdn/shop/collections/duo.jpg'} title={data.mainTitle}/>}
+    </>
   )
 }
 

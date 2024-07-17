@@ -1,4 +1,5 @@
 import Types from "@/components/Types";
+import ShopAll from "@/components/ShopAll";
 
 const getData = async (category) => {
   try {
@@ -18,13 +19,10 @@ async function Page({params}) {
   
 
   return (
-    <Types
-      product={data}
-      img={
-        'https://sahara-theme.myshopify.com/cdn/shop/collections/sale.webp?v=1675923072&width=1440'
-      }
-      title={data.mainTitle}
-    />
+    <>
+    {category === 'shop_all' ? <ShopAll product={data} img={'https://sahara-theme.myshopify.com/cdn/shop/collections/duo.jpg'} title={'Shop All'} url={'types'}/> : 
+    <Types product={data} img={'https://sahara-theme.myshopify.com/cdn/shop/collections/duo.jpg'} title={data.mainTitle}/>}
+  </>
   );
 }
 

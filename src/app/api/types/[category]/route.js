@@ -12,15 +12,21 @@ if (!mongoose.connection.readyState) {
 }
 
 export async function GET(request,{params}){
-  try{
-    const {category} = params;
-    const product = await Type.findOne({mainTitle: category});
-    if(product){
-      return NextResponse.json(product)
-    }else{
-      return NextResponse.json({status: 404})
+  try {
+    const { category } = params;
+    if (category === 'shop_all') {
+      const Products = await Type.find();
+      const allProduct = Products.flatMap(item => item.product)
+      return NextResponse.json(allProduct);
+    } else {
+      const product = await Type.findOne({ mainTitle: category });
+      if (product) {
+        return NextResponse.json(product)
+      } else {
+        return NextResponse.json({ status: 404 })
+      }
     }
-  }catch(err){
+  } catch (err) {
     console.error(err)
   }
 }
