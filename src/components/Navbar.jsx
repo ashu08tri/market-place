@@ -3,13 +3,14 @@ import Link from 'next/link';
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname, useRouter } from 'next/navigation';
-import { Toaster, toast } from 'sonner';
 import SearchModal from './SearchModal';
 import CartModal from './CartModal';
+import { Toaster, toast } from 'sonner';
 import { CiSearch, CiUser, CiMenuBurger } from "react-icons/ci";
 import { IoBagOutline } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { LuUserX2 } from "react-icons/lu";
 import BeatLoader from "react-spinners/BeatLoader";
 
 function Navbar() {
@@ -25,7 +26,6 @@ function Navbar() {
   const [results, setResults] = useState({ featured: [], type: [], collection: [] });
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMainPage, setIsMainPage] = useState(true);
-
   const path = usePathname();
   const router = useRouter();
 
@@ -50,18 +50,11 @@ function Navbar() {
     }
   };
 
-  // const logOutHandler = async() => {
-  //   try{
-  //     await signOut(auth)
-  //     toast.success('User Logged Out!')
-  //     setTimeout(() => {
-  //       router.push('/')
-  //     },1500)
-  //   }catch(err){
-  //     toast.error('User Logged Out!')
-  //     console.error(err)
-  //   }
-  // }
+  const logOutHandler = async() => {
+    localStorage.removeItem('token');
+    setLogOut(true);
+    toast.success('User loggout successfully!');
+  }
 
   useEffect(() => {
     determineIsMainPage(path);
@@ -71,6 +64,11 @@ function Navbar() {
     };
 
     router.events?.on('routeChangeComplete', handleRouteChange);
+
+    const token = localStorage.getItem('token');
+        if (token) {
+          setLogOut(false)
+        }
 
     return () => {
       router.events?.off('routeChangeComplete', handleRouteChange);
@@ -185,7 +183,7 @@ function Navbar() {
 
   return (
     <div className={dynamicStyles.navbar}>
-      <Toaster closeButton position="bottom-right" />
+      <Toaster closeButton position='bottom-right'/>
       <AnimatePresence>
         {isDrawerOpen && <SearchModal isOpen={isDrawerOpen} onClose={toggleDrawer} />}
         {isCartDrawerOpen && <CartModal isOpen={isCartDrawerOpen} onClose={toggleCartDrawer} />}
@@ -250,7 +248,9 @@ function Navbar() {
           <li className={dynamicStyles.menuItem}>Ethics</li>
           <li className={dynamicStyles.menuItem}>About</li>
           <li className="text-2xl py-9" onClick={toggleDrawer}><CiSearch /></li>
-          <li className="text-2xl py-9"><Link href='/customer_login'><CiUser /></Link></li>
+          {logOut ? <li className="text-2xl py-9"><Link href='/login'><CiUser /></Link></li> : 
+          <li className="text-2xl py-9" onClick={logOutHandler}><LuUserX2 /></li>
+          }
           <li className="text-2xl py-9" onClick={toggleCartDrawer}><IoBagOutline /></li>
         </ul>
       </nav>

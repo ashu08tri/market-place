@@ -28,7 +28,7 @@ export async function POST(request) {
       return NextResponse.json({ message: "Email or password is incorrect!", ok: false }, { status: 401 });
     }
 
-    const tokenPayload = { email: user.email };
+    const tokenPayload = { email: user.email, isAdmin: user.isAdmin };
     const accessToken = jwt.sign(tokenPayload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
 
     // Store the access token in the user's record

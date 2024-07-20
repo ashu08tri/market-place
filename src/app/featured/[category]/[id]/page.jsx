@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import SizeSelector from '@/components/SizeSelector';
+import Options from '@/components/Options';
 
 
 const getProductData = async (category, id) => {
@@ -14,11 +15,24 @@ const getProductData = async (category, id) => {
   }
 };
 
+const getMoreProducts = async() => {
+  try {
+    let res = await fetch('http://localhost:3000/api/products/shop_all',{cache: 'no-store'});
+    res = await res.json();
+    return res;
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+}
+
 async function page({ params }) {
   const { category ,id } = params;
   const data = await getProductData(category, id);
+  const allData = await getMoreProducts();
   let item = []
-  item.push(data)
+  item.push(data);
+  
   
   return (
     <div className='pt-24'>
@@ -64,7 +78,7 @@ async function page({ params }) {
         <button className='px-8 py-3 bg-transparent text-white border border-white hover:bg-white hover:text-black'>Explore All Products</button>
         </div>
         <div className='bg-orange-50 mt-16 md:mt-20 pb-10 md:pb-0'>
-        
+        <Options items={allData}/>
         </div>
           </div>
         </div>

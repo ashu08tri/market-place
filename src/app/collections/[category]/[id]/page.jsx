@@ -63,9 +63,6 @@ async function page({ params }) {
         <p className='tracking-widest text-2xl font-semibold text-white'>LUXURIOUS SWIMWEAR</p>
         <button className='px-8 py-3 bg-transparent text-white border border-white hover:bg-white hover:text-black'>Explore All Products</button>
         </div>
-        <div className='bg-orange-50 mt-16 md:mt-20 pb-10 md:pb-0'>
-        
-        </div>
           </div>
         </div>
       </>

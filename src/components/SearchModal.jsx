@@ -4,11 +4,13 @@ import { motion } from 'framer-motion';
 import { CiSearch } from "react-icons/ci";
 import { HiMiniArrowUturnRight } from "react-icons/hi2";
 import BeatLoader from "react-spinners/BeatLoader";
+import { toast, Toaster } from 'sonner';
 
 const SearchModal = ({ isOpen, onClose }) => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState({ featured: [], type: [], collection: [] });
   const [loading, setLoading] = useState(false);
+  const [searched, setSearched] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -26,7 +28,8 @@ const SearchModal = ({ isOpen, onClose }) => {
   }, [onClose]);
 
   const handleSearch = async () => {
-    if (!query) return;
+    if (!query) return toast.error('Enter item name first!');
+    setSearched(true);
     setLoading(true);
     try {
       const response = await fetch(`/api/search?query=${encodeURIComponent(query)}`);
@@ -105,6 +108,7 @@ const SearchModal = ({ isOpen, onClose }) => {
               </button>
             </div>
             <div className="mt-4">
+              <Toaster closeButton />
               {loading ? (
                 <div className="flex justify-center items-center">
                   <BeatLoader loading={loading} size={10} color='white' aria-label="Loading Spinner" data-testid="loader" />
@@ -129,8 +133,8 @@ const SearchModal = ({ isOpen, onClose }) => {
                       {displayUniqueProducts(results.collection, uniqueTitles, 'collections')}
                     </div>
                   )}
-                  {results.featured.length === 0 && results.type.length === 0 && results.collection.length === 0 && (
-                    <div>No results found</div>
+                  {searched && results.featured.length === 0 && results.type.length === 0 && results.collection.length === 0 && (
+                    <p className='text-xl text-black'>No results found</p>
                   )}
                 </>
               )}

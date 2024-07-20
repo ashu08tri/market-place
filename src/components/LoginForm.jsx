@@ -45,9 +45,11 @@ function Form() {
           router.push('/');
         }, 1500)
       } else {
+        setLoading(false)
         toast.error('Login Failed!');
       }
     } catch (err) {
+      setLoading(false)
       console.error("Failed to login user", err);
       toast.error("Error User Not Found!");
     }
@@ -55,7 +57,7 @@ function Form() {
 
   return (
     <>
-      <Toaster richColors closeButton position="bottom-right" />
+      <Toaster closeButton position="bottom-right" />
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="flex flex-col w-[50vh] md:w-[30vw]">
           <label htmlFor="email">Email:</label>
