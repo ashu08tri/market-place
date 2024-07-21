@@ -1,20 +1,67 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import ProductFormModal from './ProductFormModal';
+import { decode } from 'jsonwebtoken';
+import { Toaster, toast } from "sonner";
 
+const getData = async (category) => {
+  try {
+    let res = await fetch(`http://localhost:3000/api/collections/${category}`, { cache: 'no-store' });
+    res = await res.json();
+    return res;
+  } catch (err) {
+    console.log(err);
+  }
+};
 
-function Collection({ product, img, title }) {
+function Collection({ product, img, title, category }) {
   const router = useRouter();
   const [visibleItems, setVisibleItems] = useState(10);
+  const [isProductFormOpen, setIsProductFormOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem('token') || null);
+  const [products, setProducts] = useState(product.product);
 
   const handleViewMore = () => {
     setVisibleItems(prevVisibleItems => prevVisibleItems + 10);
   };
-  //console.log(product);
+
+  useEffect(() => {
+    if (token) {
+      try {
+        const decodedToken = decode(token);
+        if (decodedToken.exp * 1000 > Date.now()) {
+          setIsAdmin(decodedToken.isAdmin);
+        } else {
+          localStorage.removeItem('token');
+          setToken(null);
+        }
+      } catch (error) {
+        console.error("Invalid token:", error);
+        localStorage.removeItem('token');
+        setToken(null);
+      }
+    } else {
+      setIsAdmin(false);
+    }
+  }, [token]);
+
+  const closeProductFormModal = () => {
+    setIsProductFormOpen(!isProductFormOpen);
+  };
+
+  const handleProductAdd = async () => {
+    const updatedData = await getData(category);
+    setProducts(updatedData.product);
+    toast.success('Product list updated');
+    setIsProductFormOpen(false);
+  };
 
   return (
     <div className='pt-24'>
+      <Toaster closeButton position="bottom-right" />
       <div className='h-80 relative'>
         <img
           src={img}
@@ -35,7 +82,7 @@ function Collection({ product, img, title }) {
             <li className='group'><Link href='/collections/mediterranean_love' className='text-sm whitespace-nowrap border-x group-hover:underline underline-offset-2'>Mediterranean Love</Link></li>
           </ul>
         </div>
-        <p className='text-xl text-center'>{`${product.product.length} Products`}</p>
+        <p className='text-xl text-center'>{`${products.length} Products`}</p>
       </div>
       <div className='flex'>
         <div className='hidden md:flex justify-center md:w-2/12'>
@@ -47,7 +94,7 @@ function Collection({ product, img, title }) {
           </ul>
         </div>
         <div className='md:w-10/12 flex flex-wrap justify-center md:pl-8'>
-          {(product.product.length > 10 ? product.product.slice(0, visibleItems) : product.product).map((item, i) => (
+          {(products.length > 10 ? products.slice(0, visibleItems) : products).map((item, i) => (
             <div key={i} className='w-1/2 md:w-1/4 px-2 mb-4 cursor-pointer' onClick={() => router.push(`/collections/${title}/${item._id}`)}>
               <div className='rounded overflow-hidden shadow-lg'>
                 <img className='h-64 w-56 object-cover' src={item.img[0]} alt={item.title} />
@@ -60,7 +107,7 @@ function Collection({ product, img, title }) {
           ))}
         </div>
       </div>
-      {visibleItems < product.product.length && (
+      {visibleItems < products.length && (
         <div className='flex justify-center mt-4'>
           <button
             className='bg-black text-white px-4 py-2'
@@ -70,6 +117,13 @@ function Collection({ product, img, title }) {
           </button>
         </div>
       )}
+      {isAdmin && (
+        <div className='absolute top-40 p-5'>
+          <button className='bg-black text-white p-3' onClick={closeProductFormModal}>Add Product</button>
+        </div>
+      )}
+      {isProductFormOpen && <ProductFormModal onClose={closeProductFormModal} maintitle={title} onProductAdd={handleProductAdd} apiRoute={`/api/collections/${title}`}
+            storagePath={'productImages/collections'}/>}
     </div>
   );
 }

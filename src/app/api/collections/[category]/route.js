@@ -27,22 +27,7 @@ export async function GET(request,{params}){
 
 export async function POST(request,{params}) {
   const {category} = params;
-  const data =  {
-   mainTitle: 'glitz_on_the_beach',
-     product: [{
-        title: 'ZENITH BOTTOMS',
-        quantity: {
-          size: [
-            { quantity: 5, size: "S" },
-            { quantity: 2, size: "M" },
-            { quantity: 1, size: "L" },
-            { quantity: 6, size: "XL" }
-          ]
-        },
-        amount: 250,
-        img: ['https://sahara-theme.myshopify.com/cdn/shop/products/IMG_6682-low_2b8ba84c-e724-4afc-b00f-ec2d6d82eecd.jpg']
-      }]
-    }
+  const data =  await request.json();
 
   try {
 

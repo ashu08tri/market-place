@@ -27,6 +27,16 @@ export async function POST(request){
     }
 }
 
+export async function DELETE(request){
+    const {imageURL} = await request.json();
+    try{
+        await MainCarousel.deleteOne({images: imageURL});
+        return NextResponse.json({ok: true})
+    }catch(err){
+        return NextResponse.json({status: 500})
+    }
+}
+
 // export async function POST(request){
 //     const res = await fetch('https://api-preproduction.signzy.app/api/v3/aadhaar/verify', {
 //         method: 'POST',

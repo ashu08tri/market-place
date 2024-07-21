@@ -1,10 +1,13 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import Carousel from 'react-multi-carousel';
+import app from '@/firebase';
+import { getStorage, ref, deleteObject } from 'firebase/storage';
 import FormModal from './FormModal';
 import 'react-multi-carousel/lib/styles.css';
 import { HiArrowLongLeft, HiArrowLongRight } from "react-icons/hi2";
 import { decode } from 'jsonwebtoken';
+import { Toaster, toast } from 'sonner';
 
 const responsive = {
     desktop: {
@@ -48,7 +51,7 @@ function HeaderCarousel() {
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [images, setImages] = useState([]);
     const [isAdmin, setIsAdmin] = useState(false);
-    const [token, setToken] = useState(localStorage.getItem('token') || null);
+    const [token, setToken] = useState(null || localStorage.getItem('token'));
 
     const closeFormModal = () => {
         setIsFormOpen(!isFormOpen);
@@ -95,8 +98,41 @@ function HeaderCarousel() {
         }
     }, [token]);
 
+    const deleteImage = async (imageURL) => {
+        if (!imageURL) {
+            toast.error('No image URL provided!');
+            return;
+        }
+
+        const storage = getStorage(app);
+        const storageRef = ref(storage, imageURL);
+
+        try {
+            // Delete image from Firebase Storage
+            await deleteObject(storageRef);
+
+            // Delete image URL from the database
+            let res = await fetch('/api/updates/carousel', {
+                method: "DELETE",
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ imageURL })
+            });
+            res = await res.json();
+            if (res.ok) {
+                toast.success('Image deleted!');
+                fetchImages();
+            }
+        } catch (err) {
+            toast.error('Failed to delete image!');
+            console.log(err);
+        }
+    };
+
     return (
         <div className='h-screen relative'>
+            <Toaster closeButton position="bottom-right" />
             <Carousel
                 responsive={responsive}
                 ssr={true}
@@ -109,7 +145,9 @@ function HeaderCarousel() {
                 customButtonGroup={isDesktop ? <ButtonGroup /> : null}
             >
                 {images.length > 0 && images.map((item, i) => (
-                    <div key={i} className='h-screen w-screen bg-cover bg-center' style={{ backgroundImage: `url(${item.images})` }}></div>
+                    <div key={i} className='h-screen w-screen bg-cover bg-center flex items-end p-10' style={{ backgroundImage: `url(${item.images})` }}>
+                        {isAdmin && <button onClick={() => deleteImage(item.images)} className='p-2 bg-black text-white'>Delete Image</button>}
+                    </div>
                 ))}
 
                 <div className='h-screen w-screen'>
