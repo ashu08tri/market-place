@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Toaster, toast } from 'sonner';
 
 const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle, onSuccess }) => {
   const [title, setTitle] = useState('');
@@ -26,7 +27,7 @@ const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ mainTitle: newMainTitle, sublink: sublinkTitle, title, url, images }),
+          body: JSON.stringify({ mainTitle: newMainTitle, sublink: sublinkTitle, title, url }),
         });
       } else if (mode === 'edit') {
         response = await fetch('/api/navlink', {
@@ -48,23 +49,15 @@ const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle
 
       if (response.ok) {
         onSuccess();
-        refreshData(); // Refresh the data after the operation
+        toast.success('Operation Successfull!')
         onClose();
       } else {
         console.error('Failed to perform action');
+        toast.error('Operation Failed!')
       }
     } catch (error) {
       console.error('Error:', error);
-    }
-  };
-
-  const refreshData = async () => {
-    try {
-      let res = await fetch('/api/navlink');
-      res = await res.json();
-      setLinks(res);
-    } catch (err) {
-      console.log(err);
+      toast.error('Something went wrong!')
     }
   };
 
@@ -87,9 +80,10 @@ const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50 text-black">
+      <Toaster closeButton position='bottom-right' />
       <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md relative">
         <button
-          className="absolute top-4 right-4 text-md text-gray-600 hover:text-gray-900"
+          className="absolute top-4 right-4 text-xl text-gray-600 hover:text-gray-900"
           onClick={onClose}
         >
           &times;
@@ -98,7 +92,7 @@ const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle
           {mode === 'add' ? 'Add Sublink' : mode === 'edit' ? 'Edit Sublink' : 'Delete Sublink'}
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
+          {mode === 'add' || mode === 'edit' ? <><div>
             <label className="block text-sm font-medium text-gray-700">Main Title:</label>
             <input
               type="text"
@@ -108,65 +102,67 @@ const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black"
             />
           </div>
-          {(mode === 'add' || mode === 'edit') && (
-            <>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Title:</label>
-                <input
-                  type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  required
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">URL:</label>
-                <input
-                  type="text"
-                  value={url}
-                  onChange={(e) => setUrl(e.target.value)}
-                  required={mode === 'add'}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Images:</label>
-                {images.map((image, index) => (
-                  <div key={index} className="space-y-2">
-                    <input
-                      type="text"
-                      placeholder="Image URL"
-                      value={image.img}
-                      onChange={(e) => handleImageChange(index, 'img', e.target.value)}
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Alt Text"
-                      value={image.alt}
-                      onChange={(e) => handleImageChange(index, 'alt', e.target.value)}
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Text"
-                      value={image.text}
-                      onChange={(e) => handleImageChange(index, 'text', e.target.value)}
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black"
-                    />
-                    {index > 0 && (
-                      <button type="button" onClick={() => removeImageField(index)} className="text-red-500">
-                        Remove Image
-                      </button>
-                    )}
-                  </div>
-                ))}
-                <button type="button" onClick={addImageField} className="text-blue-500">
-                  Add Image
-                </button>
-              </div>
-            </>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Title:</label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">URL:</label>
+              <input
+                type="text"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                required
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black"
+              />
+            </div>
+
+          </> : <></>}
+
+
+          {mode === 'edit' && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Images:</label>
+              {images.map((image, index) => (
+                <div key={index} className="space-y-2">
+                  <input
+                    type="text"
+                    placeholder="Image URL"
+                    value={image.img}
+                    onChange={(e) => handleImageChange(index, 'img', e.target.value)}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Alt Text"
+                    value={image.alt}
+                    onChange={(e) => handleImageChange(index, 'alt', e.target.value)}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Text"
+                    value={image.text}
+                    onChange={(e) => handleImageChange(index, 'text', e.target.value)}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black"
+                  />
+                  {index > 0 && (
+                    <button type="button" onClick={() => removeImageField(index)} className="text-red-500">
+                      Remove Image
+                    </button>
+                  )}
+                </div>
+              ))}
+              <button type="button" onClick={addImageField} className="text-blue-500">
+                Add Image
+              </button>
+            </div>
           )}
           {mode === 'delete' && (
             <p>Are you sure you want to delete the sublink titled "{oldTitle}"?</p>

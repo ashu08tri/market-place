@@ -43,16 +43,18 @@ function Navbar() {
   const path = usePathname();
   const router = useRouter();
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        let res = await fetch('/api/navlink');
-        res = await res.json();
-        setLinks(res);
-      } catch (err) {
-        console.log(err);
-      }
+
+  const getData = async () => {
+    try {
+      let res = await fetch('/api/navlink');
+      res = await res.json();
+      setLinks(res);
+    } catch (err) {
+      console.log(err);
     }
+  }
+  
+  useEffect(() => {
     getData();
   }, []);
 
@@ -76,7 +78,6 @@ function Navbar() {
       await signOut({ redirect: '/' });
       setUser(null); // Clear client-side state
       toast.success('User logged out successfully!');
-      // Perform any additional state updates or redirection here if needed
     } catch (error) {
       console.error('Error logging out:', error);
       toast.error('Failed to log out!');
@@ -218,8 +219,10 @@ function Navbar() {
     footerLink: 'py-3 text-sm'
   };
 
-  const handleAdd = () => {
+  const handleAdd = (mainTitle, sublinkTitle) => {
     setMode('add');
+    setMainTitle(mainTitle);
+    setSublinkTitle(sublinkTitle);
     setModalOpen(true);
   };
 
@@ -240,7 +243,7 @@ function Navbar() {
   };
 
   const handleSuccess = () => {
-    // Handle success (e.g., refresh data)
+    getData();
   };
 
 
@@ -267,6 +270,7 @@ function Navbar() {
               
               {links.length > 0 && links[0].subLinks.map((link, i) => (
                 <li key={i} className='font-semi-bold'>{link.title}
+                {isAdmin && <li className='p-1 w-1/2 bg-black text-white' onClick={()=> handleAdd('New In',link.title)}>Add</li>}
                   {link.sublink.map((l, j) => (
                     <li className='flex'>
                     <Link href={l.url} key={j} className='block text-sm py-2 hover:underline underline-offset-2'>{l.title}</Link>
@@ -302,7 +306,6 @@ function Navbar() {
                 </div>
               ))}
             </ul>
-
           </li>
           <li className={dynamicStyles.menuItem}>Look books</li>
           <li className={dynamicStyles.menuItem}>Blogs</li>
