@@ -2,13 +2,12 @@
 import { useState } from 'react';
 import { Toaster, toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import BeatLoader from "react-spinners/BeatLoader";
 
 function Form() {
-
   const router = useRouter();
-  let [loading, setLoading] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -23,35 +22,28 @@ function Form() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true)
+    setLoading(true);
     try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+      const result = await signIn('credentials', {
+        redirect: false,
+        email: formData.email,
+        password: formData.password,
       });
-      const result = await res.json();
-      if (result.ok) {
-        localStorage.setItem('token', result.res)
-        toast.success('User Logged in Successfully!');
-        setLoading(false)
-        setFormData({
-          email: "",
-          password: "",
-        });
-        setTimeout(() => {
-          router.push('/');
-        }, 1500)
-      } else {
-        setLoading(false)
-        toast.error('Login Failed!');
+
+      if (result.error) {
+        throw new Error(result.error);
       }
+
+      toast.success('User Logged in Successfully!');
+      setLoading(false);
+      setFormData({
+        email: "",
+        password: "",
+      });
+      router.push('/');
     } catch (err) {
-      setLoading(false)
-      console.error("Failed to login user", err);
-      toast.error("Error User Not Found!");
+      setLoading(false);
+      toast.error(`Login Failed: ${err.message}`);
     }
   };
 

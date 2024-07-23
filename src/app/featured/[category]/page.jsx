@@ -20,7 +20,7 @@ async function page({params}) {
   return (
     <>
       {category === 'shop_all' ? <ShopAll product={data} img={'https://sahara-theme.myshopify.com/cdn/shop/collections/duo.jpg'} title={'Shop All'} url={'featured'}/> : 
-      <Product product={data} img={'https://sahara-theme.myshopify.com/cdn/shop/collections/duo.jpg'} title={data.mainTitle}/>}
+      <Product product={data} img={'https://sahara-theme.myshopify.com/cdn/shop/collections/duo.jpg'} title={data.mainTitle} category={category} />}
     </>
   )
 }

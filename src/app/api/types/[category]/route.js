@@ -33,22 +33,7 @@ export async function GET(request,{params}){
 
 export async function POST(request,{params}) {
   const {category} = params;
-  const data =  {
-   mainTitle: 'bikini_tops',
-     product: [{
-        title: 'TOP HIBISCUS',
-        quantity: {
-          size: [
-            { quantity: 5, size: "S" },
-            { quantity: 2, size: "M" },
-            { quantity: 1, size: "L" },
-            { quantity: 6, size: "XL" }
-          ]
-        },
-        amount: 250,
-        img: ['https://sahara-theme.myshopify.com/cdn/shop/products/FAEStudio-363.jpg']
-      }]
-    }
+  const data =  await request.json();
 
   try {
 

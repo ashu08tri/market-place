@@ -1,5 +1,7 @@
-"use client"
+"use client";
+
 import React, { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 import Carousel from 'react-multi-carousel';
 import app from '@/firebase';
 import { getStorage, ref, deleteObject } from 'firebase/storage';
@@ -51,7 +53,15 @@ function HeaderCarousel() {
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [images, setImages] = useState([]);
     const [isAdmin, setIsAdmin] = useState(false);
-    const [token, setToken] = useState(null || localStorage.getItem('token'));
+    const [token, setToken] = useState(null);
+
+    const { data } = useSession();
+
+    useEffect(() => {
+        if (data) {
+            setToken(data.user.accessToken);
+        }
+    }, [data]);
 
     const closeFormModal = () => {
         setIsFormOpen(!isFormOpen);
@@ -84,14 +94,9 @@ function HeaderCarousel() {
                 const decodedToken = decode(token);
                 if (decodedToken.exp * 1000 > Date.now()) {
                     setIsAdmin(decodedToken.isAdmin);
-                } else {
-                    localStorage.removeItem('token');
-                    setToken(null);
-                }
+                } 
             } catch (error) {
                 console.error("Invalid token:", error);
-                localStorage.removeItem('token');
-                setToken(null);
             }
         } else {
             setIsAdmin(false);

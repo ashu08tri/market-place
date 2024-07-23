@@ -3,8 +3,10 @@ import Link from 'next/link';
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname, useRouter } from 'next/navigation';
+import { useSession, signOut } from 'next-auth/react';
 import SearchModal from './SearchModal';
 import CartModal from './CartModal';
+import { decode } from 'jsonwebtoken';
 import { Toaster, toast } from 'sonner';
 import { CiSearch, CiUser, CiMenuBurger } from "react-icons/ci";
 import { IoBagOutline } from "react-icons/io5";
@@ -12,6 +14,7 @@ import { RxCross1 } from "react-icons/rx";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { LuUserX2 } from "react-icons/lu";
 import BeatLoader from "react-spinners/BeatLoader";
+import NavFormModal from './NavFormModal';
 
 function Navbar() {
   const [links, setLinks] = useState([]);
@@ -21,11 +24,22 @@ function Navbar() {
   const [activeSublink, setActiveSublink] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [logOut, setLogOut] = useState(true);
   const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false);
   const [results, setResults] = useState({ featured: [], type: [], collection: [] });
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMainPage, setIsMainPage] = useState(true);
+
+  const { data: session, status } = useSession();
+  const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [token, setToken] = useState(null);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [mode, setMode] = useState('add');
+  const [mainTitle, setMainTitle] = useState('');
+  const [sublinkTitle, setSublinkTitle] = useState('');
+  const [oldTitle, setOldTitle] = useState('');
+  
+
   const path = usePathname();
   const router = useRouter();
 
@@ -40,7 +54,14 @@ function Navbar() {
       }
     }
     getData();
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      setUser(session.user); // Set user data when authenticated
+      setToken(session.user.accessToken)
+    }
+  }, [session, status]);
 
   const determineIsMainPage = (path) => {
     if (path === '/') {
@@ -50,11 +71,32 @@ function Navbar() {
     }
   };
 
-  const logOutHandler = async() => {
-    localStorage.removeItem('token');
-    setLogOut(true);
-    toast.success('User loggout successfully!');
-  }
+  const logOutHandler = async () => {
+    try {
+      await signOut({ redirect: '/' });
+      setUser(null); // Clear client-side state
+      toast.success('User logged out successfully!');
+      // Perform any additional state updates or redirection here if needed
+    } catch (error) {
+      console.error('Error logging out:', error);
+      toast.error('Failed to log out!');
+    }
+  };
+
+  useEffect(() => {
+    if (token) {
+        try {
+            const decodedToken = decode(token);
+            if (decodedToken.exp * 1000 > Date.now()) {
+                setIsAdmin(decodedToken.isAdmin);
+            } 
+        } catch (error) {
+            console.error("Invalid token:", error);
+        }
+    } else {
+        setIsAdmin(false);
+    }
+}, [token]);
 
   useEffect(() => {
     determineIsMainPage(path);
@@ -64,11 +106,6 @@ function Navbar() {
     };
 
     router.events?.on('routeChangeComplete', handleRouteChange);
-
-    const token = localStorage.getItem('token');
-        if (token) {
-          setLogOut(false)
-        }
 
     return () => {
       router.events?.off('routeChangeComplete', handleRouteChange);
@@ -139,7 +176,7 @@ function Navbar() {
           return true;
         }
       });
-
+      
       return (
         uniqueProducts.length > 0 && (
           <div key={index} className="p-2">
@@ -181,21 +218,63 @@ function Navbar() {
     footerLink: 'py-3 text-sm'
   };
 
+  const handleAdd = () => {
+    setMode('add');
+    setModalOpen(true);
+  };
+
+  const handleEdit = (mainTitle, sublinkTitle, oldTitle) => {
+    setMode('edit');
+    setMainTitle(mainTitle);
+    setSublinkTitle(sublinkTitle);
+    setOldTitle(oldTitle);
+    setModalOpen(true);
+  };
+
+  const handleDelete = (mainTitle, sublinkTitle, oldTitle) => {
+    setMode('delete');
+    setMainTitle(mainTitle);
+    setSublinkTitle(sublinkTitle);
+    setOldTitle(oldTitle);
+    setModalOpen(true);
+  };
+
+  const handleSuccess = () => {
+    // Handle success (e.g., refresh data)
+  };
+
+
   return (
     <div className={dynamicStyles.navbar}>
       <Toaster closeButton position='bottom-right'/>
+      {isModalOpen && <NavFormModal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        mode={mode}
+        mainTitle={mainTitle}
+        sublinkTitle={sublinkTitle}
+        oldTitle={oldTitle}
+        onSuccess={handleSuccess}
+      />}
       <AnimatePresence>
         {isDrawerOpen && <SearchModal isOpen={isDrawerOpen} onClose={toggleDrawer} />}
         {isCartDrawerOpen && <CartModal isOpen={isCartDrawerOpen} onClose={toggleCartDrawer} />}
       </AnimatePresence>
       <nav className="md:w-11/12 flex items-center justify-between h-24 px-8 border-b">
         <ul className="hidden md:flex gap-6 z-50">
-          <li className={`${dynamicStyles.menuItem} group relative`}>New in
+          <li className={`${dynamicStyles.menuItem} group relative`}>{links.length > 0 ? links[0].title : 'New In'}
             <ul className='w-[calc(90.7vw)] bg-white text-black h-72 hidden group-hover:flex absolute top-20 -left-8 mt-4 justify-between px-6 py-4'>
+              
               {links.length > 0 && links[0].subLinks.map((link, i) => (
                 <li key={i} className='font-semi-bold'>{link.title}
                   {link.sublink.map((l, j) => (
+                    <li className='flex'>
                     <Link href={l.url} key={j} className='block text-sm py-2 hover:underline underline-offset-2'>{l.title}</Link>
+                    <li className='flex gap-2 m-2 text-xs'>
+                    {isAdmin && <><button className='py-1 px-2 bg-black text-white' onClick={() => handleEdit('New In', link.title, l.title)}>Edit</button>
+                    <button className='py-1 px-2 bg-black text-white' onClick={() => handleDelete('New In', link.title, l.title)}>Delete</button></>}
+                    </li>
+                    </li>
                   ))}
                 </li>
               ))}
@@ -212,7 +291,7 @@ function Navbar() {
 
             </ul>
           </li>
-          <li className={`${dynamicStyles.menuItem} group relative`}>Swimwear
+          <li className={`${dynamicStyles.menuItem} group relative`}>{links.length > 0 ? links[1].title : 'Swimwear'}
             <ul className='w-[calc(90.7vw)] bg-white text-black h-80 hidden group-hover:flex absolute top-20 -left-[calc(106px)] mt-4 justify-evenly px-4 pt-4'>
               {links.length > 0 && links[1].images.map((img, i) => (
                 <div key={i} className='relative'>
@@ -225,7 +304,7 @@ function Navbar() {
             </ul>
 
           </li>
-          <li className={dynamicStyles.menuItem}>look books</li>
+          <li className={dynamicStyles.menuItem}>Look books</li>
           <li className={dynamicStyles.menuItem}>Blogs</li>
         </ul>
 
@@ -248,9 +327,10 @@ function Navbar() {
           <li className={dynamicStyles.menuItem}>Ethics</li>
           <li className={dynamicStyles.menuItem}>About</li>
           <li className="text-2xl py-9" onClick={toggleDrawer}><CiSearch /></li>
-          {logOut ? <li className="text-2xl py-9"><Link href='/login'><CiUser /></Link></li> : 
-          <li className="text-2xl py-9" onClick={logOutHandler}><LuUserX2 /></li>
-          }
+          
+          {user ? <li className="text-2xl py-9" onClick={logOutHandler}><LuUserX2 /></li> : 
+           <li className="text-2xl py-9"><Link href='/login'><CiUser /></Link></li>}
+          
           <li className="text-2xl py-9" onClick={toggleCartDrawer}><IoBagOutline /></li>
         </ul>
       </nav>

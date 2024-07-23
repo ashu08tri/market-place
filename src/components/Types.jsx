@@ -1,20 +1,67 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import ProductFormModal from './ProductFormModal';
+import { decode } from 'jsonwebtoken';
+import { Toaster, toast } from "sonner";
 
+const getData = async (category) => {
+  try {
+    let res = await fetch(`http://localhost:3000/api/types/${category}`, { cache: 'no-store' });
+    res = await res.json();
+    return res;
+  } catch (err) {
+    console.log(err);
+  }
+};
 
-function Types({ product, img, title }) {
+function Types({ product, img, title, category }) {
   const router = useRouter();
   const [visibleItems, setVisibleItems] = useState(10);
+  const [isProductFormOpen, setIsProductFormOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem('token') || null);
+  const [products, setProducts] = useState(product.product);
 
   const handleViewMore = () => {
     setVisibleItems(prevVisibleItems => prevVisibleItems + 10);
   };
-  //console.log(product);
+
+  useEffect(() => {
+    if (token) {
+      try {
+        const decodedToken = decode(token);
+        if (decodedToken.exp * 1000 > Date.now()) {
+          setIsAdmin(decodedToken.isAdmin);
+        } else {
+          localStorage.removeItem('token');
+          setToken(null);
+        }
+      } catch (error) {
+        console.error("Invalid token:", error);
+        localStorage.removeItem('token');
+        setToken(null);
+      }
+    } else {
+      setIsAdmin(false);
+    }
+  }, [token]);
+
+  const closeProductFormModal = () => {
+    setIsProductFormOpen(!isProductFormOpen);
+  };
+
+  const handleProductAdd = async () => {
+    const updatedData = await getData(category);
+    setProducts(updatedData.product);
+    toast.success('Product list updated');
+    setIsProductFormOpen(false);
+  };
 
   return (
     <div className='pt-24'>
+      <Toaster closeButton position="bottom-right" />
       <div className='h-80 relative'>
         <img
           src={img}
@@ -22,7 +69,7 @@ function Types({ product, img, title }) {
           className='h-full w-full object-cover'
         />
         <p className='text-white text-2xl uppercase font-semibold md:text-4xl tracking-wider absolute top-1/2 left-1/2 transform -translate-x-1/2 translate-y-[100%]'>
-          {product && title.replace(/_/g, ' ')}
+          {title.replace(/_/g, ' ')}
         </p>
       </div>
 
@@ -47,10 +94,12 @@ function Types({ product, img, title }) {
           </ul>
         </div>
         <div className='md:w-10/12 flex flex-wrap justify-center md:pl-8'>
-          {(product.product.length > 10 ? product.product.slice(0, visibleItems) : product.product).map((item, i) => (
+          {(products.length > 10 ? products.slice(0, visibleItems) : products).map((item, i) => (
             <div key={i} className='w-1/2 md:w-1/4 px-2 mb-4 cursor-pointer' onClick={() => router.push(`/types/${title}/${item._id}`)}>
               <div className='rounded overflow-hidden shadow-lg'>
-                <img className='h-64 w-56 object-cover' src={item.img[0]} alt={item.title} />
+              <div className='flex justify-center'>
+                  <img className='h-64 w-56 object-cover' src={item.img[0]} alt={item.title} />
+                  </div>
                 <div className='px-6 py-4'>
                   <p className='font-bold text-xl mb-2'>{item.title}</p>
                   <p className='text-gray-700 text-base'>{item.amount}</p>
@@ -60,7 +109,7 @@ function Types({ product, img, title }) {
           ))}
         </div>
       </div>
-      {visibleItems < product.product.length && (
+      {visibleItems < products.length && (
         <div className='flex justify-center mt-4'>
           <button
             className='bg-black text-white px-4 py-2'
@@ -70,8 +119,16 @@ function Types({ product, img, title }) {
           </button>
         </div>
       )}
+      {isAdmin && (
+        <div className='absolute top-40 p-5'>
+          <button className='bg-black text-white p-3' onClick={closeProductFormModal}>Add Product</button>
+        </div>
+      )}
+      {isProductFormOpen && <ProductFormModal onClose={closeProductFormModal} maintitle={title} onProductAdd={handleProductAdd} apiRoute={`/api/types/${title}`}
+            storagePath={'productImages/types'}/>}
     </div>
   );
 }
 
 export default Types;
+

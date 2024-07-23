@@ -97,7 +97,9 @@ function Collection({ product, img, title, category }) {
           {(products.length > 10 ? products.slice(0, visibleItems) : products).map((item, i) => (
             <div key={i} className='w-1/2 md:w-1/4 px-2 mb-4 cursor-pointer' onClick={() => router.push(`/collections/${title}/${item._id}`)}>
               <div className='rounded overflow-hidden shadow-lg'>
-                <img className='h-64 w-56 object-cover' src={item.img[0]} alt={item.title} />
+              <div className='flex justify-center'>
+                  <img className='h-64 w-56 object-cover' src={item.img[0]} alt={item.title} />
+                  </div>
                 <div className='px-6 py-4'>
                   <p className='font-bold text-xl mb-2'>{item.title}</p>
                   <p className='text-gray-700 text-base'>{item.amount}</p>
