@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import ProductFormModal from './ProductFormModal';
 import { decode } from 'jsonwebtoken';
@@ -21,32 +22,20 @@ function Collection({ product, img, title, category }) {
   const [visibleItems, setVisibleItems] = useState(10);
   const [isProductFormOpen, setIsProductFormOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [token, setToken] = useState(localStorage.getItem('token') || null);
+  const [token, setToken] = useState(null);
   const [products, setProducts] = useState(product.product);
+
+  const { data } = useSession();
 
   const handleViewMore = () => {
     setVisibleItems(prevVisibleItems => prevVisibleItems + 10);
   };
 
-  useEffect(() => {
-    if (token) {
-      try {
-        const decodedToken = decode(token);
-        if (decodedToken.exp * 1000 > Date.now()) {
-          setIsAdmin(decodedToken.isAdmin);
-        } else {
-          localStorage.removeItem('token');
-          setToken(null);
+    useEffect(() => {
+        if (data) {
+            setToken(data.user.accessToken);
         }
-      } catch (error) {
-        console.error("Invalid token:", error);
-        localStorage.removeItem('token');
-        setToken(null);
-      }
-    } else {
-      setIsAdmin(false);
-    }
-  }, [token]);
+    }, [data]);
 
   const closeProductFormModal = () => {
     setIsProductFormOpen(!isProductFormOpen);
@@ -55,9 +44,23 @@ function Collection({ product, img, title, category }) {
   const handleProductAdd = async () => {
     const updatedData = await getData(category);
     setProducts(updatedData.product);
-    toast.success('Product list updated');
     setIsProductFormOpen(false);
   };
+
+  useEffect(() => {
+    if (token) {
+        try {
+            const decodedToken = decode(token);
+            if (decodedToken.exp * 1000 > Date.now()) {
+                setIsAdmin(decodedToken.isAdmin);
+            } 
+        } catch (error) {
+            console.error("Invalid token:", error);
+        }
+    } else {
+        setIsAdmin(false);
+    }
+}, [token]);
 
   return (
     <div className='pt-24'>
@@ -125,7 +128,7 @@ function Collection({ product, img, title, category }) {
         </div>
       )}
       {isProductFormOpen && <ProductFormModal onClose={closeProductFormModal} maintitle={title} onProductAdd={handleProductAdd} apiRoute={`/api/collections/${title}`}
-            storagePath={'productImages/collections'}/>}
+            storagePath={'productImages/collections'} method={'POST'}/>}
     </div>
   );
 }

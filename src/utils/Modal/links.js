@@ -20,7 +20,8 @@ const linkSchema = new mongoose.Schema({
     images: [{
         img: String,
         alt: String,
-        text: String
+        text: String,
+        url: String
     }]
   })
   

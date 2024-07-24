@@ -125,7 +125,7 @@ function Types({ product, img, title, category }) {
         </div>
       )}
       {isProductFormOpen && <ProductFormModal onClose={closeProductFormModal} maintitle={title} onProductAdd={handleProductAdd} apiRoute={`/api/types/${title}`}
-            storagePath={'productImages/types'}/>}
+            storagePath={'productImages/types'} method={'POST'}/>}
     </div>
   );
 }

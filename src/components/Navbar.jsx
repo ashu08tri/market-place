@@ -34,11 +34,14 @@ function Navbar() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [token, setToken] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [mode, setMode] = useState('add');
+  const [mode, setMode] = useState('');
   const [mainTitle, setMainTitle] = useState('');
   const [sublinkTitle, setSublinkTitle] = useState('');
   const [oldTitle, setOldTitle] = useState('');
-  
+  const [oldImage, setOldImage] = useState({});
+  const [imageEdit, setImageEdit] = useState(false);
+
+
 
   const path = usePathname();
   const router = useRouter();
@@ -53,7 +56,7 @@ function Navbar() {
       console.log(err);
     }
   }
-  
+
   useEffect(() => {
     getData();
   }, []);
@@ -86,18 +89,18 @@ function Navbar() {
 
   useEffect(() => {
     if (token) {
-        try {
-            const decodedToken = decode(token);
-            if (decodedToken.exp * 1000 > Date.now()) {
-                setIsAdmin(decodedToken.isAdmin);
-            } 
-        } catch (error) {
-            console.error("Invalid token:", error);
+      try {
+        const decodedToken = decode(token);
+        if (decodedToken.exp * 1000 > Date.now()) {
+          setIsAdmin(decodedToken.isAdmin);
         }
+      } catch (error) {
+        console.error("Invalid token:", error);
+      }
     } else {
-        setIsAdmin(false);
+      setIsAdmin(false);
     }
-}, [token]);
+  }, [token]);
 
   useEffect(() => {
     determineIsMainPage(path);
@@ -177,7 +180,7 @@ function Navbar() {
           return true;
         }
       });
-      
+
       return (
         uniqueProducts.length > 0 && (
           <div key={index} className="p-2">
@@ -234,6 +237,14 @@ function Navbar() {
     setModalOpen(true);
   };
 
+  const handleImageEdit = (mainTitle, image) => {
+    setModalOpen(true);
+    setMode('imageEdit');
+    setMainTitle(mainTitle);
+    setOldImage(image);
+    setImageEdit(true);
+  };
+
   const handleDelete = (mainTitle, sublinkTitle, oldTitle) => {
     setMode('delete');
     setMainTitle(mainTitle);
@@ -249,7 +260,7 @@ function Navbar() {
 
   return (
     <div className={dynamicStyles.navbar}>
-      <Toaster closeButton position='bottom-right'/>
+      <Toaster closeButton position='bottom-right' />
       {isModalOpen && <NavFormModal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
@@ -257,7 +268,9 @@ function Navbar() {
         mainTitle={mainTitle}
         sublinkTitle={sublinkTitle}
         oldTitle={oldTitle}
+        oldImage={oldImage}
         onSuccess={handleSuccess}
+        imageEdit={imageEdit}
       />}
       <AnimatePresence>
         {isDrawerOpen && <SearchModal isOpen={isDrawerOpen} onClose={toggleDrawer} />}
@@ -267,17 +280,17 @@ function Navbar() {
         <ul className="hidden md:flex gap-6 z-50">
           <li className={`${dynamicStyles.menuItem} group relative`}>{links.length > 0 ? links[0].title : 'New In'}
             <ul className='w-[calc(90.7vw)] bg-white text-black h-72 hidden group-hover:flex absolute top-20 -left-8 mt-4 justify-between px-6 py-4'>
-              
+
               {links.length > 0 && links[0].subLinks.map((link, i) => (
                 <li key={i} className='font-semi-bold'>{link.title}
-                {isAdmin && <li className='p-1 w-1/2 bg-black text-white' onClick={()=> handleAdd('New In',link.title)}>Add</li>}
+                  {isAdmin && <li className='p-1 w-1/2 bg-black text-white' onClick={() => handleAdd('New In', link.title)}>Add</li>}
                   {link.sublink.map((l, j) => (
                     <li className='flex'>
-                    <Link href={l.url} key={j} className='block text-sm py-2 hover:underline underline-offset-2'>{l.title}</Link>
-                    <li className='flex gap-2 m-2 text-xs'>
-                    {isAdmin && <><button className='py-1 px-2 bg-black text-white' onClick={() => handleEdit('New In', link.title, l.title)}>Edit</button>
-                    <button className='py-1 px-2 bg-black text-white' onClick={() => handleDelete('New In', link.title, l.title)}>Delete</button></>}
-                    </li>
+                      <Link href={l.url} key={j} className='block text-sm py-2 hover:underline underline-offset-2'>{l.title}</Link>
+                      <li className='flex gap-2 m-2 text-xs'>
+                        {isAdmin && <><button className='py-1 px-2 bg-black text-white' onClick={() => handleEdit('New In', link.title, l.title)}>Edit</button>
+                          <button className='py-1 px-2 bg-black text-white' onClick={() => handleDelete('New In', link.title, l.title)}>Delete</button></>}
+                      </li>
                     </li>
                   ))}
                 </li>
@@ -285,6 +298,16 @@ function Navbar() {
               <ul className='h-full flex gap-3 relative'>
                 {links.length > 0 && links[0].images.map((img, i) => (
                   <div key={i} className='relative'>
+                    {isAdmin && (
+                      
+                        <button
+                          className='absolute py-1 px-2 bg-black text-white'
+                          onClick={() => handleImageEdit('New In', img)}
+                        >
+                          Edit Image
+                        </button>
+                      
+                    )}
                     <img src={img.img} alt={img.alt} className='w-64 h-full object-cover' />
                     <p className='absolute bottom-0 left-0 right-0 text-center text-white bg-black bg-opacity-50 py-2'>
                       {img.text}
@@ -317,7 +340,7 @@ function Navbar() {
 
         {/* LOGO */}
         <p onClick={() => {
-          if(isOpen){
+          if (isOpen) {
             setIsOpen(false)
           }
           router.push('/')
@@ -330,10 +353,10 @@ function Navbar() {
           <li className={dynamicStyles.menuItem}>Ethics</li>
           <li className={dynamicStyles.menuItem}>About</li>
           <li className="text-2xl py-9" onClick={toggleDrawer}><CiSearch /></li>
-          
-          {user ? <li className="text-2xl py-9" onClick={logOutHandler}><LuUserX2 /></li> : 
-           <li className="text-2xl py-9"><Link href='/login'><CiUser /></Link></li>}
-          
+
+          {user ? <li className="text-2xl py-9" onClick={logOutHandler}><LuUserX2 /></li> :
+            <li className="text-2xl py-9"><Link href='/login'><CiUser /></Link></li>}
+
           <li className="text-2xl py-9" onClick={toggleCartDrawer}><IoBagOutline /></li>
         </ul>
       </nav>
@@ -363,35 +386,38 @@ function Navbar() {
                   <>
                     {results.featured.length > 0 && (
                       <div className='p-4 bg-gray-200 w-10/12 my-2 rounded-md'>
-                       <div className='flex justify-between px-4'>
-                       <h3 className="font-bold text-lg">Featured</h3>
-                       <button onClick={()=> {
-                        setSearch('')
-                        setResults({...results, featured: []})}}>X</button>
-                       </div>
+                        <div className='flex justify-between px-4'>
+                          <h3 className="font-bold text-lg">Featured</h3>
+                          <button onClick={() => {
+                            setSearch('')
+                            setResults({ ...results, featured: [] })
+                          }}>X</button>
+                        </div>
                         {displayUniqueProducts(results.featured, uniqueTitles, 'featured')}
                       </div>
                     )}
                     {results.type.length > 0 && (
                       <div>
                         <div className='flex justify-between px-4'>
-                        <h3 className="font-bold text-lg">Type</h3>
-                       <button onClick={()=> {
-                        setSearch('')
-                        setResults({...results, type: []})}}>X</button>
-                       </div>
-                        
+                          <h3 className="font-bold text-lg">Type</h3>
+                          <button onClick={() => {
+                            setSearch('')
+                            setResults({ ...results, type: [] })
+                          }}>X</button>
+                        </div>
+
                         {displayUniqueProducts(results.type, uniqueTitles, 'types')}
                       </div>
                     )}
                     {results.collection.length > 0 && (
                       <div>
                         <div className='flex justify-between px-4'>
-                        <h3 className="font-bold text-lg">Collection</h3>
-                       <button onClick={()=> {
-                        setSearch('')
-                        setResults({...results, collection: []})}}>X</button>
-                       </div>
+                          <h3 className="font-bold text-lg">Collection</h3>
+                          <button onClick={() => {
+                            setSearch('')
+                            setResults({ ...results, collection: [] })
+                          }}>X</button>
+                        </div>
                         {displayUniqueProducts(results.collection, uniqueTitles, 'collections')}
                       </div>
                     )}

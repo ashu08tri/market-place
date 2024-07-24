@@ -4,8 +4,9 @@ import CartModal from "@/components/CartModal";
 import { CiStopwatch } from "react-icons/ci";
 import { AnimatePresence } from "framer-motion";
 import { IoCheckmark } from "react-icons/io5";
+import Button from "./Button";
 
-function SizeSelector({ id, sizes, amount, title, img }) {
+function SizeSelector({ id, sizes, amount, title, img, category }) {
     const [selected, setSelected] = useState('M');
     const [quantity, setQuantity] = useState(1);
     const [totalAmount, setTotalAmount] = useState(amount);
@@ -119,6 +120,7 @@ function SizeSelector({ id, sizes, amount, title, img }) {
                         </button>
                     </div>
                 </div>
+                <Button id={id} category={category} sizes={sizes} title={title} img={img} amount={amount} />
                 <div className="pt-4 md:p-0">
                     <p className="mt-4 text-sm flex items-center gap-1"><span className="text-xl"><CiStopwatch /></span>Only {sizeQuantity} left in stock for selected size, Order soon.</p>
                     <p className="mt-4 text-sm flex items-center gap-1"><span className="pl-1"><IoCheckmark /></span>Free delivery and shipping</p>

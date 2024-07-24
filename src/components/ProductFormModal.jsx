@@ -1,15 +1,16 @@
 "use client";
 import { useState } from "react";
-import app from "@/firebase"; // Ensure this path points to your Firebase configuration
+import app from "@/firebase";
 import { getStorage, ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 import { Toaster, toast } from "sonner";
 import { BeatLoader } from "react-spinners";
 
-function ProductFormModal({ onClose, onProductAdd, apiRoute, storagePath, maintitle }) {
-    const [mainTitle, setMainTitle] = useState(maintitle);
-    const [title, setTitle] = useState('');
-    const [amount, setAmount] = useState('');
-    const [quantity, setQuantity] = useState([{ size: '', quantity: '' }]);
+function ProductFormModal({ onClose, onProductAdd, apiRoute, storagePath, maintitle, method,
+    titles, amounts, sizes, img
+}) {
+    const [title, setTitle] = useState(titles || '');
+    const [amount, setAmount] = useState(amounts || '');
+    const [quantity, setQuantity] = useState(sizes || [{ size: '', quantity: '' }]);
     const [images, setImages] = useState([]);
     const [uploading, setUploading] = useState(false);
 
@@ -20,7 +21,7 @@ function ProductFormModal({ onClose, onProductAdd, apiRoute, storagePath, mainti
     };
 
     const handleImageChange = (files) => {
-        setImages(files);
+        setImages(Array.from(files));
     };
 
     const addQuantityField = () => {
@@ -42,32 +43,32 @@ function ProductFormModal({ onClose, onProductAdd, apiRoute, storagePath, mainti
             const uploadedImageUrls = await Promise.all(Array.from(images).map(img => uploadImageToFirebase(img)));
 
             const productData = {
-                mainTitle,
+                maintitle,
                 product: [{
                     title,
                     quantity: { size: quantity },
                     amount: Number(amount),
-                    img: uploadedImageUrls
+                    img: uploadedImageUrls.length > 0 ? uploadedImageUrls : img || []
                 }]
             };
 
             let res = await fetch(apiRoute, {
-                method: "POST",
+                method: method,
                 headers: {
                     'Content-type': 'application/json'
                 },
-                body: JSON.stringify(productData)
+                body: JSON.stringify(method==='POST' ? productData : productData.product[0])
             });
             res = await res.json();
             if (res.ok) {
-                toast.success('Product added!');
+                toast.success('Operation Successful!');
                 onProductAdd();
                 onClose();
             } else {
                 toast.error(res.error);
             }
         } catch (err) {
-            toast.error('Failed to add product!');
+            toast.error('Operation Failed!');
             console.log(err);
         } finally {
             setUploading(false);
@@ -75,37 +76,82 @@ function ProductFormModal({ onClose, onProductAdd, apiRoute, storagePath, mainti
     };
 
     return (
-        <div className="absolute top-40 left-40 p-5 bg-black rounded-md text-white">
-            <Toaster closeButton position="bottom-right" />
-            <form onSubmit={submitHandler} className="w-full">
-                <div className="flex flex-col gap-2">
-                    <label htmlFor="mainTitle">Main Title:</label>
-                    <input type="text" className="text-black" id="mainTitle" value={mainTitle} onChange={(e) => setMainTitle(e.target.value)} required />
-
-                    <label htmlFor="title">Title:</label>
-                    <input type="text" className="text-black" id="title" value={title} onChange={(e) => setTitle(e.target.value)} required />
-
-                    <label htmlFor="amount">Amount:</label>
-                    <input type="number" className="text-black" id="amount" value={amount} onChange={(e) => setAmount(e.target.value)} required />
-
-                    <label>Quantity:</label>
-                    {quantity.map((q, index) => (
-                        <div key={index} className="flex gap-2">
-                            <input type="text" className="text-black" placeholder="Size" value={q.size} onChange={(e) => handleQuantityChange(index, 'size', e.target.value)} required />
-                            <input type="number" className="text-black" placeholder="Quantity" value={q.quantity} onChange={(e) => handleQuantityChange(index, 'quantity', e.target.value)} required />
-                        </div>
-                    ))}
-                    <button type="button" onClick={addQuantityField}>Add Size</button>
-
-                    <label>Images:</label>
-                    <input type="file" className="text-white" multiple onChange={(e) => handleImageChange(e.target.files)} required />
-
-                    <button className='bg-white text-black py-1 px-3 mt-2' disabled={uploading}>
-                        {uploading ? <BeatLoader loading={uploading} size={10} color='black' aria-label="Loading Spinner" data-testid="loader" /> : 'Add Product'}
-                    </button>
+        <div className="absolute top-20 left-40 p-4 bg-white border border-black rounded-md text-black mt-10">
+        <button
+            onClick={onClose}
+            className="absolute top-2 right-2 text-black text-xl font-bold"
+        >
+            ×
+        </button>
+        <Toaster closeButton position="bottom-right" />
+        <form onSubmit={submitHandler} className="flex flex-col gap-3">
+            <label htmlFor="title" className="text-black font-semibold">Title:</label>
+            <input
+                type="text"
+                className="border border-black p-2 rounded-md"
+                id="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+            />
+    
+            <label htmlFor="amount" className="text-black font-semibold">Amount:</label>
+            <input
+                type="number"
+                className="border border-black p-2 rounded-md"
+                id="amount"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                required
+            />
+    
+            <label className="text-black font-semibold">Quantity:</label>
+            {quantity.map((q, index) => (
+                <div key={index} className="flex gap-2">
+                    <input
+                        type="text"
+                        className="border border-black p-1 rounded-md flex-1"
+                        placeholder="Size"
+                        value={q.size}
+                        onChange={(e) => handleQuantityChange(index, 'size', e.target.value)}
+                       
+                    />
+                    <input
+                        type="number"
+                        className="border border-black p-1 rounded-md flex-1"
+                        placeholder="Quantity"
+                        value={q.quantity}
+                        onChange={(e) => handleQuantityChange(index, 'quantity', e.target.value)}
+                      
+                    />
                 </div>
-            </form>
-        </div>
+            ))}
+            <button
+                type="button"
+                className="mt-2 border border-black text-black py-1 px-2 rounded-md hover:bg-black hover:text-white transition"
+                onClick={addQuantityField}
+            >
+                Add Size
+            </button>
+    
+            <label className="text-black font-semibold">Images:</label>
+            <input
+                type="file"
+                className="border border-black p-1 rounded-md"
+                multiple
+                onChange={(e) => handleImageChange(e.target.files)}
+            />
+    
+            <button
+                type="submit"
+                className='bg-black text-white py-2 px-4 mt-2 rounded-md hover:bg-gray-800 transition'
+                disabled={uploading}
+            >
+                {uploading ? <BeatLoader loading={uploading} size={10} color='white' aria-label="Loading Spinner" data-testid="loader" /> : 'Add Product'}
+            </button>
+        </form>
+    </div>
+    
     );
 }
 

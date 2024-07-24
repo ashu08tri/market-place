@@ -36,7 +36,7 @@ async function page({ params }) {
           <p className='text-xs py-1 md:text-sm'>Tax included. Shipping calculated at checkout.</p>
           <div className='py-4'>
             <p className='text-sm pb-2'>SIZE:</p>
-            <SizeSelector id={item[0]._id} sizes={item[0].quantity.size} amount={item[0].amount} title={item[0].title} img={item[0].img} />
+            <SizeSelector id={item[0]._id} sizes={item[0].quantity.size} amount={item[0].amount} title={item[0].title} img={item[0].img} category={category} />
           </div>
           </div>
           </div>
