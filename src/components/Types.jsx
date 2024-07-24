@@ -16,49 +16,56 @@ const getData = async (category) => {
   }
 };
 
-function Types({ product, img, title, category }) {
+function Product({ product, img, title, categories }) {
   const router = useRouter();
   const [visibleItems, setVisibleItems] = useState(10);
   const [isProductFormOpen, setIsProductFormOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [token, setToken] = useState(null);
-  const [products, setProducts] = useState(product.product);
-
-  
-  const {data} = useSession();
+  const [products, setProducts] = useState(product);
+  const [allCategories, setAllCategories] = useState(categories);
+  const { data } = useSession();
 
   const handleViewMore = () => {
-    setVisibleItems(prevVisibleItems => prevVisibleItems + 10);
+    setVisibleItems((prevVisibleItems) => prevVisibleItems + 10);
   };
 
   useEffect(() => {
     if (data) {
-        setToken(data.user.accessToken);
+      setToken(data.user.accessToken);
     }
-}, [data]);
+  }, [data]);
 
   useEffect(() => {
     if (token) {
-        try {
-            const decodedToken = decode(token);
-            if (decodedToken.exp * 1000 > Date.now()) {
-                setIsAdmin(decodedToken.isAdmin);
-            } 
-        } catch (error) {
-            console.error("Invalid token:", error);
+      try {
+        const decodedToken = decode(token);
+        if (decodedToken.exp * 1000 > Date.now()) {
+          setIsAdmin(decodedToken.isAdmin);
         }
+      } catch (error) {
+        console.error("Invalid token:", error);
+      }
     } else {
-        setIsAdmin(false);
+      setIsAdmin(false);
     }
-}, [token]);
+  }, [token]);
+
+  useEffect(() => {
+    (async () => {
+      const fetchedData = await getData(title);
+      setProducts(fetchedData.products);
+      setAllCategories(fetchedData.categories);
+    })();
+  }, [title]);
 
   const closeProductFormModal = () => {
     setIsProductFormOpen(!isProductFormOpen);
   };
 
   const handleProductAdd = async () => {
-    const updatedData = await getData(category);
-    setProducts(updatedData.product);
+    const updatedData = await getData(title);
+    setProducts(updatedData.products);
     setIsProductFormOpen(false);
   };
 
@@ -78,30 +85,37 @@ function Types({ product, img, title, category }) {
       <div className='p-8 border-y flex flex-col justify-center gap-6 items-center'>
         <div className='md:hidden border-b pb-10'>
           <ul className='flex justify-center gap-2 text-left'>
-            <li className='group'><Link href='/types/one_piece_swimsuits' className='text-sm whitespace-nowrap group-hover:underline underline-offset-2'>One-piece</Link></li>
-            <li className='group'><Link href='/types/two_piece_swimsuits' className='text-sm whitespace-nowrap px-2 py-10 border-x group-hover:underline underline-offset-2'>Two-piece</Link></li>
-            <li className='group'><Link href='/types/bikini_tops' className='text-sm whitespace-nowrap pr-2 py-10 border-r group-hover:underline underline-offset-2'>Bikini Tops</Link></li>
-            <li className='group'><Link href='/types/bikini_bottoms' className='text-sm whitespace-nowrap border-x group-hover:underline underline-offset-2'>Bikini Bottoms</Link></li>
+            {allCategories.map((cat, index) => (
+              <li key={index} className='group'>
+                <Link href={`/types/${cat}`} className='text-sm whitespace-nowrap group-hover:underline underline-offset-2'>
+                  {cat.replace(/_/g, ' ').toUpperCase()}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
-        <p className='text-xl text-center'>{`${product.product.length} Products`}</p>
+        <p className='text-xl text-center'>{`${products.length} Products`}</p>
       </div>
       <div className='flex'>
         <div className='hidden md:flex justify-center md:w-2/12'>
           <ul className='flex flex-col justify-center gap-4 text-left h-96 sticky top-8 border-r px-16'>
-            <li className='group'><Link href='/types/one_piece_swimsuits' className='group-hover:underline underline-offset-2'>One-piece</Link></li>
-            <li className='group'><Link href='/types/two_piece_swimsuits' className='group-hover:underline underline-offset-2'>Two-piece</Link></li>
-            <li className='group'><Link href='/types/bikini_tops' className='group-hover:underline underline-offset-2'></Link>Bikini Tops</li>
-            <li className='group'><Link href='/types/bikini_bottoms' className='group-hover:underline underline-offset-2'>Bikini Bottoms</Link></li>
+            {allCategories.map((cat, index) => (
+              <li key={index} className='group'>
+                <Link href={`/types/${cat}`} className='group-hover:underline underline-offset-2'>
+                  {cat.replace(/_/g, ' ').toUpperCase()}
+                </Link>
+              </li>
+            ))}
+            <li className='hover:underline underline-offset-2'><Link href='/types/shop_all'>Shop All</Link></li>
           </ul>
         </div>
         <div className='md:w-10/12 flex flex-wrap justify-center md:pl-8'>
           {(products.length > 10 ? products.slice(0, visibleItems) : products).map((item, i) => (
             <div key={i} className='w-1/2 md:w-1/4 px-2 mb-4 cursor-pointer' onClick={() => router.push(`/types/${title}/${item._id}`)}>
               <div className='rounded overflow-hidden shadow-lg'>
-              <div className='flex justify-center'>
+                <div className='flex justify-center'>
                   <img className='h-64 w-56 object-cover' src={item.img[0]} alt={item.title} />
-                  </div>
+                </div>
                 <div className='px-6 py-4'>
                   <p className='font-bold text-xl mb-2'>{item.title}</p>
                   <p className='text-gray-700 text-base'>{item.amount}</p>
@@ -127,10 +141,9 @@ function Types({ product, img, title, category }) {
         </div>
       )}
       {isProductFormOpen && <ProductFormModal onClose={closeProductFormModal} maintitle={title} onProductAdd={handleProductAdd} apiRoute={`/api/types/${title}`}
-            storagePath={'productImages/types'} method={'POST'}/>}
+        storagePath={'productImages/types'} method={'POST'} />}
     </div>
   );
 }
 
-export default Types;
-
+export default Product;

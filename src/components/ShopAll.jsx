@@ -3,15 +3,13 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-
-function ShopAll({ product, img, title, url }) {
+function ShopAll({ product, img, title, url, categories }) {
   const router = useRouter();
   const [visibleItems, setVisibleItems] = useState(10);
 
   const handleViewMore = () => {
     setVisibleItems(prevVisibleItems => prevVisibleItems + 10);
   };
-  //console.log(product);
 
   return (
     <div className='pt-24'>
@@ -29,10 +27,13 @@ function ShopAll({ product, img, title, url }) {
       <div className='p-8 border-y flex flex-col justify-center gap-6 items-center'>
         <div className='md:hidden border-b pb-10'>
           <ul className='flex justify-center gap-2 text-left'>
-            <li className='group'><Link href='/featured/sale' className='text-sm whitespace-nowrap group-hover:underline underline-offset-2'>Sale</Link></li>
-            <li className='group'><Link href='/featured/new_arrivals' className='text-sm whitespace-nowrap px-2 py-10 border-x group-hover:underline underline-offset-2'>New Arrivals</Link></li>
-            <li className='group'><Link href='/featured/best_seller' className='text-sm whitespace-nowrap pr-2 py-10 border-r group-hover:underline underline-offset-2'>Summer Wear</Link></li>
-            <li className='group'><Link href='/featured/shop_all' className='text-sm whitespace-nowrap border-x group-hover:underline underline-offset-2'>Shop All</Link></li>
+            {categories.map((cat, index) => (
+              <li key={index} className='group'>
+                <Link href={`/${url}/${cat}`} className='text-sm whitespace-nowrap group-hover:underline underline-offset-2'>
+                  {cat.replace(/_/g, ' ')}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
         <p className='text-xl text-center'>{`${product.length} Products`}</p>
@@ -40,10 +41,16 @@ function ShopAll({ product, img, title, url }) {
       <div className='flex'>
         <div className='hidden md:flex justify-center md:w-2/12'>
           <ul className='flex flex-col justify-center gap-4 text-left h-96 sticky top-8 border-r px-16'>
-            <li className='group'><Link href='/featured/sale' className='group-hover:underline underline-offset-2'>Sale</Link></li>
-            <li className='group'><Link href='/featured/new_arrivals' className='group-hover:underline underline-offset-2'>New Arrivals</Link></li>
-            <li className='group'><Link href='/featured/best_seller' className='group-hover:underline underline-offset-2'>Summer Wear</Link></li>
-            <li className='group'><Link href='/featured/shop_all' className='group-hover:underline underline-offset-2'>Shop All</Link></li>
+            {categories.map((cat, index) => (
+              <li key={index} className='group'>
+                <Link href={`/${url}/${cat}`} className='group-hover:underline underline-offset-2'>
+                  {cat.replace(/_/g, ' ').toUpperCase()}
+                </Link>
+              </li>
+            ))}
+            <li className='hover:underline underline-offset-2'>
+              <Link href={`/types/shop_all`}>Shop All</Link>
+            </li>
           </ul>
         </div>
         <div className='md:w-10/12 flex flex-wrap justify-center md:pl-8'>

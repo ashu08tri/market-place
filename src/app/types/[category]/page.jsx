@@ -1,30 +1,41 @@
-import Types from "@/components/Types";
-import ShopAll from "@/components/ShopAll";
+import React from 'react';
+import Types from '@/components/Types';
+import ShopAll from '@/components/ShopAll';
 
 const getData = async (category) => {
   try {
-    let res = await fetch('http://localhost:3000/api/types/'+category,{cache: 'no-store'});
+    let res = await fetch(`http://localhost:3000/api/types/${category}`, { cache: 'no-store' });
     res = await res.json();
     return res;
   } catch (err) {
     console.log(err);
-    return [];
   }
 };
 
-
-async function Page({params}) {
-  const{category} = params;
-  const data = await getData(category)
-  
+async function Page({ params }) {
+  const { category } = params;
+  const data = await getData(category);
 
   return (
     <>
-    {category === 'shop_all' ? <ShopAll product={data} img={'https://sahara-theme.myshopify.com/cdn/shop/collections/duo.jpg'} title={'Shop All'} url={'types'}/> : 
-    <Types product={data} img={'https://sahara-theme.myshopify.com/cdn/shop/collections/duo.jpg'} title={data.mainTitle} category={category} />}
-  </>
+      {category === 'shop_all' ? (
+        <ShopAll
+          product={data.products}
+          categories={data.categories}
+          img={'https://sahara-theme.myshopify.com/cdn/shop/collections/duo.jpg'}
+          title={'Shop All'}
+          url={'types'}
+        />
+      ) : (
+        <Types
+          product={data.products}
+          categories={data.categories}
+          img={'https://sahara-theme.myshopify.com/cdn/shop/collections/duo.jpg'}
+          title={category}
+        />
+      )}
+    </>
   );
 }
 
 export default Page;
-

@@ -14,20 +14,24 @@ if (!mongoose.connection.readyState) {
 export async function GET(request, { params }) {
   try {
     const { category } = params;
+    const categories = await Featured.find().select('mainTitle -_id');
+    const uniqueCategories = categories.map(cat => cat.mainTitle);
+
     if (category === 'shop_all') {
       const Products = await Featured.find();
-      const allProduct = Products.flatMap(item => item.product)
-      return NextResponse.json(allProduct);
+      const allProduct = Products.flatMap(item => item.product);
+      return NextResponse.json({ products: allProduct, categories: uniqueCategories });
     } else {
       const product = await Featured.findOne({ mainTitle: category });
       if (product) {
-        return NextResponse.json(product)
+        return NextResponse.json({ products: product.product, categories: uniqueCategories });
       } else {
-        return NextResponse.json({ status: 404 })
+        return NextResponse.json({ status: 404, categories: uniqueCategories });
       }
     }
   } catch (err) {
-    console.error(err)
+    console.error(err);
+    return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });
   }
 }
 

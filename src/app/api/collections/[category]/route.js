@@ -11,17 +11,24 @@ if (!mongoose.connection.readyState) {
   });
 }
 
-export async function GET(request,{params}){
-  try{
-    const {category} = params;
-    const product = await Collection.findOne({mainTitle: category});
-    if(product){
-      return NextResponse.json(product)
-    }else{
-      return NextResponse.json({status: 404})
+export async function GET(request, { params }) {
+  try {
+    const { category } = params;
+
+    // Ensure you're using the correct model and schema
+    const categories = await Collection.find().select('mainTitle -_id');
+    const uniqueCategories = categories.map(cat => cat.mainTitle);
+
+    const product = await Collection.findOne({ mainTitle: category });
+
+    if (product) {
+      return NextResponse.json({ products: product.product, categories: uniqueCategories });
+    } else {
+      return NextResponse.json({ status: 404, categories: uniqueCategories });
     }
-  }catch(err){
-    console.error(err)
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ status: 500, message: 'Internal Server Error' });
   }
 }
 
