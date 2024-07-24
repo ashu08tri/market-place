@@ -46,3 +46,70 @@ if (!mongoose.connection.readyState) {
       return NextResponse.json({ error: 'Something went wrong', details: err.message }, { status: 500 });
     }
   }
+
+
+  export async function PUT(request, { params }) {
+    try {
+      const { category, id } = params;
+      const updates = await request.json();
+  
+      // Validate if the id is a valid ObjectId
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return NextResponse.json({ error: 'Invalid product ID' }, { status: 400 });
+      }
+  
+      // Update specific fields in the product array
+      const updateFields = {};
+      
+      // Build the update fields object based on the updates
+      for (const [key, value] of Object.entries(updates)) {
+        if (key !== '_id') {
+          updateFields[`product.$.${key}`] = value;
+        }
+      }
+  
+      // Find the product by id within the specified category and update it
+      const product = await Type.findOneAndUpdate(
+        { mainTitle: category, 'product._id': id },
+        { $set: updateFields },
+        { new: true, runValidators: true } // Return the updated document and validate the updates
+      );
+  
+      if (product) {
+        return NextResponse.json({ ok: true });
+      } else {
+        return NextResponse.json({ error: 'Product not found' }, { status: 404 });
+      }
+    } catch (err) {
+      console.error(err);
+      return NextResponse.json({ error: 'Something went wrong', details: err.message }, { status: 500 });
+    }
+  }
+  
+  export async function DELETE(request, { params }) {
+    try {
+      const { category, id } = params;
+      console.log(category, id);
+  
+      // Validate if the id is a valid ObjectId
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return new Response(JSON.stringify({ error: 'Invalid product ID' }), { status: 400 });
+      }
+  
+      // Find the product by id within the specified category and delete it
+      const result = await Type.updateOne(
+        { mainTitle: category },
+        { $pull: { product: { _id: id } } }
+      );
+  
+      if (result.modifiedCount > 0) {
+        return NextResponse.json({ok: true});
+      } else {
+        return NextResponse.json({ok:false});
+      }
+    } catch (err) {
+      console.error(err);
+      return NextResponse.json({error: err});
+    }
+  }
+  

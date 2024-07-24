@@ -5,7 +5,6 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import ProductFormModal from './ProductFormModal';
 import { decode } from 'jsonwebtoken';
-import { Toaster, toast } from "sonner";
 
 const getData = async (category) => {
   try {
@@ -64,7 +63,6 @@ function Collection({ product, img, title, category }) {
 
   return (
     <div className='pt-24'>
-      <Toaster closeButton position="bottom-right" />
       <div className='h-80 relative'>
         <img
           src={img}

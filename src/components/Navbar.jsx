@@ -302,7 +302,7 @@ function Navbar() {
                       
                         <button
                           className='absolute py-1 px-2 bg-black text-white'
-                          onClick={() => handleImageEdit('New In', img)}
+                          onClick={() => handleImageEdit(links[0].title , img)}
                         >
                           Edit Image
                         </button>
@@ -322,6 +322,16 @@ function Navbar() {
             <ul className='w-[calc(90.7vw)] bg-white text-black h-80 hidden group-hover:flex absolute top-20 -left-[calc(106px)] mt-4 justify-evenly px-4 pt-4'>
               {links.length > 0 && links[1].images.map((img, i) => (
                 <div key={i} className='relative'>
+                  {isAdmin && (
+                      
+                      <button
+                        className='absolute py-1 px-2 bg-black text-white'
+                        onClick={() => handleImageEdit(links[1].title, img)}
+                      >
+                        Edit Image
+                      </button>
+                    
+                  )}
                   <img src={img.img} alt={img.alt} className='w-64 h-72 object-cover' />
                   <p className='absolute bottom-4 left-0 right-0 text-center text-white bg-black bg-opacity-50 py-2'>
                     {img.text}

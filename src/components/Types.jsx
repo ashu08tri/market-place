@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import ProductFormModal from './ProductFormModal';
+import { useSession } from 'next-auth/react';
 import { decode } from 'jsonwebtoken';
-import { Toaster, toast } from "sonner";
 
 const getData = async (category) => {
   try {
@@ -21,32 +21,36 @@ function Types({ product, img, title, category }) {
   const [visibleItems, setVisibleItems] = useState(10);
   const [isProductFormOpen, setIsProductFormOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [token, setToken] = useState(localStorage.getItem('token') || null);
+  const [token, setToken] = useState(null);
   const [products, setProducts] = useState(product.product);
+
+  
+  const {data} = useSession();
 
   const handleViewMore = () => {
     setVisibleItems(prevVisibleItems => prevVisibleItems + 10);
   };
 
   useEffect(() => {
-    if (token) {
-      try {
-        const decodedToken = decode(token);
-        if (decodedToken.exp * 1000 > Date.now()) {
-          setIsAdmin(decodedToken.isAdmin);
-        } else {
-          localStorage.removeItem('token');
-          setToken(null);
-        }
-      } catch (error) {
-        console.error("Invalid token:", error);
-        localStorage.removeItem('token');
-        setToken(null);
-      }
-    } else {
-      setIsAdmin(false);
+    if (data) {
+        setToken(data.user.accessToken);
     }
-  }, [token]);
+}, [data]);
+
+  useEffect(() => {
+    if (token) {
+        try {
+            const decodedToken = decode(token);
+            if (decodedToken.exp * 1000 > Date.now()) {
+                setIsAdmin(decodedToken.isAdmin);
+            } 
+        } catch (error) {
+            console.error("Invalid token:", error);
+        }
+    } else {
+        setIsAdmin(false);
+    }
+}, [token]);
 
   const closeProductFormModal = () => {
     setIsProductFormOpen(!isProductFormOpen);
@@ -55,13 +59,11 @@ function Types({ product, img, title, category }) {
   const handleProductAdd = async () => {
     const updatedData = await getData(category);
     setProducts(updatedData.product);
-    toast.success('Product list updated');
     setIsProductFormOpen(false);
   };
 
   return (
     <div className='pt-24'>
-      <Toaster closeButton position="bottom-right" />
       <div className='h-80 relative'>
         <img
           src={img}

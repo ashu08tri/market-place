@@ -7,7 +7,7 @@ import { getStorage, ref, deleteObject } from 'firebase/storage';
 import ProductFormModal from "./ProductFormModal";
 import { useRouter } from "next/navigation";
 
-function Button({ category, id, title, sizes, amount, img }) {
+function Button({ category, id, title, sizes, amount, img, productType }) {
     const { data: session } = useSession();
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
@@ -20,7 +20,7 @@ function Button({ category, id, title, sizes, amount, img }) {
 
     const refreshData = async (category, id) => {
         try {
-            let res = await fetch(`/api/collections/${category}/${id}`);
+            let res = await fetch(`/api/${productType}/${category}/${id}`);
             res = await res.json();
             return res;
         } catch (err) {
@@ -36,8 +36,8 @@ function Button({ category, id, title, sizes, amount, img }) {
         const storage = getStorage(app);
         const storageRef = ref(storage, img[0]);
         try {
-            await deleteObject(storageRef);
-            let res = await fetch(`/api/collections/${category}/${id}`, {
+            //await deleteObject(storageRef);
+            let res = await fetch(`/api/${productType}/${category}/${id}`, {
                 method: 'DELETE',
                 cache: 'no-store'
             });
@@ -82,7 +82,7 @@ function Button({ category, id, title, sizes, amount, img }) {
                 <button className="px-3 py-1 text-white bg-black" onClick={() => deleteHandler(category, id, img)}>Delete</button>
             </div>}
 
-            {isFormOpen && <ProductFormModal onClose={closeProductFormModal} onProductAdd={handleProductUpdate} apiRoute={`/api/collections/${category}/${id}`}
+            {isFormOpen && <ProductFormModal onClose={closeProductFormModal} onProductAdd={handleProductUpdate} apiRoute={`/api/${productType}/${category}/${id}`}
                 storagePath={`productImages/${category}`} method={'PUT'} maintitle={category}
                 titles={title} amounts={amount} sizes={sizes} img={img}
             />}
