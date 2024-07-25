@@ -24,22 +24,19 @@ if (!mongoose.connection.readyState) {
   
     try {
       const { products, ...orderData } = payload;
+
+      const order = new Order({
+        ...orderData,
+        products: products
+    });
+
+    await order.save();
   
-      // Check if each product exists in the Payment collection
-      const paymentIds = await Payment.find({ _id: { $in: products } }).select('_id');
-  
-      if (paymentIds.length !== products.length) {
-        throw new Error('One or more products do not exist');
-      }
-  
-      const order = new Order({ ...orderData, products: paymentIds.map(p => p._id) });
-      await order.save();
-  
-      return NextResponse.json({order, ok: true});
-    } catch (err) {
-      console.error('Error creating order:', err);
-      return NextResponse.json({ ok: false, error: err.message });
-    }
-  }
+    return NextResponse.json({ order, ok: true });
+} catch (err) {
+    console.error('Error creating order:', err);
+    return NextResponse.json({ ok: false, error: err.message });
+}
+}
 
  

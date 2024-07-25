@@ -110,7 +110,11 @@ const orderSchema = new mongoose.Schema({
   state: String,
   city: String,
   zipcode: Number,
-  products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Payment' }], 
+  products: [{ 
+    img: [String],
+    amount: Number,
+    title: String,
+   }], 
 });
 
 export const Order = mongoose.models.Order || mongoose.model('Order', orderSchema);

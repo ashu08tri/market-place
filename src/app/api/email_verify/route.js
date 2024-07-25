@@ -10,17 +10,17 @@ if (!mongoose.connection.readyState) {
     });
   }
 
-  export async function POST(request){
-    const {email} = await request.json()
-    try{
-      const user = await Order.findOne({email});
-      if(user){
-        return NextResponse.json({ok: true})
-      }else{
-        return NextResponse.json({ok:false, message: `User ${email} not registered!`})
+  
+  export async function POST(request) {
+    const { email } = await request.json();
+    try {
+      const userOrders = await Order.find({ email }).populate('products');
+      if (userOrders.length > 0) {
+        return NextResponse.json(userOrders);
+      } else {
+        return NextResponse.json({ ok: false, message: `User ${email} not registered!` });
       }
-      
-    }catch(err){
-      return NextResponse.json({err})
+    } catch (err) {
+      return NextResponse.json({ err });
     }
   }

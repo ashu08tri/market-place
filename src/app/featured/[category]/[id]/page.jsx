@@ -32,6 +32,7 @@ async function page({ params }) {
   const allData = await getMoreProducts();
   let item = []
   item.push(data);
+  console.log(allData);
   
   
   return (

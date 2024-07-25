@@ -58,7 +58,7 @@ const Options = ({ items }) => {
         customRightArrow={<CustomRightArrow />}
         itemClass="px-2" 
       >
-        {items.length > 0 && items.map((item, index) => (
+        {items.products.length > 0 && items.products.map((item, index) => (
           <div key={index} className="flex flex-col items-center justify-start h-full md:h-[80vh] group" onClick={() => router.push('/featured/shop_all/' + item._id)}>
             <div className='bg-white w-full h-full md:h-[50vh] flex items-center'>
             <img src={item.img} alt="img" className=" object-contain md:h-full w-full h-full group-hover:opacity-75" />

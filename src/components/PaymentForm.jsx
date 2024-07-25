@@ -51,7 +51,11 @@ function PaymentForm() {
         // Add products IDs to formData
         const updatedFormData = {
             ...formData,
-            products: data.map(item => item._id) // assuming data has the _id of Payment documents
+            products: data.map(product => ({
+                img: product.img,
+                amount: product.amount,
+                title: product.title,
+            }))
         };
 
         if (!isFormValid()) {
@@ -59,73 +63,85 @@ function PaymentForm() {
             return;
         }
 
-        const res = await initializeRazorpay();
-        if (!res) {
-          alert("Razorpay SDK Failed to load");
-          return;
+        let resOrder = await fetch('/api/orders', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(updatedFormData)
+        });
+
+        resOrder = await resOrder.json();
+        if (resOrder.ok) {
+            try{
+                let res = await fetch('/api/payment',{
+                    method: 'DELETE',
+                    cache: 'no-store'
+                })
+                res = await res.json();
+
+                if(res.ok){
+                    router.push('/orders/' + resOrder.order._id);
+                    setProcessLoad(false);
+                }  
+               }catch(err){
+                console.log(err);
+               }
         }
 
-        try {
-          const response = await fetch("/api/razorpay", {
-            method: "POST",
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              taxAmt: payAmount
-            })
-          });
+        // const res = await initializeRazorpay();
+        // if (!res) {
+        //   alert("Razorpay SDK Failed to load");
+        //   return;
+        // }
 
-          if (!response.ok) {
-            const errorData = await response.json();
-            console.error('Server error:', errorData);
-            alert(`Server error: ${errorData.error}`);
-            return;
-          }
+        // try {
+        //   const response = await fetch("/api/razorpay", {
+        //     method: "POST",
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({
+        //       taxAmt: payAmount
+        //     })
+        //   });
+
+        //   if (!response.ok) {
+        //     const errorData = await response.json();
+        //     console.error('Server error:', errorData);
+        //     alert(`Server error: ${errorData.error}`);
+        //     return;
+        //   }
 
         //   const data = await response.json();
         //   console.log('Payment data:', data);
 
-        //   let resOrder = await fetch('/api/orders', {
-        //     method: 'POST',
-        //     headers: {
-        //         'content-type': 'application/json'
+        //   var options = {
+        //     key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        //     name: "ECOM Website",
+        //     currency: data.currency,
+        //     amount: data.amount,
+        //     order_id: data.id,
+        //     description: "Thank you for your purchase",
+        //     handler: function (response) {
+        //       alert("Razorpay Response: " + response.razorpay_payment_id);
         //     },
-        //     body: JSON.stringify(updatedFormData)
-        // });
+        //     prefill: {
+        //       name: "Alok Anand",
+        //       email: "admin@ECOM",
+        //       contact: '9999999999'
+        //     },
+        //   };
 
-        // resOrder = await resOrder.json();
-        // if (resOrder.ok) {
-        //     router.push('/orders/' + resOrder.order._id);
+        //   const paymentObject = new window.Razorpay(options);
+        //   paymentObject.open();
+        // } catch (err) {
+        //   console.error('Fetch error:', err);
+        //   alert(`Fetch error: ${err.message}`);
         // }
-        
-
-          var options = {
-            key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-            name: "ECOM Website",
-            currency: data.currency,
-            amount: data.amount,
-            order_id: data.id,
-            description: "Thank you for your purchase",
-            handler: function (response) {
-              alert("Razorpay Response: " + response.razorpay_payment_id);
-            },
-            prefill: {
-              name: "Alok Anand",
-              email: "admin@ECOM",
-              contact: '9999999999'
-            },
-          };
-
-          const paymentObject = new window.Razorpay(options);
-          paymentObject.open();
-        } catch (err) {
-          console.error('Fetch error:', err);
-          alert(`Fetch error: ${err.message}`);
-        }
-        finally{
-            setProcessLoad(false);
-        }
+        // finally{
+        //     setProcessLoad(false);
+        // }
     };
 
     const handleChange = (e) => {
@@ -162,6 +178,8 @@ function PaymentForm() {
             method: 'DELETE',
             cache: 'no-store'
         })
+        res = await res.json();
+
         if(res.ok){
             router.back()
         }  
