@@ -57,37 +57,66 @@ function PaymentForm() {
                 title: product.title,
             }))
         };
-
+        
         if (!isFormValid()) {
             alert("Please fill out all the fields.");
             return;
         }
-
-        let resOrder = await fetch('/api/orders', {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify(updatedFormData)
-        });
-
-        resOrder = await resOrder.json();
-        if (resOrder.ok) {
-            try{
-                let res = await fetch('/api/payment',{
-                    method: 'DELETE',
-                    cache: 'no-store'
-                })
-                res = await res.json();
-
-                if(res.ok){
-                    router.push('/orders/' + resOrder.order._id);
-                    setProcessLoad(false);
-                }  
-               }catch(err){
-                console.log(err);
-               }
+        
+        try {
+            let resOrder = await fetch('/api/orders', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(updatedFormData)
+            });
+        
+            resOrder = await resOrder.json();
+            if (resOrder.ok) {
+                const emailPayload = {
+                    email: formData.email,
+                    products: updatedFormData.products
+                };
+                let email = await fetch('/api/email', {
+                    method: "POST",
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify(emailPayload)
+                });
+        
+                // Log the response text before parsing
+                const emailText = await email.text();
+                console.log('Email response:', emailText);
+        
+                email = JSON.parse(emailText);
+                if (email.ok) {
+                    let res = await fetch('/api/payment', {
+                        method: 'DELETE',
+                        cache: 'no-store'
+                    });
+        
+                    res = await res.json();
+                    if (res.ok) {
+                        let cartDel = await fetch('/api/cart', {
+                            method: 'DELETE',
+                            credentials: 'include'
+                        });
+        
+                        cartDel = await cartDel.json();
+                        if (cartDel.ok) {
+                            setProcessLoad(false);
+                            router.push('/orders/' + resOrder.order._id);
+                        }
+                    }
+                }
+            }
+        } catch (err) {
+            console.error('Error:', err);
         }
+            
+        
 
         // const res = await initializeRazorpay();
         // if (!res) {
@@ -157,7 +186,7 @@ function PaymentForm() {
             try {
                 const res = await fetch('/api/payment', {
                     method: 'GET',
-                    credentials: 'include', // Ensure cookies are sent
+                    credentials: 'include' // Ensure cookies are sent
                 });
                 if (!res.ok) {
                     throw new Error('Network response was not ok');
@@ -172,20 +201,20 @@ function PaymentForm() {
         getData();
     }, []);
 
-    const cancelHandler = async() => {
-       try{
-        let res = await fetch('/api/payment',{
-            method: 'DELETE',
-            cache: 'no-store'
-        })
-        res = await res.json();
+    const cancelHandler = async () => {
+        try {
+            let res = await fetch('/api/payment', {
+                method: 'DELETE',
+                cache: 'no-store'
+            })
+            res = await res.json();
 
-        if(res.ok){
-            router.back()
-        }  
-       }catch(err){
-        console.log(err);
-       }
+            if (res.ok) {
+                router.back()
+            }
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     return (

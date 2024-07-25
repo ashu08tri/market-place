@@ -15,10 +15,20 @@ export async function GET(){
     try{
         let sessionId = cookies().get('sessionId');
         const cartData = await CartItem.find({sessionId: sessionId.value});
-        return NextResponse.json({cartData, ok:'true'})
+        return NextResponse.json({cartData, ok: true})
     }catch(err){
         return NextResponse.json({error:'Something went wrong!'})
     }
+}
+
+export async function DELETE(){
+  try{
+      let sessionId = cookies().get('sessionId');
+      await CartItem.deleteMany({sessionId: sessionId.value});
+      return NextResponse.json({ok: true})
+  }catch(err){
+      return NextResponse.json({error:'Something went wrong!'})
+  }
 }
 
 export async function POST(request, response) {
