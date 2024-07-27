@@ -1,15 +1,31 @@
-import React from 'react'
+import Link from 'next/link';
+import React from 'react';
 
-function Banner() {
+const getData = async() => {
+  try{
+    let res = await fetch('http://localhost:3000/api/landingPage/banner');
+    res = await res.json();
+    return res;
+  }catch(err){
+    console.log(err);
+  }
+}
+
+async function Banner() {
+  const data = await getData();
   return (
-    <div className='h-96 flex flex-col tracking-wider justify-center text-white gap-5 items-center bg-cover bg-center' style={{backgroundImage: 'url(https://sahara-theme.myshopify.com/cdn/shop/files/sahara-home-full-width-banner.jpg)'}}>
-        <p className='text-xs'>LUXURY SWIMWEAR CREATED WITH CARE</p>
-        <p className='text-4xl'>SPRING/SUMMER 2024</p>
-        <div className='flex gap-3'>
-            <button className='px-6 py-3 border border-white text-white bg-transparent hover:bg-white hover:text-black text-sm'>Show New in</button>
-            <button className='px-6 py-3 border border-white text-white bg-transparent hover:bg-white hover:text-black text-sm'>All Products</button>
-        </div>
-    </div>
+    <>
+    {
+      data ? data.map((item,i) => <div key={i} className='h-96 flex flex-col tracking-wider justify-center text-white gap-5 items-center bg-cover bg-center' style={{backgroundImage: `url(${item.image})`}}>
+      <p className='text-xs'>{item.title}</p>
+      <p className='text-4xl'>{item.title2}</p>
+      <div className='flex gap-3'>
+          <button className='px-6 py-3 border border-white text-white bg-transparent hover:bg-white hover:text-black text-sm'><Link href={item.url}>Shop New In</Link></button>
+          <button className='px-6 py-3 border border-white text-white bg-transparent hover:bg-white hover:text-black text-sm'><Link href={item.url2}>All Products</Link></button>
+      </div>
+  </div>) : <p>Failed to load data!</p>
+    }
+    </>
   )
 }
 

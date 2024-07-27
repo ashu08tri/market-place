@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
-import { OurCollection } from "@/utils/Modal/ourCollection";
+import { OurCollection } from "@/utils/Modal/LandingPageSchema";
 
 if (!mongoose.connection.readyState) {
     mongoose.connect('mongodb://127.0.0.1:27017/ecom').then(() => {
