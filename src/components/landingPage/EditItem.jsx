@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useSession } from 'next-auth/react';
-import GeneralForm from "./GeneralForm";
+import GeneralForm from "../GeneralForm";
 import { decode } from 'jsonwebtoken';
 
 const EditItem = ({ item, api, storageUrl }) => {
@@ -13,7 +13,6 @@ const EditItem = ({ item, api, storageUrl }) => {
     title: item.title,
     image: item.image,
     url: item.url,
-    desc: item.desc || "", // Ensure desc is defined
   };
 
   const { data } = useSession();
@@ -67,7 +66,6 @@ const EditItem = ({ item, api, storageUrl }) => {
         api={`${api}/${item._id}`}
         initialData={initialData}
         storageUrl={storageUrl}
-        id={item._id}
     />
       )}
     </div>

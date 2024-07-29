@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import EditItem from './EditItem';
+import EditItem from './landingPage/EditItem';
 
 const getData = async () => {
     let res = await fetch('http://localhost:3000/api/landingPage/ourcollection', {cache: 'no-store'});

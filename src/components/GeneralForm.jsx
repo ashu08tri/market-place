@@ -8,8 +8,10 @@ import { BeatLoader } from "react-spinners";
 const GeneralForm = ({ api, initialData, storageUrl }) => {
   const [image, setImg] = useState("");
   const [title, setTitle] = useState(initialData.title || "");
+  const [title2, setTitle2] = useState(initialData.title2 || "");
   const [desc, setDesc] = useState(initialData.desc || "");
   const [url, setUrl] = useState(initialData.url || "");
+  const [url2, setUrl2] = useState(initialData.url2 || "");
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -21,12 +23,12 @@ const GeneralForm = ({ api, initialData, storageUrl }) => {
 
       if (image) {
         const storage = getStorage(app);
-        const storageRef = ref(storage, `${storageUrl}/${image.name}`);
+        const storageRef = ref(storage, `landingPage/${storageUrl}/${image.name}`);
         await uploadBytes(storageRef, image);
         downloadUrl = await getDownloadURL(storageRef);
       }
 
-      const updatedItem = { image: downloadUrl, title, url };
+      const updatedItem = { image: downloadUrl, title, url, title2, url2, desc };
 
       try {
         let res = await fetch(api, {
@@ -70,6 +72,17 @@ const GeneralForm = ({ api, initialData, storageUrl }) => {
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
+        {
+          initialData.title2.length > 0 && <div className="flex justify-between">
+          <label>Text</label>
+          <input
+            className="text-black"
+            type="text"
+            value={title2}
+            onChange={(e) => setTitle2(e.target.value)}
+          />
+        </div>
+        }
         {initialData.desc && (
           <div className="flex justify-between">
             <label>Description</label>
@@ -90,6 +103,17 @@ const GeneralForm = ({ api, initialData, storageUrl }) => {
             onChange={(e) => setUrl(e.target.value)}
           />
         </div>
+        {
+          initialData.url2.length > 0 && <div className="flex justify-between">
+          <label>URL 2</label>
+          <input
+            className="text-black"
+            type="text"
+            value={url2}
+            onChange={(e) => setUrl2(e.target.value)}
+          />
+        </div>
+        }
         <button
           className="bg-white text-black py-1 px-3 mt-2"
           type="submit"
