@@ -15,7 +15,7 @@ export async function GET(){
         const banner = await Banner.find();
         return NextResponse.json(banner);
     }catch(err){
-
+        return NextResponse.json({error: err});
     }
 } 
 

@@ -15,7 +15,7 @@ export async function GET(){
         const banner = await DualTile.find();
         return NextResponse.json(banner);
     }catch(err){
-
+        return NextResponse.json({error: err});
     }
 } 
 

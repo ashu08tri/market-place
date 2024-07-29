@@ -55,10 +55,10 @@ const ImageSlider = ({ items }) => {
       >
         {items.map((item, index) => (
           <div key={index} className="flex flex-col items-center justify-center w-full h-full group">
-            <img src={item.src} alt="img" className="object-cover md:h-full w-full h-3/4 group-hover:opacity-75" />
+            <img src={item.image} alt={item.title} className="object-cover md:h-full w-full h-3/4 group-hover:opacity-75" />
             <div className="flex flex-col items-start gap-1 p-4 h-1/3 md:h-auto">
               <p className="text-lg font-semibold group-hover:underline underline-offset-2">{item.title}</p>
-              <p className="text-xs">{item.description}</p>
+              <p className="text-xs">{item.desc }</p>
             </div>
           </div>
         ))}

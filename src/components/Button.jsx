@@ -36,7 +36,7 @@ function Button({ category, id, title, sizes, amount, img, productType }) {
         const storage = getStorage(app);
         const storageRef = ref(storage, img[0]);
         try {
-            //await deleteObject(storageRef);
+            await deleteObject(storageRef);
             let res = await fetch(`/api/${productType}/${category}/${id}`, {
                 method: 'DELETE',
                 cache: 'no-store'

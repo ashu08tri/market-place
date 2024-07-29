@@ -15,7 +15,7 @@ export async function GET(){
         const itemSale = await ItemSale.find();
         return NextResponse.json(itemSale);
     }catch(err){
-
+        return NextResponse.json({error: err});
     }
 } 
 

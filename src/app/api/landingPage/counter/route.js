@@ -15,7 +15,7 @@ export async function GET(){
         const count = await Counter.find();
         return NextResponse.json(count);
     }catch(err){
-
+        return NextResponse.json({error: err});
     }
 } 
 

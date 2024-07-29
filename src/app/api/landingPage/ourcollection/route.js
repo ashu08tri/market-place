@@ -15,7 +15,7 @@ export async function GET(){
         const collection = await OurCollection.find();
         return NextResponse.json(collection);
     }catch(err){
-
+        return NextResponse.json({error: err});
     }
 } 
 
@@ -24,17 +24,17 @@ export async function POST(request){
         mainTitle: 'Our Collections',
         items: [
             {
-                img: 'https://sahara-theme.myshopify.com/cdn/shop/files/FAE_Hotel_Sages_-834_2_-min.jpg',
+                image: 'https://sahara-theme.myshopify.com/cdn/shop/files/FAE_Hotel_Sages_-834_2_-min.jpg',
                 url: '/types/shop_all',
                 title: 'Swimwear'
             },
             {
-                img: 'https://sahara-theme.myshopify.com/cdn/shop/files/FAE_Hotel_Sages_-437_4_-min.jpg',
+                image: 'https://sahara-theme.myshopify.com/cdn/shop/files/FAE_Hotel_Sages_-437_4_-min.jpg',
                 url: 'types/bikini_tops',
                 title: 'Tops'
             },
             {
-                img: 'https://sahara-theme.myshopify.com/cdn/shop/files/fae_-35.jpg',
+                image: 'https://sahara-theme.myshopify.com/cdn/shop/files/fae_-35.jpg',
                 url: 'types/bikini_bottoms',
                 title: 'Bottoms'
             }
