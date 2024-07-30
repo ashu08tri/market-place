@@ -19,3 +19,44 @@ export async function GET(request, {params}){
         return NextResponse.json({error: err});
     }
 } 
+
+export async function PUT(request, { params }) {
+  const id = params.id; 
+
+  try {
+      const { image, title, desc } = await request.json();
+
+      // Find and update the specific item within the collection
+      const updatedItem = await Blog.findOneAndUpdate(
+          { _id: id },
+          { 
+              $set: {
+                  image,
+                  title,
+                  desc
+              }
+          },
+          { new: true, runValidators: true }
+      );
+
+      if (updatedItem) {
+          return NextResponse.json({ ok: true });
+      } else {
+          console.log('Item not found:', id);
+          return NextResponse.json({ error: 'Item not found' }, { status: 404 });
+      }
+  } catch (err) {
+      console.log('Error:', err);
+      return NextResponse.json({ status: 500, error: err.message });
+  }
+}
+
+export async function DELETE(request, {params}){
+  const {id} = params;
+  try{
+      const blog = await Blog.deleteOne({_id: id});
+      return NextResponse.json({ok: true});
+  }catch(err){
+      return NextResponse.json({error: err});
+  }
+} 

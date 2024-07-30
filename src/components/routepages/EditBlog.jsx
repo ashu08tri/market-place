@@ -1,19 +1,21 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useSession } from 'next-auth/react';
-import GeneralForm from "../GeneralForm";
+import { useRouter } from "next/navigation";
+import EditForms from "./EditForms";
 import { decode } from 'jsonwebtoken';
 
-const EditDualTile= ({ item, api, storageUrl }) => {
+const EditBlog = ({ item, api, storageUrl }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [token, setToken] = useState(null);
 
+  const router = useRouter();
+
   const initialData = {
     title: item.title,
-    desc: item.desc,
     image: item.image,
-    url: item.url
+    desc: item.desc
   };
 
   const { data } = useSession();
@@ -43,17 +45,40 @@ const EditDualTile= ({ item, api, storageUrl }) => {
     setIsEditing(!isEditing);
   };
 
+  const handleDeleteClick = async(id) => {
+    try{
+        let res = await fetch('/api/landingPage/blog/'+id,{
+            method: 'DELETE'
+        });
+        res = await res.json();
+        if(res.ok){
+            alert('Blog post deleted!');
+            router.back();
+        }else{
+            alert('something went wrong!');
+        }
+    }catch(err){
+        console.log(err);
+    }
+  };
+
   return (
     <>
-   {isAdmin && <div className="">
+    {isAdmin && <div className="flex gap-3">
       <button
-        className="absolute top-2 bg-black text-white py-1 px-3"
+        className="bg-black text-white py-1 px-3"
         onClick={handleEditClick}
       >
         Edit
       </button>
+      <button
+        className=" bg-black text-white py-1 px-3"
+        onClick={() => handleDeleteClick(item._id)}
+      >
+        Delete
+      </button>
       {isEditing && (
-        <GeneralForm
+        <EditForms
         api={`${api}/${item._id}`}
         initialData={initialData}
         storageUrl={storageUrl}
@@ -64,7 +89,7 @@ const EditDualTile= ({ item, api, storageUrl }) => {
   );
 };
 
-export default EditDualTile;
+export default EditBlog;
 
 
 

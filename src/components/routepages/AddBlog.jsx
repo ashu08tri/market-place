@@ -1,20 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useSession } from 'next-auth/react';
-import GeneralForm from "../GeneralForm";
+import { useRouter } from "next/navigation";
+import AddForm from "./AddFrom";
 import { decode } from 'jsonwebtoken';
 
-const EditDualTile= ({ item, api, storageUrl }) => {
-  const [isEditing, setIsEditing] = useState(false);
+const AddBlog = ({ api, storageUrl }) => {
+  const [isAdding, setIsAdding] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [token, setToken] = useState(null);
-
-  const initialData = {
-    title: item.title,
-    desc: item.desc,
-    image: item.image,
-    url: item.url
-  };
 
   const { data } = useSession();
 
@@ -40,22 +34,22 @@ const EditDualTile= ({ item, api, storageUrl }) => {
 }, [token]);
 
   const handleEditClick = () => {
-    setIsEditing(!isEditing);
+    setIsAdding(!isAdding);
   };
 
   return (
     <>
-   {isAdmin && <div className="">
+    {isAdmin && <div>
       <button
-        className="absolute top-2 bg-black text-white py-1 px-3"
+        className="bg-black text-white py-1 px-3"
         onClick={handleEditClick}
       >
-        Edit
+        Add New Blog
       </button>
-      {isEditing && (
-        <GeneralForm
-        api={`${api}/${item._id}`}
-        initialData={initialData}
+      {isAdding && (
+        <AddForm
+        api={api}
+        initialData={""}
         storageUrl={storageUrl}
     />
       )}
@@ -64,7 +58,7 @@ const EditDualTile= ({ item, api, storageUrl }) => {
   );
 };
 
-export default EditDualTile;
+export default AddBlog;
 
 
 
