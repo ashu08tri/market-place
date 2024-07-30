@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import CounDown from "./CountDown";
+import EditCounterSale from "./landingPage/EditCounterSale";
 
 const getData = async () => {
     try {
@@ -42,7 +43,8 @@ async function CounterSale() {
             <div className='flex flex-col md:flex-row px-10 md:px-40 gap-2 md:gap-10 h-[80%] md:h-[65%] text-center my-20'>
                 {
                     data ? data.map((item, i) =>
-                        <div key={i} className='bg-cover bg-center h-full w-full md:w-1/2' style={{ backgroundImage: `url(${item.image})` }}>
+                        <div key={i} className='bg-cover relative bg-center h-full w-full md:w-1/2' style={{ backgroundImage: `url(${item.image})` }}>
+                            <EditCounterSale item={item} api={'http://localhost:3000/api/landingPage/counterSale'} storageUrl={'couterSale'}/>
                             <div className='flex flex-col h-full justify-end items-center pb-8 gap-4'>
                                 <p className='text-2xl tracking-widest font-semibold text-white'>
                                     {item.title.split(',').map((part, index) => (

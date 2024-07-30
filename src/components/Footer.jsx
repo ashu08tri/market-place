@@ -40,10 +40,8 @@ const Footer = () => {
             <h3 className='text-lg font-semibold mb-4'>Company</h3>
             <ul className='space-y-2'>
               <li><Link href='/contact'>Contact Us</Link></li>
-              <li><Link href='/gift-card'>Gift Card</Link></li>
               <li><Link href='/blog'>Blog</Link></li>
               <li><Link href='/lookbook'>Lookbook</Link></li>
-              <li><Link href='/sustainability'>Sustainability</Link></li>
             </ul>
           </div>
           <div>

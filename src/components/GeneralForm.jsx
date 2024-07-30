@@ -73,7 +73,7 @@ const GeneralForm = ({ api, initialData, storageUrl }) => {
           />
         </div>
         {
-          initialData.title2.length > 0 && <div className="flex justify-between">
+          initialData.title2 && initialData.title2.length > 0 && <div className="flex justify-between">
           <label>Text</label>
           <input
             className="text-black"
@@ -94,7 +94,8 @@ const GeneralForm = ({ api, initialData, storageUrl }) => {
             />
           </div>
         )}
-        <div className="flex justify-between">
+        {
+          initialData.url && <div className="flex justify-between">
           <label>URL</label>
           <input
             className="text-black"
@@ -102,9 +103,10 @@ const GeneralForm = ({ api, initialData, storageUrl }) => {
             value={url}
             onChange={(e) => setUrl(e.target.value)}
           />
-        </div>
+        </div> 
+        }
         {
-          initialData.url2.length > 0 && <div className="flex justify-between">
+          initialData.url2 && initialData.url2.length > 0 && <div className="flex justify-between">
           <label>URL 2</label>
           <input
             className="text-black"

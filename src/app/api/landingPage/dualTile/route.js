@@ -24,12 +24,14 @@ export async function POST(request) {
         {
             title: 'HIGHEST QUALITY, LOVE FOREVER',
             image: 'https://sahara-theme.myshopify.com/cdn/shop/files/FAE_Hotel_Sages_-174-min.jpg',
-            desc: "Sahara's Swimwear Makes, You Look And Feel, Confident And Sexy"
+            desc: "Sahara's Swimwear Makes, You Look And Feel, Confident And Sexy",
+            url: "/featured/new_arrivals"
         },
         {
             title: 'SAHARAS STORY',
             image: 'https://sahara-theme.myshopify.com/cdn/shop/files/FAE_Hotel_Sages_-855-min.jpg',
-            desc: 'Our Swimwear Is Crafted With Eco-Friendly Materials, Ensuring A Sustainable Future'
+            desc: 'Our Swimwear Is Crafted With Eco-Friendly Materials, Ensuring A Sustainable Future',
+            url: "/collections/shop_all"
         }
     ];
     try {

@@ -26,7 +26,8 @@ export const OurCollection = mongoose.models.OurCollection || mongoose.model('Ou
 const dualTileSchema = new mongoose.Schema({
     title: String,
     image: String,
-    desc: String
+    desc: String,
+    url: String
 })
 
 export const DualTile = mongoose.models.DualTile || mongoose.model('DualTile', dualTileSchema);
@@ -34,6 +35,7 @@ export const DualTile = mongoose.models.DualTile || mongoose.model('DualTile', d
 const itemSaleSchema = new mongoose.Schema({
     title: String,
     image: String,
+    url: String
 })
 
 export const ItemSale = mongoose.models.ItemSale || mongoose.model('ItemSale', itemSaleSchema);

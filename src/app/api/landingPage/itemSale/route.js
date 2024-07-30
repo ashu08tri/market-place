@@ -24,6 +24,7 @@ export async function POST(request) {
         {
             title: 'MEDITERRANEAN LOVE',
             image: 'https://sahara-theme.myshopify.com/cdn/shop/files/FAE_Hotel_Sages_-307-min.jpg',
+            url: '/collections/mediterranean_love'
             
         }
     try {
