@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 const getData = async() => {
     try{
-        let res = await fetch('http://localhost:3000/api/products/best_seller');
+        let res = await fetch(`${NEXT_PUBLIC_HOST_URL}//api/products/best_seller`);
         res = await res.json();
         return res;
     }catch(err){

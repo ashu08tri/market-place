@@ -5,7 +5,7 @@ import Collection from '@/components/Collection';
 
 const getData = async (category) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/collections/${category}`, { cache: 'no-store' });
+    const res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/collections/${category}`, { cache: 'no-store' });
     const data = await res.json();
     return data;
   } catch (err) {

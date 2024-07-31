@@ -2,7 +2,7 @@ import React from 'react';
 
 const getData = async (id) => {
   try {
-    let res = await fetch(`http://localhost:3000/api/orders/${id}`,{cache: 'no-store'});
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/orders/${id}`,{cache: 'no-store'});
     res = await res.json();
     return res;
   } catch (error) {

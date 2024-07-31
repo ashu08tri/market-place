@@ -29,7 +29,7 @@ const MakePayment = ({ payAmount }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          taxAmt: 100,
+          taxAmt: payAmount,
         })
       });
 
@@ -71,7 +71,7 @@ const MakePayment = ({ payAmount }) => {
 
   return (
     <div>
-      <button onClick={makePayment}>Pay 100</button>
+      <button onClick={makePayment}>Make Payment {payAmount}</button>
     </div>
   );
 };

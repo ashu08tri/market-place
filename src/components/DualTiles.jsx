@@ -4,7 +4,7 @@ import EditDualTile from './landingPage/EditDualTile';
 
 const getData = async () => {
   try {
-    let res = await fetch('http://localhost:3000/api/landingPage/dualTile');
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/dualTile`);
     res = await res.json();
     return res;
   } catch (err) {
@@ -31,7 +31,7 @@ async function DualTiles() {
               {index % 2 === 0 ? (
                 <>
                   <div className='text-center md:w-1/2 flex flex-col items-center justify-center tracking-widest mt-12 md:my-12 gap-4'>
-                  <EditDualTile item={item} api={'http://localhost:3000/api/landingPage/dualTile'} storageUrl={'dualTile'} />
+                  <EditDualTile item={item} api={`${NEXT_PUBLIC_HOST_URL}/api/landingPage/dualTile`} storageUrl={'dualTile'} />
                     <h1 className='text-3xl' style={{ whiteSpace: 'pre-line' }}>
                       {item.title.split(',').map((part, index) => (
                         <React.Fragment key={index}>

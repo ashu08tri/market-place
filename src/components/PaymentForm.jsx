@@ -62,8 +62,35 @@ function PaymentForm() {
             alert("Please fill out all the fields.");
             return;
         }
-        
+
+        const res = await initializeRazorpay();
+        if (!res) {
+          alert("Razorpay SDK Failed to load");
+          return;
+        }
+
         try {
+          const response = await fetch("/api/razorpay", {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              taxAmt: payAmount
+            })
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Server error:', errorData);
+            alert(`Server error: ${errorData.error}`);
+            return;
+          }
+
+          const data = await response.json();
+          console.log('Payment data:', data);
+
+          try {
             let resOrder = await fetch('/api/orders', {
                 method: 'POST',
                 headers: {
@@ -88,7 +115,7 @@ function PaymentForm() {
         
                 // Log the response text before parsing
                 const emailText = await email.text();
-                console.log('Email response:', emailText);
+                //console.log('Email response:', emailText);
         
                 email = JSON.parse(emailText);
                 if (email.ok) {
@@ -115,62 +142,33 @@ function PaymentForm() {
         } catch (err) {
             console.error('Error:', err);
         }
-            
-        
 
-        // const res = await initializeRazorpay();
-        // if (!res) {
-        //   alert("Razorpay SDK Failed to load");
-        //   return;
-        // }
+          var options = {
+            key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+            name: "ECOM Website",
+            currency: data.currency,
+            amount: data.amount,
+            order_id: data.id,
+            description: "Thank you for your purchase",
+            handler: function (response) {
+              alert("Razorpay Response: " + response.razorpay_payment_id);
+            },
+            prefill: {
+              name: "Alok Anand",
+              email: "admin@ECOM",
+              contact: '9999999999'
+            },
+          };
 
-        // try {
-        //   const response = await fetch("/api/razorpay", {
-        //     method: "POST",
-        //     headers: {
-        //       'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //       taxAmt: payAmount
-        //     })
-        //   });
-
-        //   if (!response.ok) {
-        //     const errorData = await response.json();
-        //     console.error('Server error:', errorData);
-        //     alert(`Server error: ${errorData.error}`);
-        //     return;
-        //   }
-
-        //   const data = await response.json();
-        //   console.log('Payment data:', data);
-
-        //   var options = {
-        //     key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        //     name: "ECOM Website",
-        //     currency: data.currency,
-        //     amount: data.amount,
-        //     order_id: data.id,
-        //     description: "Thank you for your purchase",
-        //     handler: function (response) {
-        //       alert("Razorpay Response: " + response.razorpay_payment_id);
-        //     },
-        //     prefill: {
-        //       name: "Alok Anand",
-        //       email: "admin@ECOM",
-        //       contact: '9999999999'
-        //     },
-        //   };
-
-        //   const paymentObject = new window.Razorpay(options);
-        //   paymentObject.open();
-        // } catch (err) {
-        //   console.error('Fetch error:', err);
-        //   alert(`Fetch error: ${err.message}`);
-        // }
-        // finally{
-        //     setProcessLoad(false);
-        // }
+          const paymentObject = new window.Razorpay(options);
+          paymentObject.open();
+        } catch (err) {
+          console.error('Fetch error:', err);
+          alert(`Fetch error: ${err.message}`);
+        }
+        finally{
+            setProcessLoad(false);
+        }
     };
 
     const handleChange = (e) => {

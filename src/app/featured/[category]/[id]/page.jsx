@@ -6,7 +6,7 @@ import Options from '@/components/Options';
 
 const getProductData = async (category, id) => {
   try {
-    let res = await fetch(`http://localhost:3000/api/products/${category}/${id}`,{cache: 'no-store'});
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/products/${category}/${id}`,{cache: 'no-store'});
     res = await res.json();
     return res;
   } catch (err) {
@@ -17,7 +17,7 @@ const getProductData = async (category, id) => {
 
 const getMoreProducts = async() => {
   try {
-    let res = await fetch('http://localhost:3000/api/products/shop_all',{cache: 'no-store'});
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/products/shop_all`,{cache: 'no-store'});
     res = await res.json();
     return res;
   } catch (err) {

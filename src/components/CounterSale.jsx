@@ -5,7 +5,7 @@ import EditCounterSale from "./landingPage/EditCounterSale";
 
 const getData = async () => {
     try {
-        let res = await fetch('http://localhost:3000/api/landingPage/counterSale');
+        let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/counterSale`);
         res = await res.json();
         return res;
     } catch (err) {
@@ -16,7 +16,7 @@ const getData = async () => {
 
 const getCounter = async () => {
     try {
-        let res = await fetch('http://localhost:3000/api/landingPage/counter');
+        let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/counter`);
         res = await res.json();
         return res;
     } catch (err) {
@@ -44,7 +44,7 @@ async function CounterSale() {
                 {
                     data ? data.map((item, i) =>
                         <div key={i} className='bg-cover relative bg-center h-full w-full md:w-1/2' style={{ backgroundImage: `url(${item.image})` }}>
-                            <EditCounterSale item={item} api={'http://localhost:3000/api/landingPage/counterSale'} storageUrl={'couterSale'}/>
+                            <EditCounterSale item={item} api={`${NEXT_PUBLIC_HOST_URL}/api/landingPage/counter/api/landingPage/counterSale`} storageUrl={'couterSale'}/>
                             <div className='flex flex-col h-full justify-end items-center pb-8 gap-4'>
                                 <p className='text-2xl tracking-widest font-semibold text-white'>
                                     {item.title.split(',').map((part, index) => (

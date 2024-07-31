@@ -2,7 +2,7 @@ import Link from 'next/link';
 import EditItem from './landingPage/EditItem';
 
 const getData = async () => {
-    let res = await fetch('http://localhost:3000/api/landingPage/ourcollection', {cache: 'no-store'});
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/ourcollection`, {cache: 'no-store'});
     res = await res.json();
     return res;
 }
@@ -25,7 +25,7 @@ async function OurCollections() {
                     <div className='w-full h-3/4 overflow-x-scroll md:overflow-x-auto scrollbar-hide'>
                         <div className='h-full flex w-[calc(200vw)] gap-1 md:w-full justify-center text-center text-white'>
                             {data[0].items.map((item, i) => (
-                                <EditItem key={i} item={item} api={'http://localhost:3000/api/landingPage/ourcollection'} storageUrl={'ourCollections'}/>
+                                <EditItem key={i} item={item} api={`${NEXT_PUBLIC_HOST_URL}/api/landingPage/ourcollection`} storageUrl={'ourCollections'}/>
                             ))}
                         </div>
                     </div>

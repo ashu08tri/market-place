@@ -5,7 +5,7 @@ import SizeSelector from '@/components/SizeSelector';
 
 const getProductData = async (category, id) => {
   try {
-    let res = await fetch(`http://localhost:3000/api/types/${category}/${id}`,{cache: 'no-store'});
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/types/${category}/${id}`,{cache: 'no-store'});
     res = await res.json();
     return res;
   } catch (err) {

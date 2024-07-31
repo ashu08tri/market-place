@@ -3,7 +3,7 @@ import ImageSlider from './ImageSlider';
 
 const getBlog = async () => {
   try{
-    let res = await fetch('http://localhost:3000/api/landingPage/blog');
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/blog`);
     res = await res.json();
     return res;
   }catch(err){

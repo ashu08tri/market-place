@@ -8,7 +8,7 @@ import { decode } from 'jsonwebtoken';
 
 const getData = async (category) => {
   try {
-    let res = await fetch(`http://localhost:3000/api/types/${category}`, { cache: 'no-store' });
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/types/${category}`, { cache: 'no-store' });
     res = await res.json();
     return res;
   } catch (err) {

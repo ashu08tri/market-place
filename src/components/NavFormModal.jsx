@@ -35,7 +35,7 @@ const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ mainTitle: newMainTitle, sublink: sublinkTitle, oldTitle, newTitle: title, newUrl: url }),
+          body: JSON.stringify({ mainTitle: newMainTitle, sublink: sublinkTitle, oldTitle, newTitle: title, newUrl: url.trim().toLowerCase().replace(/\s+/g, '_')}),
         });
       } else if (mode === 'delete') {
         response = await fetch('/api/navlink', {
