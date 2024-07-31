@@ -58,13 +58,6 @@ const counterSaleSchema = new mongoose.Schema({
 
 export const CounterSale = mongoose.models.CounterSale || mongoose.model('CounterSale', counterSaleSchema);
 
-const ourMissionSchema = new mongoose.Schema({
-    title: String,
-    desc: String
-})
-
-export const OurMission = mongoose.models.OurMission || mongoose.model('OurMission', ourMissionSchema);
-
 const blogSchema = new mongoose.Schema({
     title: String,
     desc: String,

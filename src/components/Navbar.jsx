@@ -340,7 +340,6 @@ function Navbar() {
               ))}
             </ul>
           </li>
-          <li className={dynamicStyles.menuItem}>Look books</li>
           <li className={dynamicStyles.menuItem}><Link href='/blog'>Blogs</Link></li>
         </ul>
 
@@ -359,8 +358,7 @@ function Navbar() {
         <div className='md:hidden text-2xl cursor-pointer' onClick={toggleCartDrawer}><IoBagOutline /></div>
 
         <ul className="hidden md:flex gap-6 group cursor-pointer">
-          <li className={dynamicStyles.menuItem}><Link href='/order'>Order</Link></li>
-          <li className={dynamicStyles.menuItem}><Link href='/ethics'>Ethics</Link></li>
+          <li className={dynamicStyles.menuItem}><Link href='/orders'>Order</Link></li>
           <li className={dynamicStyles.menuItem}><Link href='/about'>About</Link></li>
           <li className="text-2xl py-9" onClick={toggleDrawer}><CiSearch /></li>
 
@@ -507,14 +505,13 @@ function Navbar() {
                     </AnimatePresence>
                   </li>
                 ))}
-                <li className={dynamicStyles.navListItem}><Link href='/lookbook'>Look Book</Link></li>
-                <li className="pt-3 border-b pb-10 cursor-pointer"><Link href='/blog'>Blogs</Link></li>
+                <li className={dynamicStyles.navListItem}><Link href='/blog'>Blogs</Link></li>
               </ul>
               <ul className='mt-8'>
                 <li className={dynamicStyles.footerLink}>About</li>
                 {user ? <li className={dynamicStyles.footerLink} onClick={logOutHandler}>Logout</li> :
                 <li className={dynamicStyles.footerLink}><Link href='/login'>Login</Link></li>}
-                <li className={dynamicStyles.footerLink}><Link href='/order'>Order</Link></li>
+                <li className={dynamicStyles.footerLink}><Link href='/orders'>Order</Link></li>
                 <li className={dynamicStyles.footerLink}>Return Policy</li>
               </ul>
             </div>

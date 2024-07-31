@@ -15,28 +15,28 @@ const EditCounterSale = ({ item, api, storageUrl }) => {
     url: item.url,
   };
 
-//   const { data } = useSession();
+  const { data } = useSession();
 
-//     useEffect(() => {
-//         if (data) {
-//             setToken(data.user.accessToken);
-//         }
-//     }, [data]);
+    useEffect(() => {
+        if (data) {
+            setToken(data.user.accessToken);
+        }
+    }, [data]);
 
-//   useEffect(() => {
-//     if (token) {
-//         try {
-//             const decodedToken = decode(token);
-//             if (decodedToken.exp * 1000 > Date.now()) {
-//                 setIsAdmin(decodedToken.isAdmin);
-//             } 
-//         } catch (error) {
-//             console.error("Invalid token:", error);
-//         }
-//     } else {
-//         setIsAdmin(false);
-//     }
-// }, [token]);
+  useEffect(() => {
+    if (token) {
+        try {
+            const decodedToken = decode(token);
+            if (decodedToken.exp * 1000 > Date.now()) {
+                setIsAdmin(decodedToken.isAdmin);
+            } 
+        } catch (error) {
+            console.error("Invalid token:", error);
+        }
+    } else {
+        setIsAdmin(false);
+    }
+}, [token]);
 
   const handleEditClick = () => {
     setIsEditing(!isEditing);
@@ -44,7 +44,7 @@ const EditCounterSale = ({ item, api, storageUrl }) => {
 
   return (
     <>
-    {<div className="">
+    {isAdmin && <div>
       <button
         className="absolute top-2 bg-white text-black py-1 px-3"
         onClick={handleEditClick}

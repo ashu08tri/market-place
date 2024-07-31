@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { Order } from '@/utils/schema';
 
 if (!mongoose.connection.readyState) {
-    mongoose.connect('mongodb://127.0.0.1:27017/ecom').then(() => {
+    mongoose.connect(process.env.MONGODB_URI).then(() => {
       console.log('Connected to MongoDB');
     }).catch((err) => {
       console.error('Connection to MongoDB failed:', err);

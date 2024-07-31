@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import { User } from "@/utils/schema";
 
 if (!mongoose.connection.readyState) {
-  mongoose.connect("mongodb://127.0.0.1:27017/ecom", {
+  mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

@@ -41,7 +41,6 @@ const Footer = () => {
             <ul className='space-y-2'>
               <li><Link href='/contact'>Contact Us</Link></li>
               <li><Link href='/blog'>Blog</Link></li>
-              <li><Link href='/lookbook'>Lookbook</Link></li>
             </ul>
           </div>
           <div>
@@ -57,8 +56,7 @@ const Footer = () => {
             <h3 className='text-lg font-semibold mb-4'>Account</h3>
             <ul className='space-y-2'>
               <li><Link href='/login'>Log In</Link></li>
-              <li><Link href='/sign-up'>Sign Up</Link></li>
-              <li><Link href='/gift-card'>Gift Card</Link></li>
+              <li><Link href='/register'>Sign Up</Link></li>
             </ul>
           </div>
           <div>
