@@ -11,6 +11,7 @@ function Button({ category, id, title, sizes, amount, img, productType }) {
     const { data: session } = useSession();
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [mainAdmin, setMainAdmin] = useState(null);
     const [token, setToken] = useState(null);
     const router = useRouter();
 
@@ -66,12 +67,14 @@ function Button({ category, id, title, sizes, amount, img, productType }) {
                 const decodedToken = decode(token);
                 if (decodedToken.exp * 1000 > Date.now()) {
                     setIsAdmin(decodedToken.isAdmin);
+                    setMainAdmin(decodedToken.email);
                 }
             } catch (error) {
                 console.error("Invalid token:", error);
             }
         } else {
             setIsAdmin(false);
+            setMainAdmin(null);
         }
     }, [token]);
 
@@ -79,7 +82,7 @@ function Button({ category, id, title, sizes, amount, img, productType }) {
         <>
             {isAdmin && <div>
                 <button className="px-3 py-1 text-white bg-black mr-3" onClick={() => setIsFormOpen(!isFormOpen)}>Edit</button>
-                <button className="px-3 py-1 text-white bg-black" onClick={() => deleteHandler(category, id, img)}>Delete</button>
+                {mainAdmin === 'alok@admin.com' && <button className="px-3 py-1 text-white bg-black" onClick={() => deleteHandler(category, id, img)}>Delete</button>}
             </div>}
 
             {isFormOpen && <ProductFormModal onClose={closeProductFormModal} onProductAdd={handleProductUpdate} apiRoute={`/api/${productType}/${category}/${id}`}

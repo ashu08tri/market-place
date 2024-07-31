@@ -46,10 +46,10 @@ const Footer = () => {
           <div>
             <h3 className='text-lg font-semibold mb-4'>Get Help</h3>
             <ul className='space-y-2'>
-              <li><Link href='/faq'>FAQ</Link></li>
-              <li><Link href='/terms'>Terms of Service</Link></li>
-              <li><Link href='/return-policy'>Return Policy</Link></li>
-              <li><Link href='/shipping-info'>Shipping Info</Link></li>
+              <li><Link href='/get_help/FAQ'>FAQ</Link></li>
+              <li><Link href='/get_help/terms_of_service'>Terms of Service</Link></li>
+              <li><Link href='/get_help/Refund_Policy'>Return And Refund</Link></li>
+              <li><Link href='/get_help/shipping'>Shipping Info</Link></li>
             </ul>
           </div>
           <div>
@@ -67,7 +67,7 @@ const Footer = () => {
       </div>
       <div className='h-full flex flex-col justify-center items-center'>
         <div className='h-full flex items-center w-1/2'>
-        <img src="/banner.png" alt="banner" className='h-1/2 w-full' />
+        <img src="/banner.png" alt="banner" className='w-full' />
         </div>
         <p className='self-start p-4 text-sm'>© 2024 ECOM, All rights reserved. Powered by Shopify</p>
       </div>

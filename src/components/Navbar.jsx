@@ -31,6 +31,7 @@ function Navbar() {
 
   const { data: session, status } = useSession();
   const [user, setUser] = useState(null);
+  const [mainAdmin, setMainAdmin] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [token, setToken] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -93,12 +94,14 @@ function Navbar() {
         const decodedToken = decode(token);
         if (decodedToken.exp * 1000 > Date.now()) {
           setIsAdmin(decodedToken.isAdmin);
+          setMainAdmin(decodedToken.email);
         }
       } catch (error) {
         console.error("Invalid token:", error);
       }
     } else {
       setIsAdmin(false);
+      setMainAdmin(null);
     }
   }, [token]);
 
@@ -289,7 +292,7 @@ function Navbar() {
                       <Link href={l.url} key={j} className='block text-sm py-2 hover:underline underline-offset-2'>{l.title}</Link>
                       <li className='flex gap-2 m-2 text-xs'>
                         {isAdmin && <><button className='py-1 px-2 bg-black text-white' onClick={() => handleEdit('New In', link.title, l.title)}>Edit</button>
-                          <button className='py-1 px-2 bg-black text-white' onClick={() => handleDelete('New In', link.title, l.title)}>Delete</button></>}
+                          {mainAdmin === "alok@admin.com" && <button className='py-1 px-2 bg-black text-white' onClick={() => handleDelete('New In', link.title, l.title)}>Delete</button>}</>}
                       </li>
                     </li>
                   ))}
@@ -353,7 +356,7 @@ function Navbar() {
             setIsOpen(false)
           }
           router.push('/')
-        }} className='text-2xl font-semibold cursor-pointer'>Ecom</p>
+        }} className='text-2xl font-semibold cursor-pointer'>Golden Ghaf</p>
 
         <div className='md:hidden text-2xl cursor-pointer' onClick={toggleCartDrawer}><IoBagOutline /></div>
 

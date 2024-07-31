@@ -7,6 +7,7 @@ import { decode } from 'jsonwebtoken';
 
 const EditBlog = ({ item, api, storageUrl }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [mainAdmin, setMainAdmin] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [token, setToken] = useState(null);
 
@@ -32,12 +33,14 @@ const EditBlog = ({ item, api, storageUrl }) => {
             const decodedToken = decode(token);
             if (decodedToken.exp * 1000 > Date.now()) {
                 setIsAdmin(decodedToken.isAdmin);
+                setMainAdmin(decodedToken.email);
             } 
         } catch (error) {
             console.error("Invalid token:", error);
         }
     } else {
         setIsAdmin(false);
+        setMainAdmin(null);
     }
 }, [token]);
 
@@ -71,12 +74,15 @@ const EditBlog = ({ item, api, storageUrl }) => {
       >
         Edit
       </button>
-      <button
+      {
+        mainAdmin === 'alok@admin.com' &&
+        <button
         className=" bg-black text-white py-1 px-3"
         onClick={() => handleDeleteClick(item._id)}
       >
         Delete
       </button>
+      }
       {isEditing && (
         <EditForms
         api={`${api}/${item._id}`}

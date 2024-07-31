@@ -51,6 +51,7 @@ function HeaderCarousel() {
     const [isDesktop, setIsDesktop] = useState(false);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [images, setImages] = useState([]);
+    const [mainAdmin, setMainAdmin] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
     const [token, setToken] = useState(null);
 
@@ -93,12 +94,14 @@ function HeaderCarousel() {
                 const decodedToken = decode(token);
                 if (decodedToken.exp * 1000 > Date.now()) {
                     setIsAdmin(decodedToken.isAdmin);
+                    setMainAdmin(decodedToken.email);
                 } 
             } catch (error) {
                 console.error("Invalid token:", error);
             }
         } else {
             setIsAdmin(false);
+            setMainAdmin(null);
         }
     }, [token]);
 
@@ -150,7 +153,7 @@ function HeaderCarousel() {
             >
                 {images.length > 0 && images.map((item, i) => (
                     <div key={i} className='h-screen w-screen bg-cover bg-center flex items-end p-10' style={{ backgroundImage: `url(${item.images})` }}>
-                        {isAdmin && <button onClick={() => deleteImage(item.images)} className='p-2 bg-black text-white'>Delete Image</button>}
+                        {mainAdmin === 'alok@admin.com' && <button onClick={() => deleteImage(item.images)} className='p-2 bg-black text-white'>Delete Image</button>}
                     </div>
                 ))}
 
