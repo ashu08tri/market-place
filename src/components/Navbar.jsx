@@ -117,7 +117,7 @@ function Navbar() {
     return () => {
       router.events?.off('routeChangeComplete', handleRouteChange);
     };
-  }, [path]);
+  }, [path, router.events]);
 
   const toggle = () => {
     setIsOpen(!isOpen);
@@ -187,8 +187,8 @@ function Navbar() {
       return (
         uniqueProducts.length > 0 && (
           <div key={index} className="p-2">
-            {uniqueProducts.map(item => (
-              <div className='flex items-center cursor-pointer my-2' onClick={() => {
+            {uniqueProducts.map((item,i) => (
+              <div className='flex items-center cursor-pointer my-2' key={i} onClick={() => {
                 router.push(`/${category}/${items.mainTitle}/${item._id}`);
                 setResults({ featured: [], type: [], collection: [] });
                 setSearch('')

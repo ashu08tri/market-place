@@ -5,13 +5,13 @@ function page() {
 
       <section className="mb-8">
         <p>
-          Golden Ghaf, having its registered address at <a href="https://ggccomp.in" className="text-blue-500">ggccomp.in</a>, is managing and operating the website <a href="https://ggccomp.in" className="text-blue-500">ggccomp.in</a> through which it inter alia facilitates the sale and purchase of Golden Ghaf (“Products”) to the users of the Golden Ghaf platform (“User” or “Users” or “you” or “your”).
+          Golden Ghaf, having its registered address at <a href="https://ggccomp.in" className="text-blue-500">ggccomp.in</a>, is managing and operating the website <a href="https://ggccomp.in" className="text-blue-500">ggccomp.in</a> through which it inter alia facilitates the sale and purchase of Golden Ghaf (&ldquo;Products&rdquo;) to the users of the Golden Ghaf platform (&ldquo;User&rdquo; or &ldquo;Users&rdquo; or &ldquo;you&rdquo; or &ldquo;your&rdquo;).
         </p>
         <p>
           We aim to provide the best customer experience to our Users beginning from placing an order to initiating a return. While transacting on the Golden Ghaf Platform, you can expect a hassle-free experience in returning the Product that you have ordered and can rely on us as your preferred shopping destination.
         </p>
         <p>
-          This cancellation, return, and refund policy (“Policy”), together with the Terms (accessible here) sets out our procedures and policies in accepting Product cancellation, return, and refund thereof.
+          This cancellation, return, and refund policy (&ldquo;Policy&rdquo;), together with the Terms (accessible here) sets out our procedures and policies in accepting Product cancellation, return, and refund thereof.
         </p>
       </section>
 
@@ -36,7 +36,7 @@ function page() {
           In case you change your mind in relation to a particular order of the Products, you may cancel the placed purchase order, by referencing the unique tracking identity number (which enables the User in tracking the status of delivery of the purchased Products) received by you from us and requesting us to process a cancellation by sending an email to <a href="mailto:Care@ggccomp.in" className="text-blue-500">Care@ggccomp.in</a>.
         </p>
         <p>
-          On receipt of the cancellation request prior to issuing and processing of the invoice, we shall cancel the order and initiate the refund for the Products within 2 (two) business days from the receipt of the cancellation request from you. The amount shall be refunded to you through the same mode of payment used by you for the purchase, which can be used for subsequent purchases. All refunds shall be subject to applicable policies and charges of the User’s bank/ financial institution.
+          On receipt of the cancellation request prior to issuing and processing of the invoice, we shall cancel the order and initiate the refund for the Products within 2 (two) business days from the receipt of the cancellation request from you. The amount shall be refunded to you through the same mode of payment used by you for the purchase, which can be used for subsequent purchases. All refunds shall be subject to applicable policies and charges of the User&rsquo;s bank/ financial institution.
         </p>
 
         <h3 className="text-xl font-semibold mb-2">Return of Products</h3>
@@ -53,10 +53,10 @@ function page() {
           <li>The Product is of bad quality;</li>
           <li>Parts of the Product or accessory is missing;</li>
           <li>The Product ordered is different from what was ordered based on the Product description provided on the Golden Ghaf Platform; or</li>
-          <li>You are dissatisfied with the purchased Product (“Non-Compliant Product”).</li>
+          <li>You are dissatisfied with the purchased Product (&ldquo;Non-Compliant Product&rdquo;).</li>
         </ul>
         <p>
-          You shall initiate such requests for a return within 7 (seven) days from the date on which you receive the delivery of the Product (“Return Period”).
+          You shall initiate such requests for a return within 7 (seven) days from the date on which you receive the delivery of the Product (&ldquo;Return Period&rdquo;).
         </p>
         <p>
           You shall keep the Products in its unused, original condition, along with the original invoice/ sale receipt, brand outer box, MRP tags attached, user manual, warranty cards, and original accessories in manufacturer packaging for a successful return pick-up. We would accept the request for return of such Product subject to the terms of this Policy.
@@ -69,7 +69,7 @@ function page() {
         </p>
         <ol className="list-decimal list-inside mb-4">
           <li>Visit <a href="https://ggccomp.in" className="text-blue-500">ggccomp.in</a>.</li>
-          <li>Click on the "Login" button.</li>
+          <li>Click on the &quot;Login&quot; button.</li>
           <li>Follow the prompts to complete your return request.</li>
         </ol>
         <p>The returns can be raised within 7 days from the date of delivery.</p>
@@ -100,35 +100,22 @@ function page() {
           <li>The Product is returned in the same condition in which it was received.</li>
         </ul>
         <p>
-          Any refunds for the returned Products will be processed within 14 days of receipt of the Products by us and will be processed through the original mode of payment or as per the discretion of the Golden Ghaf platform. 
-        </p>
-        <p>
-          To avoid disputes and ensure timely resolution of return requests, please carefully inspect the Products received by you and verify the information, description, and other details about the Product(s) prior to placing an order. We shall not be liable for any loss or damage to Products not returned in compliance with this Policy.
+          Any refunds for the returned Products will be processed within 15 (fifteen) days from the date of return request approval by us, and refund will be made to the original payment method.
         </p>
 
-        <h3 className="text-xl font-semibold mb-2">Refunds</h3>
+        <h3 className="text-xl font-semibold mb-2">Refund of Products</h3>
         <p>
-          Refunds will be processed once the returned Product is received and verified by our team. The amount refunded will be the same as the value of the Product(s) minus any applicable shipping charges, if applicable.
+          Once we process the return request and receive the Non-Compliant Product, we shall issue a refund for the returned Products. Refunds will be processed through the original mode of payment.
         </p>
         <p>
-          Refunds are typically processed within 14 business days of receipt of the returned Product. However, the exact timing of the refund may depend on the payment method used for the original purchase.
+          If you have paid for Products using a debit/credit card or an online payment gateway, the refund amount will be credited back to the same card or online payment gateway account. The refund amount will be credited to your account within 7-10 business days from the date of receipt of the Non-Compliant Product. For any refund requests, please write to us at <a href="mailto:Care@ggccomp.in" className="text-blue-500">Care@ggccomp.in</a>.
         </p>
-      </section>
 
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-2">3. Contact Us</h2>
+        <h3 className="text-xl font-semibold mb-2">Contact Us</h3>
         <p>
-          For any queries related to cancellations, returns, and refunds, please contact us at:
-        </p>
-        <p>
-          <strong>Email:</strong> <a href="mailto:Care@ggccomp.in" className="text-blue-500">Care@ggccomp.in</a>
-        </p>
-        <p>
-          <strong>Phone:</strong> +91 9930005234
+          For any queries related to cancellation, return, and refund of the Products, you may contact us at: <a href="mailto:Care@ggccomp.in" className="text-blue-500">Care@ggccomp.in</a> or <a href="tel:+91 9930005234" className="text-blue-500">+91 9930005234</a>.
         </p>
       </section>
     </div>
   );
 }
-
-export default page;
