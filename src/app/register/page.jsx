@@ -1,4 +1,4 @@
-import RegisterForm from '../../components/RegisterForm';
+import RegisterForm from '@/components/RegisterForm';
 import Link from "next/link";
 
 function Register() {
@@ -22,4 +22,4 @@ function Register() {
   )
 }
 
-export default Register
+export default Register;

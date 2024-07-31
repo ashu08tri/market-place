@@ -4,9 +4,6 @@ import { PiPackage } from "react-icons/pi";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { CiCreditCard1 } from "react-icons/ci";
 
-
-
-
 const Footer = () => {
   return (
     <footer className="h-[100vh] mt-20 uppercase text-center">
