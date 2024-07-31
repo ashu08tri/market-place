@@ -56,8 +56,8 @@ const SearchModal = ({ isOpen, onClose }) => {
       return (
         uniqueProducts.length > 0 && (
           <div key={index} className="p-2 border-b border-gray-200">
-            {uniqueProducts.map(item => (
-              <div className='flex items-center cursor-pointer my-2' onClick={() => {
+            {uniqueProducts.map((item,i) => (
+              <div className='flex items-center cursor-pointer my-2' key={i} onClick={() => {
                 router.push(`/${category}/${items.mainTitle}/${item._id}`);
                 onClose();
               }}>

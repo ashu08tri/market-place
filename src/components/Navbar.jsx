@@ -288,8 +288,8 @@ function Navbar() {
                 <li key={i} className='font-semi-bold'>{link.title}
                   {isAdmin && <li className='p-1 w-1/2 bg-black text-white' onClick={() => handleAdd('New In', link.title)}>Add</li>}
                   {link.sublink.map((l, j) => (
-                    <li className='flex'>
-                      <Link href={l.url} key={j} className='block text-sm py-2 hover:underline underline-offset-2'>{l.title}</Link>
+                    <li className='flex' key={j}>
+                      <Link href={l.url} className='block text-sm py-2 hover:underline underline-offset-2'>{l.title}</Link>
                       <li className='flex gap-2 m-2 text-xs'>
                         {isAdmin && <><button className='py-1 px-2 bg-black text-white' onClick={() => handleEdit('New In', link.title, l.title)}>Edit</button>
                           {mainAdmin === "alok@admin.com" && <button className='py-1 px-2 bg-black text-white' onClick={() => handleDelete('New In', link.title, l.title)}>Delete</button>}</>}

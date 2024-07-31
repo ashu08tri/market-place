@@ -1,5 +1,3 @@
-import React from 'react'
-
 function page() {
     return (
         <div className="pt-24 px-4 sm:px-6 lg:px-8">
@@ -39,7 +37,7 @@ function page() {
           <section className="my-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto space-y-6">
               <h1 className="text-4xl font-serif font-bold text-center bg-white py-4">
-                FAE'S STORY
+                FAE&apos;S STORY
               </h1>
               <h2 className="text-lg text-gray-600 font-serif text-center">
                 FAE started as a love story between founders Bianca and Adam Bennetts, who met in Bali in 2015. A holiday romance quickly turned into a forever kind of love, and as they planned their future they realised they shared a similar vision in the fashion world.
@@ -54,7 +52,7 @@ function page() {
               </h2>
               <div className="h-4 bg-gray-200"></div>
               <h2 className="text-lg text-gray-600 font-serif text-center">
-                Bianca delves into the past with her inspiration pulled from the '80s and '90s, but never forgets FAE's place as a forward-thinking brand of the future. Sustainability, durability and luxury are always at the front of her mind when choosing the highest quality Italian fabrics.
+                Bianca delves into the past with her inspiration pulled from the &apos;80s and &apos;90s, but never forgets FAE&apos;s place as a forward-thinking brand of the future. Sustainability, durability and luxury are always at the front of her mind when choosing the highest quality Italian fabrics.
               </h2>
               <div className="h-4 bg-gray-200"></div>
               <h2 className="text-lg text-gray-600 font-serif text-center">

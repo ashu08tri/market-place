@@ -4,7 +4,7 @@ import Countdown from 'react-countdown';
 
 const renderer = ({ hours, minutes, seconds, completed }) => {
   if (completed) {
-    return <span>Time's up!</span>;
+    return <span>Time&apos;s up!</span>;
   } else {
     return (
       <div className="flex space-x-4 text-center">

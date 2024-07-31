@@ -13,7 +13,7 @@ function Login() {
            <LoginForm />
             </div>
             <div className="uppercase my-8">
-                <h2 className="text-2xl font-semibold tracking-wider py-6">Don't have an account?</h2>
+                <h2 className="text-2xl font-semibold tracking-wider py-6">Don&apos;t have an account?</h2>
                 <Link href='/register' className="underline underline-offset-2">Create an account</Link>
             </div>
         </div>

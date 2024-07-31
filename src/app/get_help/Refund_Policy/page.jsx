@@ -1,5 +1,3 @@
-import React from 'react'
-
 function page() {
   return (
     <div className="p-6 max-w-2xl mx-auto pt-24">
@@ -71,11 +69,7 @@ function page() {
         </p>
         <ol className="list-decimal list-inside mb-4">
           <li>Visit <a href="https://ggccomp.in" className="text-blue-500">ggccomp.in</a>.</li>
-          <li>Click on the 'Login' button.</li>
-          <li>Enter your registered phone number.</li>
-          <li>You will receive an OTP (One Time Password) on your phone.</li>
-          <li>Enter the OTP to access your account.</li>
-          <li>Navigate to 'My Orders' and select the order you wish to return.</li>
+          <li>Click on the "Login" button.</li>
           <li>Follow the prompts to complete your return request.</li>
         </ol>
         <p>The returns can be raised within 7 days from the date of delivery.</p>
