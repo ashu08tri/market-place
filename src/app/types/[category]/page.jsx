@@ -2,6 +2,8 @@ import React from 'react';
 import Types from '@/components/Types';
 import ShopAll from '@/components/ShopAll';
 
+const {NEXT_PUBLIC_HOST_URL} = process.env;
+
 const getData = async (category) => {
   try {
     let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/types/${category}`, { cache: 'no-store' });

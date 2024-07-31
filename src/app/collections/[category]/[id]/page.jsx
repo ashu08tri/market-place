@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import SizeSelector from '@/components/SizeSelector';
 
+const {NEXT_PUBLIC_HOST_URL} = process.env;
 
 const getProductData = async (category, id) => {
   try {

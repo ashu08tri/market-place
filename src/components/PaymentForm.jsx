@@ -5,11 +5,10 @@ import FadeLoader from "react-spinners/FadeLoader";
 import BeatLoader from "react-spinners/BeatLoader";
 
 function PaymentForm() {
-
     const router = useRouter();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [processLoad, setProcessLoad] = useState(false)
+    const [processLoad, setProcessLoad] = useState(false);
 
     let payAmount = data.reduce((total, payment) => total + payment.amount, 0);
 
@@ -57,7 +56,7 @@ function PaymentForm() {
                 title: product.title,
             }))
         };
-        
+
         if (!isFormValid()) {
             alert("Please fill out all the fields.");
             return;
@@ -65,108 +64,104 @@ function PaymentForm() {
 
         const res = await initializeRazorpay();
         if (!res) {
-          alert("Razorpay SDK Failed to load");
-          return;
+            alert("Razorpay SDK Failed to load");
+            return;
         }
 
         try {
-          const response = await fetch("/api/razorpay", {
-            method: "POST",
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              taxAmt: payAmount
-            })
-          });
-
-          if (!response.ok) {
-            const errorData = await response.json();
-            console.error('Server error:', errorData);
-            alert(`Server error: ${errorData.error}`);
-            return;
-          }
-
-          const data = await response.json();
-          console.log('Payment data:', data);
-
-          try {
-            let resOrder = await fetch('/api/orders', {
-                method: 'POST',
+            const response = await fetch("/api/razorpay", {
+                method: "POST",
                 headers: {
-                    'content-type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(updatedFormData)
+                body: JSON.stringify({
+                    taxAmt: payAmount
+                })
             });
-        
-            resOrder = await resOrder.json();
-            if (resOrder.ok) {
-                const emailPayload = {
-                    email: formData.email,
-                    products: updatedFormData.products
-                };
-                let email = await fetch('/api/email', {
-                    method: "POST",
-                    headers: {
-                        'content-type': 'application/json'
-                    },
-                    body: JSON.stringify(emailPayload)
-                });
-        
-                // Log the response text before parsing
-                const emailText = await email.text();
-                //console.log('Email response:', emailText);
-        
-                email = JSON.parse(emailText);
-                if (email.ok) {
-                    let res = await fetch('/api/payment', {
-                        method: 'DELETE',
-                        cache: 'no-store'
-                    });
-        
-                    res = await res.json();
-                    if (res.ok) {
-                        let cartDel = await fetch('/api/cart', {
-                            method: 'DELETE',
-                            credentials: 'include'
-                        });
-        
-                        cartDel = await cartDel.json();
-                        if (cartDel.ok) {
-                            setProcessLoad(false);
-                            router.push('/orders/' + resOrder.order._id);
-                        }
-                    }
-                }
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Server error:', errorData);
+                alert(`Server error: ${errorData.error}`);
+                return;
             }
-        } catch (err) {
-            console.error('Error:', err);
-        }
 
-          var options = {
-            key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-            name: "ECOM Website",
-            currency: data.currency,
-            amount: data.amount,
-            order_id: data.id,
-            description: "Thank you for your purchase",
-            handler: function (response) {
-              alert("Razorpay Response: " + response.razorpay_payment_id);
-            },
-            prefill: {
-              name: "Alok Anand",
-              email: "admin@ECOM",
-              contact: '9999999999'
-            },
-          };
+            const data = await response.json();
+            console.log('Payment data:', data);
 
-          const paymentObject = new window.Razorpay(options);
-          paymentObject.open();
+            var options = {
+                key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+                name: "ECOM Website",
+                currency: data.currency,
+                amount: data.amount,
+                order_id: data.id,
+                description: "Thank you for your purchase",
+                handler: async function (response) {
+                    alert("Payment successful: " + response.razorpay_payment_id);
+
+                    try {
+                        let resOrder = await fetch('/api/orders', {
+                            method: 'POST',
+                            headers: {
+                                'content-type': 'application/json'
+                            },
+                            body: JSON.stringify(updatedFormData)
+                        });
+
+                        resOrder = await resOrder.json();
+                        if (resOrder.ok) {
+                            const emailPayload = {
+                                email: formData.email,
+                                products: updatedFormData.products
+                            };
+                            let email = await fetch('/api/email', {
+                                method: "POST",
+                                headers: {
+                                    'content-type': 'application/json'
+                                },
+                                body: JSON.stringify(emailPayload)
+                            });
+
+                            const emailText = await email.text();
+                            email = JSON.parse(emailText);
+                            if (email.ok) {
+                                let res = await fetch('/api/payment', {
+                                    method: 'DELETE',
+                                    cache: 'no-store'
+                                });
+
+                                res = await res.json();
+                                if (res.ok) {
+                                    let cartDel = await fetch('/api/cart', {
+                                        method: 'DELETE',
+                                        credentials: 'include'
+                                    });
+
+                                    cartDel = await cartDel.json();
+                                    if (cartDel.ok) {
+                                        setProcessLoad(false);
+                                        router.push('/orders/' + resOrder.order._id);
+                                    }
+                                }
+                            }
+                        }
+                    } catch (err) {
+                        console.error('Error:', err);
+                    }
+                },
+                prefill: {
+                    name: "Alok Anand",
+                    email: "admin@ECOM",
+                    contact: '9999999999'
+                },
+            };
+
+            const paymentObject = new window.Razorpay(options);
+            paymentObject.open();
         } catch (err) {
-          console.error('Fetch error:', err);
-          alert(`Fetch error: ${err.message}`);
-        }
-        finally{
+            console.error('Fetch error:', err);
+            alert(`Fetch error: ${err.message}`);
+        } finally {
             setProcessLoad(false);
         }
     };
@@ -204,11 +199,11 @@ function PaymentForm() {
             let res = await fetch('/api/payment', {
                 method: 'DELETE',
                 cache: 'no-store'
-            })
+            });
             res = await res.json();
 
             if (res.ok) {
-                router.back()
+                router.back();
             }
         } catch (err) {
             console.log(err);
@@ -264,49 +259,50 @@ function PaymentForm() {
                             <h3 className="text-base text-gray-800 mb-4">Personal Details</h3>
                             <div className="grid md:grid-cols-2 gap-4">
                                 <div>
-                                    <input type="text" placeholder="First Name" name='firstName' value={formData.firstName} onChange={handleChange}
-                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required />
+                                    <input type="text" placeholder="First Name" name='firstName' value={formData.firstName} onChange={handleChange} className="w-full text-base py-2 px-3 border rounded" />
                                 </div>
                                 <div>
-                                    <input type="text" placeholder="Last Name" name="lastName" value={formData.lastName} onChange={handleChange}
-                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required />
+                                    <input type="text" placeholder="Last Name" name='lastName' value={formData.lastName} onChange={handleChange} className="w-full text-base py-2 px-3 border rounded" />
+                                </div>
+                            </div>
+                            <div className="mt-4">
+                                <input type="tel" placeholder="Phone Number" name='phoneNumber' value={formData.phoneNumber} onChange={handleChange} className="w-full text-base py-2 px-3 border rounded" />
+                            </div>
+                            <div className="mt-4">
+                                <textarea rows="4" placeholder="Address" name='address' value={formData.address} onChange={handleChange} className="w-full text-base py-2 px-3 border rounded"></textarea>
+                            </div>
+                            <div className="grid md:grid-cols-2 gap-4 mt-4">
+                                <div>
+                                    <input type="text" placeholder="State" name='state' value={formData.state} onChange={handleChange} className="w-full text-base py-2 px-3 border rounded" />
                                 </div>
                                 <div>
-                                    <input type="email" placeholder="Email" name='email' value={formData.email} onChange={handleChange}
-                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required />
+                                    <input type="text" placeholder="City" name='city' value={formData.city} onChange={handleChange} className="w-full text-base py-2 px-3 border rounded" />
+                                </div>
+                            </div>
+                            <div className="grid md:grid-cols-2 gap-4 mt-4">
+                                <div>
+                                    <input type="text" placeholder="Zip Code" name='zipcode' value={formData.zipcode} onChange={handleChange} className="w-full text-base py-2 px-3 border rounded" />
                                 </div>
                                 <div>
-                                    <input type="number" placeholder="Phone No." name='phoneNumber' value={formData.phoneNumber} onChange={handleChange}
-                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required />
+                                    <input type="email" placeholder="Email" name='email' value={formData.email} onChange={handleChange} className="w-full text-base py-2 px-3 border rounded" />
                                 </div>
                             </div>
                         </div>
                         <div className="mt-8">
-                            <h3 className="text-base text-gray-800 mb-4">Address</h3>
-                            <div className="grid md:grid-cols-2 gap-4">
-                                <div>
-                                    <input type="text" placeholder="Address" name='address' value={formData.address} onChange={handleChange}
-                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required />
+                            {processLoad ? (
+                                <div className='w-full flex justify-center items-center'>
+                                    <BeatLoader loading={processLoad} size={10} color='gray' aria-label="Loading Spinner" data-testid="loader" />
                                 </div>
-                                <div>
-                                    <input type="text" placeholder="City" name='city' value={formData.city} onChange={handleChange}
-                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required />
-                                </div>
-                                <div>
-                                    <input type="text" placeholder="State" name='state' value={formData.state} onChange={handleChange}
-                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required />
-                                </div>
-                                <div>
-                                    <input type="text" placeholder="Zip Code" name='zipcode' value={formData.zipcode} onChange={handleChange}
-                                        className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-black" required />
-                                </div>
-                            </div>
-                            <div className="flex gap-4 max-md:flex-col mt-8">
-                                <button type="button" className="rounded-md px-6 py-3 w-full text-sm tracking-wide bg-transparent border hover:bg-gray-300 border-gray-400 text-black max-md:order-1" onClick={cancelHandler}>Cancel</button>
-                                <button type="submit" className="rounded-md px-6 py-3 w-full text-sm tracking-wide border border-black bg-black hover:bg-white text-white hover:text-black" disabled={processLoad}>{processLoad ? <BeatLoader loading={processLoad} size={10} color='white'
-                                    aria-label="Loading Spinner"
-                                    data-testid="loader" /> : 'Complete Purchase'}</button>
-                            </div>
+                            ) : (
+                                <button type="submit" className="w-full text-white bg-gray-800 hover:bg-gray-900 font-medium py-2 px-4 rounded">
+                                    Pay Now
+                                </button>
+                            )}
+                        </div>
+                        <div className="mt-4">
+                            <button type="button" onClick={cancelHandler} className="w-full text-gray-800 border border-gray-800 font-medium py-2 px-4 rounded">
+                                Cancel
+                            </button>
                         </div>
                     </form>
                 </div>

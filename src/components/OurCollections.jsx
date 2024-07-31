@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import EditItem from './landingPage/EditItem';
 
+const {NEXT_PUBLIC_HOST_URL} = process.env;
+
 const getData = async () => {
     let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/ourcollection`, {cache: 'no-store'});
     res = await res.json();

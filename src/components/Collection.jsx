@@ -6,6 +6,8 @@ import ProductFormModal from './ProductFormModal';
 import { useSession } from 'next-auth/react';
 import { decode } from 'jsonwebtoken';
 
+const {NEXT_PUBLIC_HOST_URL} = process.env;
+
 const getData = async (category) => {
   try {
     let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/collections/${category}`, { cache: 'no-store' });
