@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import EditBlog from '../../../components/routepages/EditBlog';
+import EditBlog from '@/components/routepages/EditBlog';
 
 const {NEXT_PUBLIC_HOST_URL} = process.env;
 

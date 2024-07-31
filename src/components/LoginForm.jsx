@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import BeatLoader from "react-spinners/BeatLoader";
 
-function Form() {
+function LoginForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -93,4 +93,4 @@ function Form() {
   );
 }
 
-export default Form;
+export default LoginForm;

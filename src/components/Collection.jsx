@@ -18,7 +18,7 @@ const getData = async (category) => {
   }
 };
 
-function Product({ product, img, title, categories }) {
+function Collection({ product, img, title, categories }) {
   const router = useRouter();
   const [visibleItems, setVisibleItems] = useState(10);
   const [isProductFormOpen, setIsProductFormOpen] = useState(false);
@@ -147,4 +147,4 @@ function Product({ product, img, title, categories }) {
   );
 }
 
-export default Product;
+export default Collection;

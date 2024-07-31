@@ -2,13 +2,11 @@ import React from 'react';
 import Link from 'next/link';
 import AddBlog from '@/components/routepages/AddBlog';
 
-const {NEXT_PUBLIC_HOST_URL} = process.env;
+const { NEXT_PUBLIC_HOST_URL } = process.env;
 
 const getData = async () => {
     try {
-        let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/blog`,{
-            cache: 'no-store'
-        });
+        let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/blog`);
         res = await res.json();
         return res;
     } catch (err) {
@@ -25,7 +23,7 @@ async function Page() {
            <p className='text-center text-sm py-2'> <Link href='/'>HOME</Link></p>
             <div className='h-56 md:h-64 text-center content-center'>
                 <h1 className='text-bold text-2xl'>NEWS</h1>
-                <AddBlog api={`${NEXT_PUBLIC_HOST_URL}/api/landingPage/blog`} storageUrl={'blog'}/>
+                <AddBlog api={`${NEXT_PUBLIC_HOST_URL}/api/landingPage/blog`} storageUrl={'blog'} />
             </div>
             
             <div className='border-y h-16 mb-4 content-center'>

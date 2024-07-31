@@ -4,7 +4,7 @@ import { Toaster, toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import BeatLoader from "react-spinners/BeatLoader";
 
-function Form() {
+function RegisterForm() {
   const router = useRouter();
   let [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -131,4 +131,4 @@ function Form() {
   );
 }
 
-export default Form;
+export default RegisterForm;
