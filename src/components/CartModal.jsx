@@ -7,6 +7,8 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import BeatLoader from "react-spinners/BeatLoader";
 import { useRouter } from 'next/navigation';
 
+const {NEXT_PUBLIC_HOST_URL} = process.env;
+
 function CartModal({ isOpen, onClose }) {
   const [cartData, setCartData] = useState([]);
   const [loading, setLoading] = useState();
@@ -108,7 +110,7 @@ function CartModal({ isOpen, onClose }) {
   const deleteItem = async(id) => {
     setLoading(true)
     try{
-      let res = await fetch(`http://localhost:3000/api/cart/${id}`,{
+      let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/cart/${id}`,{
         method: 'DELETE',
         cache: 'no-store'
       })
