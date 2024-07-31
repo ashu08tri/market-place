@@ -19,7 +19,7 @@ function CartModal({ isOpen, onClose }) {
     setLoading(true);
     const fetchData = async () => {
       try {
-        const res = await fetch('/api/cart', {
+        const res = await fetch(NEXT_PUBLIC_HOST_URL+'/api/cart', {
           method: 'GET',
           credentials: 'include', // Ensure cookies are sent
         });
@@ -110,7 +110,7 @@ function CartModal({ isOpen, onClose }) {
   const deleteItem = async(id) => {
     setLoading(true)
     try{
-      let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/cart/${id}`,{
+      let res = await fetch(`/api/cart/${id}`,{
         method: 'DELETE',
         cache: 'no-store'
       })
