@@ -54,11 +54,20 @@ function Types({ product, img, title, categories }) {
   }, [token]);
 
   useEffect(() => {
-    (async () => {
-      const fetchedData = await getData(title);
-      setProducts(fetchedData.products);
-      setAllCategories(fetchedData.categories);
-    })();
+    const fetchData = async () => {
+      try {
+        const fetchedData = await getData(title);
+        console.log(fetchedData); // Debug the response
+        if (fetchedData) {
+          setProducts(fetchedData.products || []);
+          setAllCategories(fetchedData.categories || []);
+        }
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+  
+    fetchData();
   }, [title]);
 
   const closeProductFormModal = () => {

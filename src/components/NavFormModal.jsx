@@ -1,5 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
+import app from '@/firebase';
+import { getStorage, ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 import { Toaster, toast } from 'sonner';
 
 const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle, onSuccess, imageEdit, oldImage }) => {
@@ -47,22 +49,46 @@ const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle
           body: JSON.stringify({ mainTitle: newMainTitle, sublink: sublinkTitle, sublinkTitle: oldTitle, imageUrl: oldImage.img }),
         });
       } else if (imageEdit) {
+        let downloadUrl;
+      
+        if (newImage.img) {
+          const storage = getStorage(app);
+          const storageRef = ref(storage, `navbar/${newImage.img.name}`);
+          await uploadBytes(storageRef, newImage.img);
+          downloadUrl = await getDownloadURL(storageRef);
+        }
+      
+        const imageUpdates = [
+          {
+            oldImg: oldImage.img,
+            newImg: downloadUrl,
+            newAlt: newImage.alt,
+            newText: newImage.text,
+            newUrl: newImage.url,
+          },
+        ];
+      
         response = await fetch('/api/navlink', {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ mainTitle, oldImageUrl: oldImage.img, newImage }),
+          body: JSON.stringify({ 
+            mainTitle, 
+            oldImageUrl: oldImage.img, 
+            newImage: downloadUrl,
+            imageUpdates,
+          }),
         });
-      }
-
-      if (response.ok) {
-        onSuccess();
-        toast.success('Operation Successful!');
-        onClose();
-      } else {
-        console.error('Failed to perform action');
-        toast.error('Operation Failed!');
+      
+        if (response.ok) {
+          onSuccess();
+          toast.success('Operation Successful!');
+          onClose();
+        } else {
+          console.error('Failed to perform action');
+          toast.error('Operation Failed!');
+        }
       }
     } catch (error) {
       console.error('Error:', error);
@@ -130,10 +156,8 @@ const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle
               <div>
                 <label className="block text-sm font-medium text-gray-700">New Image URL:</label>
                 <input
-                  type="text"
-                  value={newImage.img}
+                  type="file"
                   onChange={(e) => handleNewImageChange('img', e.target.value)}
-                  required
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black"
                 />
               </div>

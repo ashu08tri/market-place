@@ -311,7 +311,7 @@ function Navbar() {
                         </button>
                       
                     )}
-                    <img src={img.img} alt={img.alt} className='w-64 h-full object-cover' />
+                    <Link href={img.url}><img src={img.img} alt={img.alt} className='w-64 h-full object-cover' /></Link>
                     <p className='absolute bottom-0 left-0 right-0 text-center text-white bg-black bg-opacity-50 py-2'>
                       {img.text}
                     </p>
@@ -335,7 +335,7 @@ function Navbar() {
                       </button>
                     
                   )}
-                  <img src={img.img} alt={img.alt} className='w-64 h-72 object-cover' />
+                   <Link href={img.url}><img src={img.img} alt={img.alt} className='w-64 h-[95%] object-cover'/></Link>
                   <p className='absolute bottom-4 left-0 right-0 text-center text-white bg-black bg-opacity-50 py-2'>
                     {img.text}
                   </p>

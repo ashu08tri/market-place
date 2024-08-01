@@ -37,57 +37,84 @@ export async function POST(request) {
 
 // PUT: Update a sublink's title or url
 export async function PUT(request) {
-    const { mainTitle, sublink, oldTitle, newTitle, newUrl, newMainTitle, oldImageUrl, newImage } = await request.json();
-    console.log(oldImageUrl + "New" + newImage);
-  
+    const { mainTitle, sublink, oldTitle, newTitle, newUrl, newMainTitle, oldImageUrl, newImage, imageUpdates } = await request.json();
+    console.log(`Old Image: ${oldImageUrl}, New Image: ${newImage}`);
+    
     try {
-        const updateFields = {};
   
-        // Update sublink title and URL if provided
+      const updatePromises = [];
+  
+      // Update sublink title and URL if provided
+      if (newTitle || newUrl) {
+        const updateFields = {};
         if (newTitle) {
-            updateFields['subLinks.$[outer].sublink.$[inner].title'] = newTitle;
+          updateFields['subLinks.$[outer].sublink.$[inner].title'] = newTitle;
         }
         if (newUrl) {
-            updateFields['subLinks.$[outer].sublink.$[inner].url'] = newUrl;
+          updateFields['subLinks.$[outer].sublink.$[inner].url'] = newUrl;
         }
+        updatePromises.push(
+          Link.updateOne(
+            { title: mainTitle, 'subLinks.title': sublink, 'subLinks.sublink.title': oldTitle },
+            { $set: updateFields },
+            {
+              arrayFilters: [
+                { 'outer.title': sublink },
+                { 'inner.title': oldTitle },
+              ],
+            }
+          )
+        );
+      }
   
-        // Handle sublink updates
-        if (newTitle || newUrl) {
-            await Link.updateOne(
-                { title: mainTitle, 'subLinks.title': sublink, 'subLinks.sublink.title': oldTitle },
-                { $set: updateFields },
-                {
-                    arrayFilters: [
-                        { 'outer.title': sublink },
-                        { 'inner.title': oldTitle },
-                    ],
-                }
-            );
-        }
+      // Handle main title update
+      if (newMainTitle) {
+        updatePromises.push(
+          Link.updateOne(
+            { title: mainTitle },
+            { $set: { title: newMainTitle } }
+          )
+        );
+      }
   
-        // Handle main title update
-        if (newMainTitle) {
-            await Link.updateOne(
-                { title: mainTitle },
-                { $set: { title: newMainTitle } }
-            );
-        }
+      // Handle single image update
+      if (oldImageUrl && newImage) {
+        updatePromises.push(
+          Link.updateOne(
+            { title: mainTitle, 'images.img': oldImageUrl },
+            { $set: { 'images.$.img': newImage } }
+          )
+        );
+      }
   
-        // Handle single image update
-        if (oldImageUrl && newImage) {
-            await Link.updateOne(
-                { title: mainTitle, 'images.img': oldImageUrl },
-                { $set: { 'images.$': newImage } }
-            );
-        }
+      // Handle multiple image updates
+      if (imageUpdates && imageUpdates.length > 0) {
+        imageUpdates.forEach(update => {
+          const { oldImg, newImg, newAlt, newText, newUrl } = update;
+          const imageUpdateFields = {};
+          if (newImg) imageUpdateFields['images.$.img'] = newImg;
+          if (newAlt) imageUpdateFields['images.$.alt'] = newAlt;
+          if (newText) imageUpdateFields['images.$.text'] = newText;
+          if (newUrl) imageUpdateFields['images.$.url'] = newUrl;
   
-        return NextResponse.json({ message: 'Update successful' });
+          updatePromises.push(
+            Link.updateOne(
+              { title: mainTitle, 'images.img': oldImg },
+              { $set: imageUpdateFields }
+            )
+          );
+        });
+      }
+  
+      // Execute all updates
+      await Promise.all(updatePromises);
+  
+      return NextResponse.json({ message: 'Update successful' });
     } catch (err) {
-        console.error('Error updating navigation data:', err);
-        return NextResponse.json({ message: 'Error updating navigation data', details: err.message });
+      console.error('Error updating navigation data:', err);
+      return NextResponse.json({ message: 'Error updating navigation data', details: err.message }, { status: 500 });
     }
   }
-
 // DELETE: Delete a sublink
 export async function DELETE(request) {
     const { mainTitle, sublink, sublinkTitle } = await request.json();

@@ -68,24 +68,50 @@ function CartModal({ isOpen, onClose }) {
     };
   }, [onClose]);
 
-  const handleDecrease = (id, size) => {
-    setCartData(prevData =>
-      prevData.map(item =>
-        item._id === id && item.quantity > 1 && item.size === size
-          ? { ...item, quantity: item.quantity - 1, amount: (item.quantity - 1) * item.unitPrice }
-          : item
-      )
-    );
+  const updateCartItem = async (id, size, newQuantity) => {
+    try {
+      const res = await fetch(`/api/cart/${id}`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, size, newQuantity }),
+      });
+      if (!res.ok) {
+        throw new Error('Failed to update cart item');
+      }
+      const updatedItem = await res.json();
+      return updatedItem.cartItem;
+    } catch (error) {
+      console.error('Error updating cart item:', error.message);
+    }
   };
 
-  const handleIncrease = (id, size) => {
-    setCartData(prevData =>
-      prevData.map(item =>
-        item._id === id && item.size === size
-          ? { ...item, quantity: item.quantity + 1, amount: (item.quantity + 1) * item.unitPrice }
-          : item
-      )
+  const handleDecrease = async (id, size) => {
+    const updatedCartData = await Promise.all(
+      cartData.map(async (item) => {
+        if (item._id === id && item.size === size && item.quantity > 1) {
+          const updatedItem = await updateCartItem(id, size, item.quantity - 1);
+          return updatedItem || item;
+        }
+        return item;
+      })
     );
+    setCartData(updatedCartData);
+  };
+
+  const handleIncrease = async (id, size) => {
+    const updatedCartData = await Promise.all(
+      cartData.map(async (item) => {
+        if (item._id === id && item.size === size) {
+          const updatedItem = await updateCartItem(id, size, item.quantity + 1);
+          return updatedItem || item;
+        }
+        return item;
+      })
+    );
+    setCartData(updatedCartData);
   };
 
   const paymentPage = async () => {
@@ -177,16 +203,16 @@ function CartModal({ isOpen, onClose }) {
                 <Link
                   href='/'
                   onClick={onClose}
-                  className="text-white bg-black py-2 px-20 mt-5 text-center text-xs md:text-base hover:bg-white border border-black hover:text-black"
+                  className="text-white bg-black py-2 px-20 mt-4"
                 >
-                  Continue Shopping
+                  Shop Now
                 </Link>
               ) : (
                 <button
                   onClick={paymentPage}
-                  className="text-white bg-black py-2 px-20 mt-5 text-xs md:text-base hover:bg-white border border-black hover:text-black"
+                  className="bg-black text-white py-2 px-20 mt-4"
                 >
-                  Complete Payment
+                  Proceed to Pay
                 </button>
               )}
             </div>

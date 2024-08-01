@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import Carousel from 'react-multi-carousel';
 import app from '@/firebase';
@@ -28,19 +29,18 @@ const responsive = {
     },
 };
 
-const ButtonGroup = ({ next, previous, ...rest }) => {
-    const {
-        carouselState: { currentSlide }
-    } = rest;
+const ButtonGroup = ({ next, previous }) => {
+
     return (
         <div className="text-white px-6 carousel-button-group absolute top-1/2 w-full flex justify-between transform -translate-y-1/2">
             <button
-                onClick={() => previous()}
-                style={{ background: 'none', border: 'none', display: currentSlide === 0 ? 'none' : '' }}
+                onClick={previous}
             >
                 <HiArrowLongLeft size={40} />
             </button>
-            <button onClick={() => next()}>
+            <button
+                onClick={next}
+            >
                 <HiArrowLongRight size={40} />
             </button>
         </div>
@@ -143,16 +143,20 @@ function HeaderCarousel() {
             <Carousel
                 responsive={responsive}
                 ssr={true}
-                infinite={true}
+                infinite={true} // Ensure this is true for infinite looping
                 autoPlay={true}
                 autoPlaySpeed={3000}
                 transitionDuration={500}
                 arrows={false}
                 removeArrowOnDeviceType={["tablet", "mobile"]}
                 customButtonGroup={isDesktop ? <ButtonGroup /> : null}
+                containerClass="carousel-container"
+                itemClass="carousel-item-padding-40-px"
+                dotListClass="custom-dot-list-style"
             >
                 {images.length > 0 && images.map((item, i) => (
-                    <div key={i} className='h-screen w-screen bg-cover bg-center flex items-end p-10' style={{ backgroundImage: `url(${item.images})` }}>
+                    <div key={i} className='h-screen w-screen bg-cover bg-center flex items-end p-10'>
+                        <Image src={item.images} fill alt='carousel_images' size="100vw" style={{objectFit: 'cover'}}/>
                         {mainAdmin === 'alok@admin.com' && <button onClick={() => deleteImage(item.images)} className='p-2 bg-black text-white'>Delete Image</button>}
                     </div>
                 ))}
