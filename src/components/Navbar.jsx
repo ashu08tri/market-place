@@ -511,11 +511,31 @@ function Navbar() {
                 <li className={dynamicStyles.navListItem}><Link href='/blog'>Blogs</Link></li>
               </ul>
               <ul className='mt-8'>
-                <li className={dynamicStyles.footerLink}><Link href='/about'>About</Link></li>
+                <li className={dynamicStyles.footerLink} onClick={() => {
+          if (isOpen) {
+            setIsOpen(false)
+          }
+          router.push('/about')
+        }}>About</li>
                 {user ? <li className={dynamicStyles.footerLink} onClick={logOutHandler}>Logout</li> :
-                <li className={dynamicStyles.footerLink}><Link href='/login'>Login</Link></li>}
-                <li className={dynamicStyles.footerLink}><Link href='/orders'>Order</Link></li>
-                <li className={dynamicStyles.footerLink}><Link href='/refund-policy'>Return Policy</Link></li>
+                <li className={dynamicStyles.footerLink} onClick={() => {
+          if (isOpen) {
+            setIsOpen(false)
+          }
+          router.push('/login')
+        }}>Login</li>}
+                <li className={dynamicStyles.footerLink} onClick={() => {
+          if (isOpen) {
+            setIsOpen(false)
+          }
+          router.push('/orders')
+        }}>Order</li>
+                <li className={dynamicStyles.footerLink} onClick={() => {
+          if (isOpen) {
+            setIsOpen(false)
+          }
+          router.push('/refund-policy')
+        }}>Return Policy</li>
               </ul>
             </div>
           </div>
