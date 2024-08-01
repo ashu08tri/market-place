@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
   },
   password: String,
   accessToken: String,
-  isAdmin: {type: Boolean, default: true}
+  isAdmin: {type: Boolean}
 })
 
 export const User = mongoose.models.User || mongoose.model('User', userSchema);
