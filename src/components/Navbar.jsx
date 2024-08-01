@@ -511,11 +511,11 @@ function Navbar() {
                 <li className={dynamicStyles.navListItem}><Link href='/blog'>Blogs</Link></li>
               </ul>
               <ul className='mt-8'>
-                <li className={dynamicStyles.footerLink}>About</li>
+                <li className={dynamicStyles.footerLink}><Link href='/about'>About</Link></li>
                 {user ? <li className={dynamicStyles.footerLink} onClick={logOutHandler}>Logout</li> :
                 <li className={dynamicStyles.footerLink}><Link href='/login'>Login</Link></li>}
                 <li className={dynamicStyles.footerLink}><Link href='/orders'>Order</Link></li>
-                <li className={dynamicStyles.footerLink}>Return Policy</li>
+                <li className={dynamicStyles.footerLink}><Link href='/refund-policy'>Return Policy</Link></li>
               </ul>
             </div>
           </div>
