@@ -19,7 +19,7 @@ function CartModal({ isOpen, onClose }) {
     setLoading(true);
     const fetchData = async () => {
       try {
-        const res = await fetch(NEXT_PUBLIC_HOST_URL+'/api/cart', {
+        const res = await fetch('/api/cart', {
           method: 'GET',
           credentials: 'include', // Ensure cookies are sent
         });
