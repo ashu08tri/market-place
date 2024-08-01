@@ -44,8 +44,8 @@ const Footer = () => {
             <h3 className='text-lg font-semibold mb-4'>Get Help</h3>
             <ul className='space-y-2'>
               <li><Link href='/FAQ'>FAQ</Link></li>
-              <li><Link href='/terms_of_service'>Terms of Service</Link></li>
-              <li><Link href='/Refund_Policy'>Return And Refund</Link></li>
+              <li><Link href='/terms-of-service'>Terms of Service</Link></li>
+              <li><Link href='/refund-policy'>Return And Refund</Link></li>
               <li><Link href='/shipping'>Shipping Info</Link></li>
             </ul>
           </div>
