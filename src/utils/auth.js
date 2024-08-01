@@ -1,6 +1,8 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
+const {NEXT_PUBLIC_HOST_URL} = process.env;
+
 export const authOptions = {
   secret: process.env.AUTH_SECRET,
   providers: [
@@ -14,7 +16,7 @@ export const authOptions = {
         const { email, password } = credentials;
 
         try {
-          const res = await fetch("http://localhost:3000/api/login", {
+          const res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/login`, {
             cache: 'no-store',
             method: "POST",
             headers: {
