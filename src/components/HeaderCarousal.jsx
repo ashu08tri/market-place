@@ -155,9 +155,9 @@ function HeaderCarousel() {
                 dotListClass="custom-dot-list-style"
             >
                 {images.length > 0 && images.map((item, i) => (
-                    <div key={i} className='h-screen w-screen bg-cover bg-center flex items-end p-10'>
-                        <Image src={item.images} fill alt='carousel_images' size="100vw" style={{objectFit: 'cover'}}/>
-                        {mainAdmin === 'alok@admin.com' && <button onClick={() => deleteImage(item.images)} className='p-2 bg-black text-white'>Delete Image</button>}
+                    <div key={i} className='h-screen w-screen'>
+                        <Image src={item.images} fill alt='carousel_images' style={{objectFit: 'cover'}}/>
+                        {mainAdmin === 'alok@admin.com' && <button onClick={() => deleteImage(item.images)} className='p-2 absolute top-40 right-5 bg-black text-white'>Delete Image</button>}
                     </div>
                 ))}
 

@@ -81,7 +81,7 @@ function ProductFormModal({ onClose, onProductAdd, apiRoute, storagePath, mainti
             onClick={onClose}
             className="absolute top-2 right-2 text-black text-xl font-bold"
         >
-            ×
+            x
         </button>
         <Toaster closeButton position="bottom-right" />
         <form onSubmit={submitHandler} className="flex flex-col gap-3">

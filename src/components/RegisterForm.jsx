@@ -21,9 +21,23 @@ function RegisterForm() {
     });
   };
 
+  const isFormValid = () => {
+    const { firstName, lastName, email, password } = formData;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const allowedProviders = ['gmail.com', 'outlook.com'];
+    return firstName && lastName && emailPattern.test(email)&&allowedProviders.includes(email.split('@')[1]) && password;
+};
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true)
+
+    if (!isFormValid()) {
+      toast.error("Please fill out all the fields or check your email credentials.");
+      setLoading(false);
+      return;
+  }
+
     try {
       const res = await fetch("/api/register", {
         method: "POST",

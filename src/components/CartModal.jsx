@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { HiMiniArrowUturnRight } from "react-icons/hi2";
 import { RiDeleteBinLine } from "react-icons/ri";
@@ -12,6 +13,7 @@ function CartModal({ isOpen, onClose }) {
   const [loading, setLoading] = useState(false);
   const [del, setDel] = useState(false);
   const router = useRouter();
+  const pathName = usePathname();
 
   const fetchData = async () => {
     setLoading(true);
@@ -141,6 +143,9 @@ function CartModal({ isOpen, onClose }) {
 
       onClose();
       router.push('/payment');
+      if (pathName === '/payment') {
+        window.location.reload();
+      }
     } catch (error) {
       console.error('Error posting payment data:', error.message);
     }
@@ -203,7 +208,7 @@ function CartModal({ isOpen, onClose }) {
                 <Link
                   href='/'
                   onClick={onClose}
-                  className="text-white bg-black py-2 px-20 mt-4"
+                  className="text-white text-center bg-black py-2 px-20 mt-4"
                 >
                   Shop Now
                 </Link>

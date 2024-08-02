@@ -1,6 +1,7 @@
 "use client"
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { Toaster, toast } from 'sonner';
 import FadeLoader from "react-spinners/FadeLoader";
 import BeatLoader from "react-spinners/BeatLoader";
 
@@ -9,6 +10,8 @@ function PaymentForm() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [processLoad, setProcessLoad] = useState(false);
+    const [redirecting, setRedirecting] = useState(false);
+    const [razorLoading, setRazorLoading] = useState(false);
 
     let payAmount = data.reduce((total, payment) => total + payment.amount, 0);
 
@@ -23,6 +26,30 @@ function PaymentForm() {
         email: '',
         products: []
     });
+
+    const fetchCityAndState = async (zipcode) => {
+        const response = await fetch(`https://api.postalpincode.in/pincode/${zipcode}`);
+        const data = await response.json();
+        if (data[0] && data[0].PostOffice && data[0].PostOffice.length > 0) {
+            const postOffice = data[0].PostOffice[0];
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                city: postOffice.District || '',
+                state: postOffice.State || ''
+            }));
+        } else {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                city: '',
+                state: ''
+            }));
+        }
+    };
+
+    useEffect(() => {
+            fetchCityAndState(formData.zipcode);
+        
+    }, [formData.zipcode]);
 
     const initializeRazorpay = () => {
         return new Promise((resolve) => {
@@ -40,13 +67,22 @@ function PaymentForm() {
 
     const isFormValid = () => {
         const { firstName, lastName, phoneNumber, address, state, city, zipcode, email } = formData;
-        return firstName && lastName && phoneNumber && address && state && city && zipcode && email;
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const allowedProviders = ['gmail.com', 'outlook.com'];
+        return firstName && lastName && phoneNumber && address && state && city && zipcode && emailPattern.test(email)&&allowedProviders.includes(email.split('@')[1]);
     };
 
     const makePayment = async (e) => {
         e.preventDefault();
         setProcessLoad(true);
+        setRazorLoading(true);
 
+        if (!isFormValid()) {
+            toast.error("Please fill out all the fields or check your email credentials.");
+            setProcessLoad(false);
+            setRazorLoading(false);
+            return;
+        }
         // Add products IDs to formData
         const updatedFormData = {
             ...formData,
@@ -57,14 +93,11 @@ function PaymentForm() {
             }))
         };
 
-        if (!isFormValid()) {
-            alert("Please fill out all the fields.");
-            return;
-        }
-
         const res = await initializeRazorpay();
         if (!res) {
             alert("Razorpay SDK Failed to load");
+            setProcessLoad(false);
+            setRazorLoading(false);
             return;
         }
 
@@ -83,21 +116,25 @@ function PaymentForm() {
                 const errorData = await response.json();
                 console.error('Server error:', errorData);
                 alert(`Server error: ${errorData.error}`);
+                setProcessLoad(false);
+                setRazorLoading(false);
                 return;
             }
 
             const data = await response.json();
-            console.log('Payment data:', data);
+            //console.log('Payment data:', data);
 
             var options = {
                 key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-                name: "ECOM Website",
+                name: "Golden Ghaf",
                 currency: data.currency,
                 amount: data.amount,
                 order_id: data.id,
                 description: "Thank you for your purchase",
                 handler: async function (response) {
-                    alert("Payment successful: " + response.razorpay_payment_id);
+                    toast.success("Payment successful: " + response.razorpay_payment_id);
+                    setRazorLoading(false);
+                    setRedirecting(true);
 
                     try {
                         let resOrder = await fetch('/api/orders', {
@@ -147,12 +184,14 @@ function PaymentForm() {
                         }
                     } catch (err) {
                         console.error('Error:', err);
+                        setRedirecting(false);
+                        setRazorLoading(false);
                     }
                 },
                 prefill: {
-                    name: "Alok Anand",
-                    email: "admin@ECOM",
-                    contact: '9999999999'
+                    name: "Golden Ghaf",
+                    email: "ggccomp.in",
+                    contact: '9930005234'
                 },
             };
 
@@ -163,6 +202,7 @@ function PaymentForm() {
             alert(`Fetch error: ${err.message}`);
         } finally {
             setProcessLoad(false);
+            setRazorLoading(false);
         }
     };
 
@@ -212,7 +252,25 @@ function PaymentForm() {
 
     return (
         <div className="font-[sans-serif] bg-white pt-24">
+            {razorLoading && (
+                <div className="fixed inset-0 z-50 flex justify-center items-center bg-transparent">
+                    <div className='flex flex-col items-center'>
+                        <span className="mb-4 text-2xl text-gray-700">Please wait...</span>
+                        <BeatLoader loading={razorLoading} size={20} color='black' />
+                    </div>
+                </div>
+            )}
+            {redirecting && (
+                <div className="fixed inset-0 z-50 flex justify-center items-center bg-transparent">
+                    <div className='flex flex-col items-center bg-white rounded-md p-4'>
+                        <span className="mb-4 text-2xl text-gray-700">Creating order summary, please wait...</span>
+                        <BeatLoader loading={redirecting} size={20} color='black' />
+                    </div>
+                </div>
+            )}
+
             <div className="flex max-sm:flex-col gap-12 max-lg:gap-4">
+                <Toaster closeButton position='top-center' />
                 <div className="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 sm:h-[calc(100vh-6rem)] sm:sticky sm:top-0 lg:min-w-[370px] sm:min-w-[300px] overflow-y-auto scrollbar-hide">
                     <div className="flex flex-col h-full relative">
                         <div className="px-4 py-8 flex-grow">
@@ -253,58 +311,52 @@ function PaymentForm() {
                 </div>
 
                 <div className="max-w-4xl w-full h-max rounded-md px-4 py-8 sticky top-0">
-                    <h2 className="text-2xl font-bold text-gray-800">Complete your order</h2>
-                    <form className="mt-8" onSubmit={makePayment}>
-                        <div>
-                            <h3 className="text-base text-gray-800 mb-4">Personal Details</h3>
-                            <div className="grid md:grid-cols-2 gap-4">
+                    {data.length > 0 ? <>
+                        <h2 className="text-2xl font-bold text-gray-800">Complete your order</h2>
+                        <form className="mt-8 space-y-6" onSubmit={makePayment}>
+                            <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <input type="text" placeholder="First Name" name='firstName' value={formData.firstName} onChange={handleChange} className="w-full text-base py-2 px-3 border rounded" />
+                                    <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name</label>
+                                    <input type="text" name="firstName" id="firstName" autoComplete="given-name" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.firstName} onChange={handleChange} required />
                                 </div>
                                 <div>
-                                    <input type="text" placeholder="Last Name" name='lastName' value={formData.lastName} onChange={handleChange} className="w-full text-base py-2 px-3 border rounded" />
+                                    <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Last Name</label>
+                                    <input type="text" name="lastName" id="lastName" autoComplete="family-name" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.lastName} onChange={handleChange} required />
+                                </div>
+                                <div>
+                                    <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">Phone Number</label>
+                                    <input type="tel" name="phoneNumber" id="phoneNumber" autoComplete="tel" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.phoneNumber} onChange={handleChange} required />
+                                </div>
+                                <div>
+                                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                                    <input type="email" name="email" id="email" autoComplete="email" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.email} onChange={handleChange} required />
+                                </div>
+                                <div className="col-span-2">
+                                    <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
+                                    <input type="text" name="address" id="address" autoComplete="street-address" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.address} onChange={handleChange} required />
+                                </div>
+                                <div>
+                                    <label htmlFor="state" className="block text-sm font-medium text-gray-700">State</label>
+                                    <input type="text" name="state" id="state" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.state} onChange={handleChange} required />
+                                </div>
+                                <div>
+                                    <label htmlFor="city" className="block text-sm font-medium text-gray-700">City</label>
+                                    <input type="text" name="city" id="city" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.city} onChange={handleChange} required />
+                                </div>
+                                <div>
+                                    <label htmlFor="zipcode" className="block text-sm font-medium text-gray-700">Zip Code</label>
+                                    <input type="text" name="zipcode" id="zipcode" autoComplete="postal-code" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.zipcode} onChange={handleChange} required />
                                 </div>
                             </div>
-                            <div className="mt-4">
-                                <input type="tel" placeholder="Phone Number" name='phoneNumber' value={formData.phoneNumber} onChange={handleChange} className="w-full text-base py-2 px-3 border rounded" />
-                            </div>
-                            <div className="mt-4">
-                                <textarea rows="4" placeholder="Address" name='address' value={formData.address} onChange={handleChange} className="w-full text-base py-2 px-3 border rounded"></textarea>
-                            </div>
-                            <div className="grid md:grid-cols-2 gap-4 mt-4">
-                                <div>
-                                    <input type="text" placeholder="State" name='state' value={formData.state} onChange={handleChange} className="w-full text-base py-2 px-3 border rounded" />
-                                </div>
-                                <div>
-                                    <input type="text" placeholder="City" name='city' value={formData.city} onChange={handleChange} className="w-full text-base py-2 px-3 border rounded" />
-                                </div>
-                            </div>
-                            <div className="grid md:grid-cols-2 gap-4 mt-4">
-                                <div>
-                                    <input type="text" placeholder="Zip Code" name='zipcode' value={formData.zipcode} onChange={handleChange} className="w-full text-base py-2 px-3 border rounded" />
-                                </div>
-                                <div>
-                                    <input type="email" placeholder="Email" name='email' value={formData.email} onChange={handleChange} className="w-full text-base py-2 px-3 border rounded" />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mt-8">
-                            {processLoad ? (
-                                <div className='w-full flex justify-center items-center'>
-                                    <BeatLoader loading={processLoad} size={10} color='gray' aria-label="Loading Spinner" data-testid="loader" />
-                                </div>
-                            ) : (
-                                <button type="submit" className="w-full text-white bg-gray-800 hover:bg-gray-900 font-medium py-2 px-4 rounded">
-                                    Pay Now
+
+                            <div className="flex justify-between items-center">
+                                <button type="button" onClick={cancelHandler} className="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">Cancel</button>
+                                <button type="submit" className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-white hover:text-black hover:border-black">
+                                    {processLoad ? <BeatLoader loading={processLoad} size={10} color='white' /> : "Pay Now"}
                                 </button>
-                            )}
-                        </div>
-                        <div className="mt-4">
-                            <button type="button" onClick={cancelHandler} className="w-full text-gray-800 border border-gray-800 font-medium py-2 px-4 rounded">
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
+                            </div>
+                        </form>
+                    </> : <p className='text-center text-2xl'>No Item to complete payment.</p>}
                 </div>
             </div>
         </div>

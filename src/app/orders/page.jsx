@@ -1,15 +1,17 @@
-"use client"
-import React, { useState } from 'react';
+"use client";
+import React, { useState, useEffect } from 'react';
 import { Toaster, toast } from 'sonner';
+import { decode } from 'jsonwebtoken';
+import { useSession } from 'next-auth/react';
 
-const getData = async (email) => {
+const getData = async (email, isAdmin) => {
     try {
         let res = await fetch('/api/email_verify', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify({ email }),
+            body: JSON.stringify({ email, isAdmin }),
         });
         res = await res.json();
         return res;
@@ -21,10 +23,60 @@ const getData = async (email) => {
 const Page = () => {
     const [formData, setFormData] = useState({ email: '' });
     const [orderData, setOrderData] = useState(null);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [userEmail, setUserEmail] = useState('');
+    const [token, setToken] = useState(null);
+
+    const { data } = useSession();
+
+    useEffect(() => {
+        if (data) {
+            setToken(data.user.accessToken);
+        }
+    }, [data]);
+
+    useEffect(() => {
+        if (token) {
+            try {
+                const decodedToken = decode(token);
+                if (decodedToken.exp * 1000 > Date.now()) {
+                    setIsAdmin(decodedToken.isAdmin);
+                    setUserEmail(decodedToken.email);
+                }
+            } catch (error) {
+                console.error("Invalid token:", error);
+            }
+        } else {
+            setIsAdmin(false);
+        }
+    }, [token]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (userEmail) {
+                const data = await getData(userEmail, isAdmin);
+                if (data.ok === false) {
+                    toast.error(data.message);
+                } else {
+                    // Group orders by email
+                    const groupedOrders = data.reduce((acc, order) => {
+                        const { email } = order;
+                        if (!acc[email]) {
+                            acc[email] = { ...order, products: [] };
+                        }
+                        acc[email].products = acc[email].products.concat(order.products);
+                        return acc;
+                    }, {});
+                    setOrderData(Object.values(groupedOrders));
+                }
+            }
+        };
+        fetchData();
+    }, [userEmail, isAdmin]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const data = await getData(formData.email);
+        const data = await getData(formData.email, isAdmin);
         if (data.ok === false) {
             toast.error(data.message);
         } else {
@@ -37,7 +89,6 @@ const Page = () => {
                 acc[email].products = acc[email].products.concat(order.products);
                 return acc;
             }, {});
-
             setOrderData(Object.values(groupedOrders));
         }
     };
@@ -48,54 +99,55 @@ const Page = () => {
             {orderData ? (
                 <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
                     <h1 className="text-2xl font-bold mb-6 text-center">Order Data</h1>
-                    <ul className="space-y-4">
-                        {orderData.map((order) => {
-                            // Format the date here
-                            const formattedDate = new Intl.DateTimeFormat('en-GB', {
-                                day: '2-digit',
-                                month: 'long',
-                                year: 'numeric',
-                            }).format(new Date(order.createdAt));
-
-                            return (
-                                <li key={order._id} className="bg-gray-50 p-4 rounded-lg shadow-md px-10">
-                                    <div className='flex justify-between'>
-                                        <div className="mb-2">
-                                            <strong className="font-semibold">Name:</strong> {order.firstName} {order.lastName}
+                    <div className="max-h-96 overflow-y-auto">
+                        <ul className="space-y-4">
+                            {orderData.map((order) => {
+                                // Format the date here
+                                const formattedDate = new Intl.DateTimeFormat('en-GB', {
+                                    day: '2-digit',
+                                    month: 'long',
+                                    year: 'numeric',
+                                }).format(new Date(order.createdAt));
+                                return (
+                                    <li key={order._id} className="bg-gray-50 p-4 rounded-lg shadow-md px-10">
+                                        <div className='flex justify-between'>
+                                            <div className="mb-2">
+                                                <strong className="font-semibold">Name:</strong> {order.firstName} {order.lastName}
+                                            </div>
+                                            <div className="mb-2">
+                                                <strong className="font-semibold">Email:</strong> {order.email}
+                                            </div>
                                         </div>
                                         <div className="mb-2">
-                                            <strong className="font-semibold">Email:</strong> {order.email}
+                                            <strong className="font-semibold">Address:</strong> {order.address}
                                         </div>
-                                    </div>
-                                    <div className="mb-2">
-                                        <strong className="font-semibold">Address:</strong> {order.address}
-                                    </div>
-                                    <div className='flex justify-between'>
-                                        <div className="mb-2">
-                                            <strong className="font-semibold">Phone No:</strong> {order.phoneNumber}
+                                        <div className='flex justify-between'>
+                                            <div className="mb-2">
+                                                <strong className="font-semibold">Phone No:</strong> {order.phoneNumber}
+                                            </div>
+                                            <div className="mb-2">
+                                                <strong className="font-semibold">Ordered On:</strong> {formattedDate}
+                                            </div>
                                         </div>
-                                        <div className="mb-2">
-                                            <strong className="font-semibold">Ordered On:</strong> {formattedDate}
+                                        <div>
+                                            <strong className="font-semibold">Products:</strong>
+                                            <ul className="ml-4 mt-2 space-y-2">
+                                                {order.products.map((product) => (
+                                                    <li key={product._id} className='flex items-center'>
+                                                        <img src={product.img} alt="" className='h-20 w-20 rounded' />
+                                                        <div className="ml-4">
+                                                            <div>{product.title}</div>
+                                                            <div>{product.amount} &#x20B9;</div>
+                                                        </div>
+                                                    </li>
+                                                ))}
+                                            </ul>
                                         </div>
-                                    </div>
-                                    <div>
-                                        <strong className="font-semibold">Products:</strong>
-                                        <ul className="ml-4 mt-2">
-                                            {order.products.map((product) => (
-                                                <li key={product._id} className='flex items-center'>
-                                                    <img src={product.img} alt="" className='h-20 w-20' />
-                                                    <div className="ml-4">
-                                                        <div>{product.title}</div>
-                                                        <div>{product.amount} &#x20B9;</div>
-                                                    </div>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                </li>
-                            );
-                        })}
-                    </ul>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </div>
                 </div>
             ) : (
                 <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg p-6 mt-20">

@@ -66,7 +66,7 @@ const Footer = () => {
         <div className='h-full flex items-center w-1/2'>
         <img src="/banner.png" alt="banner" className='w-full' />
         </div>
-        <p className='self-start p-4 text-sm'>© 2024 ECOM, All rights reserved. Powered by Shopify</p>
+        <p className='self-start p-4 text-sm'>© 2024 GOLDEN GHAF, All rights reserved. Powered by Shopify</p>
       </div>
     </div>
 
