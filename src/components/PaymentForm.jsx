@@ -47,8 +47,8 @@ function PaymentForm() {
     };
 
     useEffect(() => {
-            fetchCityAndState(formData.zipcode);
-        
+        fetchCityAndState(formData.zipcode);
+
     }, [formData.zipcode]);
 
     const initializeRazorpay = () => {
@@ -69,7 +69,7 @@ function PaymentForm() {
         const { firstName, lastName, phoneNumber, address, state, city, zipcode, email } = formData;
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const allowedProviders = ['gmail.com', 'outlook.com'];
-        return firstName && lastName && phoneNumber && address && state && city && zipcode && emailPattern.test(email)&&allowedProviders.includes(email.split('@')[1]);
+        return firstName && lastName && phoneNumber && address && state && city && zipcode && emailPattern.test(email) && allowedProviders.includes(email.split('@')[1]);
     };
 
     const makePayment = async (e) => {
@@ -132,7 +132,6 @@ function PaymentForm() {
                 order_id: data.id,
                 description: "Thank you for your purchase",
                 handler: async function (response) {
-                    toast.success("Payment successful: " + response.razorpay_payment_id);
                     setRazorLoading(false);
                     setRedirecting(true);
 
@@ -264,7 +263,7 @@ function PaymentForm() {
                 <div className="fixed inset-0 z-50 flex justify-center items-center bg-transparent">
                     <div className='flex flex-col items-center bg-white rounded-md p-4'>
                         <span className="mb-4 text-2xl text-gray-700">Creating order summary, please wait...</span>
-                        <BeatLoader loading={redirecting} size={20} color='black' />
+                        <img src="/box.gif" alt="Packaging Animation" className="mb-4 w-28 h-28" />
                     </div>
                 </div>
             )}

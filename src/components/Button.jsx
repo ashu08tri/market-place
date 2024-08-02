@@ -93,4 +93,4 @@ function Button({ category, id, title, sizes, amount, img, productType }) {
     )
 }
 
-export default Button
+export default Button;
