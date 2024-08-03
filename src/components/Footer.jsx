@@ -13,19 +13,19 @@ const Footer = () => {
         <div className='w-full md:w-1/3 h-full flex-shrink-0 flex flex-col justify-center items-center gap-5'>
           <div className='rounded-full bg-gray-300 text-gray-600 text-4xl p-4'><PiPackage /></div>
           <p className='text-3xl text-center'>Fast Shipping</p>
-          <Link href='/' className='underline underline-offset-2'>Learn More</Link>
+          <Link href='/shipping' className='underline underline-offset-2'>Learn More</Link>
         </div>
 
         <div className='w-full md:w-1/3 h-full flex-shrink-0 flex flex-col justify-center border-x items-center gap-5'>
           <div className='rounded-full bg-gray-300 text-gray-600 text-4xl p-4'><MdOutlineShoppingCart /></div>
           <p className='text-3xl text-center'>30 days <br /> return policy</p>
-          <Link href='/' className='underline underline-offset-2'>Learn More</Link>
+          <Link href='/refund-policy' className='underline underline-offset-2'>Learn More</Link>
         </div>
 
         <div className='w-full md:w-1/3 h-full flex-shrink-0 flex flex-col justify-center items-center gap-5'>
           <div className='rounded-full bg-gray-300 text-gray-600 text-4xl p-4'><CiCreditCard1 /></div>
           <p className='text-3xl text-center'>100% Secure <br /> payments</p>
-          <Link href='/' className='underline underline-offset-2'>Learn More</Link>
+          <Link href='/FAQ' className='underline underline-offset-2'>Learn More</Link>
         </div>
       </div>
     </div>
@@ -66,7 +66,7 @@ const Footer = () => {
         <div className='h-full flex items-center w-1/2'>
         <img src="/banner.png" alt="banner" className='w-full' />
         </div>
-        <p className='self-start p-4 text-sm'>© 2024 GOLDEN GHAF, All rights reserved. Powered by Shopify</p>
+        <p className='self-start p-4 text-sm'>© 2024 GOLDEN GHAF, All rights reserved.</p>
       </div>
     </div>
 

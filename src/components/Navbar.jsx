@@ -222,7 +222,7 @@ function Navbar() {
     submenuImagesContainer: 'flex gap-10 flex-wrap',
     submenuImage: 'w-28 h-28',
     navListItem: "py-3 cursor-pointer",
-    footerLink: 'py-3 text-sm'
+    footerLink: 'py-3 text-sm cursor-pointer'
   };
 
   const handleAdd = (mainTitle, sublinkTitle) => {
@@ -362,6 +362,7 @@ function Navbar() {
 
         <ul className="hidden md:flex gap-6 group cursor-pointer">
           <li className={dynamicStyles.menuItem}><Link href='/orders'>Order</Link></li>
+          <li className={dynamicStyles.menuItem}><Link href='/payment'>Payment</Link></li>
           <li className={dynamicStyles.menuItem}><Link href='/about'>About</Link></li>
           <li className="text-2xl py-9" onClick={toggleDrawer}><CiSearch /></li>
 
@@ -530,6 +531,12 @@ function Navbar() {
           }
           router.push('/orders')
         }}>Order</li>
+        <li className={dynamicStyles.footerLink} onClick={() => {
+          if (isOpen) {
+            setIsOpen(false)
+          }
+          router.push('/payment')
+        }}>Payment</li>
                 <li className={dynamicStyles.footerLink} onClick={() => {
           if (isOpen) {
             setIsOpen(false)

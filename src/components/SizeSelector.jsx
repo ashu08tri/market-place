@@ -8,7 +8,7 @@ import Button from "./Button";
 import { usePathname } from "next/navigation";
 
 function SizeSelector({ id, sizes, amount, title, img, category, productType }) {
-    const [selected, setSelected] = useState('M');
+    const [selected, setSelected] = useState(sizes[0].size);
     const [quantity, setQuantity] = useState(1);
     const [totalAmount, setTotalAmount] = useState(amount);
     const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false);
@@ -58,7 +58,7 @@ function SizeSelector({ id, sizes, amount, title, img, category, productType }) 
                 },
                 method: 'POST',
                 body: JSON.stringify(cartData)
-            
+
             })
             res = await res.json()
             console.log(res);
@@ -79,19 +79,21 @@ function SizeSelector({ id, sizes, amount, title, img, category, productType }) 
             </AnimatePresence>
             <div className="border-b pb-10 md:pb-20">
                 <ul className='flex gap-3'>
-                    {sizes.map((sizeObj, i) => (
-                        <li
-                            key={i}
-                            className='px-3 py-1 border cursor-pointer hover:bg-gray-300'
-                            style={{
-                                backgroundColor: selected === sizeObj.size ? 'gray' : '',
-                                color: selected === sizeObj.size ? 'white' : ''
-                            }}
-                            onClick={() => selectHandler(sizeObj.size)}
-                        >
-                            {sizeObj.size}
-                        </li>
-                    ))}
+                    {sizes
+                        .filter(sizeObj => sizeObj.quantity > 0)
+                        .map((sizeObj, i) => (
+                            <li
+                                key={i}
+                                className='px-3 py-1 border cursor-pointer hover:bg-gray-300'
+                                style={{
+                                    backgroundColor: selected === sizeObj.size ? 'gray' : '',
+                                    color: selected === sizeObj.size ? 'white' : ''
+                                }}
+                                onClick={() => selectHandler(sizeObj.size)}
+                            >
+                                {sizeObj.size}
+                            </li>
+                        ))}
                 </ul>
                 <div className="md:flex items-center gap-2 md:py-4">
                     <div className="flex border w-full md:w-1/4 h-12 items-center my-4 justify-between">

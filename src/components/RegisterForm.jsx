@@ -24,8 +24,7 @@ function RegisterForm() {
   const isFormValid = () => {
     const { firstName, lastName, email, password } = formData;
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const allowedProviders = ['gmail.com', 'outlook.com'];
-    return firstName && lastName && emailPattern.test(email)&&allowedProviders.includes(email.split('@')[1]) && password;
+    return firstName && lastName && emailPattern.test(email) && password;
 };
 
   const handleSubmit = async (e) => {

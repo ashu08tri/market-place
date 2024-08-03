@@ -1,7 +1,8 @@
 "use client"
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Toaster, toast } from 'sonner';
+import { toast } from 'sonner';
+import { RiDeleteBinLine } from "react-icons/ri";
 import FadeLoader from "react-spinners/FadeLoader";
 import BeatLoader from "react-spinners/BeatLoader";
 
@@ -12,6 +13,7 @@ function PaymentForm() {
     const [processLoad, setProcessLoad] = useState(false);
     const [redirecting, setRedirecting] = useState(false);
     const [razorLoading, setRazorLoading] = useState(false);
+    const [formErrors, setFormErrors] = useState({});
 
     let payAmount = data.reduce((total, payment) => total + payment.amount, 0);
 
@@ -28,10 +30,10 @@ function PaymentForm() {
     });
 
     const fetchCityAndState = async (zipcode) => {
-        const response = await fetch(`https://api.postalpincode.in/pincode/${zipcode}`);
-        const data = await response.json();
-        if (data[0] && data[0].PostOffice && data[0].PostOffice.length > 0) {
-            const postOffice = data[0].PostOffice[0];
+        let response = await fetch(`https://api.postalpincode.in/pincode/${zipcode}`);
+        response = await response.json();
+        if (response[0] && response[0].PostOffice && response[0].PostOffice.length > 0) {
+            const postOffice = response[0].PostOffice[0];
             setFormData((prevFormData) => ({
                 ...prevFormData,
                 city: postOffice.District || '',
@@ -65,24 +67,81 @@ function PaymentForm() {
         });
     };
 
-    const isFormValid = () => {
-        const { firstName, lastName, phoneNumber, address, state, city, zipcode, email } = formData;
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const allowedProviders = ['gmail.com', 'outlook.com'];
-        return firstName && lastName && phoneNumber && address && state && city && zipcode && emailPattern.test(email) && allowedProviders.includes(email.split('@')[1]);
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
     };
+
+    const handleBlur = (e) => {
+        const { name, value } = e.target;
+        validateField(name, value);
+    };
+
+    const validateField = (name, value) => {
+        let errors = { ...formErrors };
+
+        switch (name) {
+            case "firstName":
+            case "lastName":
+                if (!value) {
+                    errors[name] = "This field is required";
+                } else {
+                    delete errors[name];
+                }
+                break;
+            case "phoneNumber":
+                if (!/^\d{10}$/.test(value)) {
+                    errors[name] = "Phone number must be 10 digits";
+                } else {
+                    delete errors[name];
+                }
+                break;
+            case "email":
+                if (!/\S+@\S+\.\S+/.test(value)) {
+                    errors[name] = "Email is invalid";
+                } else {
+                    delete errors[name];
+                }
+                break;
+            case "zipcode":
+                if (!/^\d{5,6}$/.test(value)) {
+                    errors[name] = "Zip code is invalid";
+                } else {
+                    delete errors[name];
+                }
+                break;
+            default:
+                if (!value) {
+                    errors[name] = "This field is required";
+                } else {
+                    delete errors[name];
+                }
+                break;
+        }
+
+        setFormErrors(errors);
+    };
+
+    // const isFormValid = () => {
+    //     const { firstName, lastName, phoneNumber, address, state, city, zipcode, email } = formData;
+    //     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    //     const phonePattern = /^\d{10}$/;
+    //     return firstName && lastName && phoneNumber && phonePattern.test(phoneNumber) && address && state && city && zipcode && emailPattern.test(email);
+    // };
 
     const makePayment = async (e) => {
         e.preventDefault();
         setProcessLoad(true);
         setRazorLoading(true);
 
-        if (!isFormValid()) {
-            toast.error("Please fill out all the fields or check your email credentials.");
-            setProcessLoad(false);
-            setRazorLoading(false);
-            return;
-        }
+        // if (!isFormValid()) {
+        //     toast.warning("Please fill out all the fields properly.",{
+        //         position: 'top-center'
+        //     });
+        //     setProcessLoad(false);
+        //     setRazorLoading(false);
+        //     return;
+        // }
         // Add products IDs to formData
         const updatedFormData = {
             ...formData,
@@ -205,13 +264,39 @@ function PaymentForm() {
         }
     };
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
-    };
+    const deleteItem = async(id) => {
+        try {
+            let res = await fetch('/api/payment/'+id, {
+                method: 'DELETE',
+                cache: 'no-store'
+            });
+            res = await res.json();
+            if (res.ok) {
+                toast.success('Item removed!');
+                const getData = async () => {
+                    try {
+                        const res = await fetch('/api/payment', {
+                            method: 'GET',
+                            credentials: 'include' // Ensure cookies are sent
+                        });
+                        if (!res.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        const data = await res.json();
+                        if(data.length === 0){
+                            router.back();
+                        }
+                        setData(data);
+                    } catch (error) {
+                        console.error('Error fetching cart data:', error.message);
+                    }
+                }
+                getData();
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
     useEffect(() => {
         const getData = async () => {
@@ -269,7 +354,7 @@ function PaymentForm() {
             )}
 
             <div className="flex max-sm:flex-col gap-12 max-lg:gap-4">
-                <Toaster closeButton position='top-center' />
+                
                 <div className="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 sm:h-[calc(100vh-6rem)] sm:sticky sm:top-0 lg:min-w-[370px] sm:min-w-[300px] overflow-y-auto scrollbar-hide">
                     <div className="flex flex-col h-full relative">
                         <div className="px-4 py-8 flex-grow">
@@ -287,7 +372,10 @@ function PaymentForm() {
                                                         <img src={item.img} alt={item.title} className="w-full object-contain" />
                                                     </div>
                                                     <div className="w-full">
+                                                        <div className='flex justify-between mb-2'>
                                                         <h3 className="text-base text-white">{item.title}</h3>
+                                                        <button className='text-xl text-white' onClick={() => deleteItem(item._id)}><RiDeleteBinLine /></button>
+                                                        </div>
                                                         <ul className="text-xs text-gray-300 space-y-2 mt-2">
                                                             <li className="flex flex-wrap gap-4">Size <span className="ml-auto">{item.size}</span></li>
                                                             <li className="flex flex-wrap gap-4">Quantity <span className="ml-auto">{item.quantity}</span></li>
@@ -316,35 +404,40 @@ function PaymentForm() {
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name</label>
-                                    <input type="text" name="firstName" id="firstName" autoComplete="given-name" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.firstName} onChange={handleChange} required />
+                                    <input type="text" name="firstName" id="firstName" autoComplete="given-name" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.firstName} onChange={handleChange} onBlur={handleBlur} required />
+                                    {formErrors.firstName && <p className="text-red-500 text-xs mt-1">{formErrors.firstName}</p>}
                                 </div>
                                 <div>
                                     <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Last Name</label>
-                                    <input type="text" name="lastName" id="lastName" autoComplete="family-name" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.lastName} onChange={handleChange} required />
+                                    <input type="text" name="lastName" id="lastName" autoComplete="family-name" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.lastName} onChange={handleChange} onBlur={handleBlur} required />
+                                    {formErrors.lastName && <p className="text-red-500 text-xs mt-1">{formErrors.lastName}</p>}
                                 </div>
                                 <div>
                                     <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">Phone Number</label>
-                                    <input type="tel" name="phoneNumber" id="phoneNumber" autoComplete="tel" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.phoneNumber} onChange={handleChange} required />
+                                    <input type="tel" name="phoneNumber" id="phoneNumber" autoComplete="tel" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.phoneNumber} onChange={handleChange} onBlur={handleBlur} required />
+                                    {formErrors.phoneNumber && <p className="text-red-500 text-xs mt-1">{formErrors.phoneNumber}</p>}
                                 </div>
                                 <div>
                                     <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                                    <input type="email" name="email" id="email" autoComplete="email" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.email} onChange={handleChange} required />
+                                    <input type="email" name="email" id="email" autoComplete="email" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.email} onChange={handleChange} onBlur={handleBlur} required />
+                                    {formErrors.email && <p className="text-red-500 text-xs mt-1">{formErrors.email}</p>}
                                 </div>
                                 <div className="col-span-2">
                                     <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
-                                    <input type="text" name="address" id="address" autoComplete="street-address" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.address} onChange={handleChange} required />
+                                    <input type="text" name="address" id="address" autoComplete="street-address" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.address} onChange={handleChange} onBlur={handleBlur} required />
                                 </div>
                                 <div>
                                     <label htmlFor="state" className="block text-sm font-medium text-gray-700">State</label>
-                                    <input type="text" name="state" id="state" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.state} onChange={handleChange} required />
+                                    <input type="text" name="state" id="state" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.state} onChange={handleChange} onBlur={handleBlur} required />
                                 </div>
                                 <div>
                                     <label htmlFor="city" className="block text-sm font-medium text-gray-700">City</label>
-                                    <input type="text" name="city" id="city" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.city} onChange={handleChange} required />
+                                    <input type="text" name="city" id="city" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.city} onChange={handleChange} onBlur={handleBlur} required />
                                 </div>
                                 <div>
                                     <label htmlFor="zipcode" className="block text-sm font-medium text-gray-700">Zip Code</label>
-                                    <input type="text" name="zipcode" id="zipcode" autoComplete="postal-code" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.zipcode} onChange={handleChange} required />
+                                    <input type="text" name="zipcode" id="zipcode" autoComplete="postal-code" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.zipcode} onChange={handleChange} onBlur={handleBlur} required />
+                                    {formErrors.zipcode && <p className="text-red-500 text-xs mt-1">{formErrors.zipcode}</p>}
                                 </div>
                             </div>
 

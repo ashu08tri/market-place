@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import app from "@/firebase";
 import { getStorage, ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 import { Toaster, toast } from "sonner";
@@ -10,22 +10,32 @@ function ProductFormModal({ onClose, onProductAdd, apiRoute, storagePath, mainti
 }) {
     const [title, setTitle] = useState(titles || '');
     const [amount, setAmount] = useState(amounts || '');
-    const [quantity, setQuantity] = useState(sizes || [{ size: '', quantity: '' }]);
     const [images, setImages] = useState([]);
     const [uploading, setUploading] = useState(false);
+    const [quantity, setQuantity] = useState([]);
 
-    const handleQuantityChange = (index, key, value) => {
-        const newQuantities = [...quantity];
-        newQuantities[index][key] = value;
-        setQuantity(newQuantities);
+    useEffect(() => {
+        // Define all possible sizes
+        const allSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
+
+        // Create an initial quantity state based on the sizes prop
+        const initialQuantity = allSizes.map(size => ({
+            size,
+            quantity: sizes.find(s => s.size === size) ? sizes.find(s => s.size === size).quantity : 0
+        }));
+
+        setQuantity(initialQuantity);
+    }, [sizes]);
+
+    const handleQuantityChange = (size, value) => {
+        const updatedQuantity = quantity.map(q =>
+            q.size === size ? { ...q, quantity: value } : q
+        );
+        setQuantity(updatedQuantity);
     };
 
     const handleImageChange = (files) => {
         setImages(Array.from(files));
-    };
-
-    const addQuantityField = () => {
-        setQuantity([...quantity, { size: '', quantity: '' }]);
     };
 
     const uploadImageToFirebase = async (file) => {
@@ -94,7 +104,7 @@ function ProductFormModal({ onClose, onProductAdd, apiRoute, storagePath, mainti
                     onChange={(e) => setTitle(e.target.value)}
                     required
                 />
-    
+
                 <label htmlFor="amount" className="text-black font-semibold">Amount:</label>
                 <input
                     type="number"
@@ -104,41 +114,21 @@ function ProductFormModal({ onClose, onProductAdd, apiRoute, storagePath, mainti
                     onChange={(e) => setAmount(e.target.value)}
                     required
                 />
-    
+
                 <label className="text-black font-semibold">Quantity:</label>
-                {quantity.map((q, index) => (
-                    <div key={index} className="flex gap-2">
-                        <select
-                            className="border border-black p-1 rounded-md flex-1"
-                            value={q.size}
-                            onChange={(e) => handleQuantityChange(index, 'size', e.target.value)}
-                        >
-                            <option value="">Select Size</option>
-                            <option value="XS">XS</option>
-                            <option value="S">S</option>
-                            <option value="M">M</option>
-                            <option value="L">L</option>
-                            <option value="XL">XL</option>
-                            <option value="XXL">XXL</option>
-                            <option value="XXXL">XXXL</option>
-                        </select>
+                {quantity.map((q) => (
+                    <div key={q.size} className="flex gap-2 mb-2">
+                        <span className="border border-black p-1 rounded-md flex-1">{q.size}</span>
                         <input
                             type="number"
                             className="border border-black p-1 rounded-md flex-1"
                             placeholder="Quantity"
                             value={q.quantity}
-                            onChange={(e) => handleQuantityChange(index, 'quantity', e.target.value)}
+                            onChange={(e) => handleQuantityChange(q.size, e.target.value)}
                         />
                     </div>
                 ))}
-                <button
-                    type="button"
-                    className="mt-2 border border-black text-black py-1 px-2 rounded-md hover:bg-black hover:text-white transition"
-                    onClick={addQuantityField}
-                >
-                    Add Size
-                </button>
-    
+
                 <label className="text-black font-semibold">Images:</label>
                 <input
                     type="file"
@@ -146,13 +136,13 @@ function ProductFormModal({ onClose, onProductAdd, apiRoute, storagePath, mainti
                     multiple
                     onChange={(e) => handleImageChange(e.target.files)}
                 />
-    
+
                 <button
                     type="submit"
                     className='bg-black text-white py-2 px-4 mt-2 rounded-md hover:bg-gray-800 transition'
                     disabled={uploading}
                 >
-                    {uploading ? <BeatLoader loading={uploading} size={10} color='white' aria-label="Loading Spinner" data-testid="loader" /> : 'Add Product'}
+                    {uploading ? <BeatLoader loading={uploading} size={10} color='white' aria-label="Loading Spinner" data-testid="loader" /> : 'Proceed'}
                 </button>
             </form>
         </div>
