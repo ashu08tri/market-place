@@ -128,7 +128,7 @@ function Collection({ product, img, title, categories }) {
                 </div>
                 <div className='px-6 py-4'>
                   <p className='font-bold text-xl mb-2'>{item.title}</p>
-                  <p className='text-gray-700 text-base'>{item.amount}</p>
+                  <p className='text-gray-700 text-base font-semibold'>&#x20B9; {item.amount}</p>
                 </div>
               </div>
             </div>
