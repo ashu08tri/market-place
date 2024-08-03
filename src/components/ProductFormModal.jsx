@@ -4,8 +4,9 @@ import app from "@/firebase";
 import { getStorage, ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 import { Toaster, toast } from "sonner";
 import { BeatLoader } from "react-spinners";
+import { useRouter } from "next/navigation";
 
-function ProductFormModal({ onClose, onProductAdd, apiRoute, storagePath, maintitle, method,
+function ProductFormModal({ onClose, apiRoute, storagePath, maintitle, method,
     titles, amounts, sizes, img
 }) {
     const [title, setTitle] = useState(titles || '');
@@ -13,6 +14,7 @@ function ProductFormModal({ onClose, onProductAdd, apiRoute, storagePath, mainti
     const [images, setImages] = useState([]);
     const [uploading, setUploading] = useState(false);
     const [quantity, setQuantity] = useState([]);
+    const router = useRouter();
 
     useEffect(() => {
         // Define all possible sizes
@@ -21,7 +23,7 @@ function ProductFormModal({ onClose, onProductAdd, apiRoute, storagePath, mainti
         // Create an initial quantity state based on the sizes prop
         const initialQuantity = allSizes.map(size => ({
             size,
-            quantity: sizes.find(s => s.size === size) ? sizes.find(s => s.size === size).quantity : 0
+            quantity: sizes && sizes.find(s => s.size === size) ? sizes.find(s => s.size === size).quantity : 0
         }));
 
         setQuantity(initialQuantity);
@@ -48,10 +50,10 @@ function ProductFormModal({ onClose, onProductAdd, apiRoute, storagePath, mainti
     const submitHandler = async (e) => {
         e.preventDefault();
         setUploading(true);
-
+    
         try {
             const uploadedImageUrls = await Promise.all(Array.from(images).map(img => uploadImageToFirebase(img)));
-
+    
             const productData = {
                 maintitle,
                 product: [{
@@ -61,7 +63,7 @@ function ProductFormModal({ onClose, onProductAdd, apiRoute, storagePath, mainti
                     img: uploadedImageUrls.length > 0 ? uploadedImageUrls : img || []
                 }]
             };
-
+    
             let res = await fetch(apiRoute, {
                 method: method,
                 headers: {
@@ -69,13 +71,14 @@ function ProductFormModal({ onClose, onProductAdd, apiRoute, storagePath, mainti
                 },
                 body: JSON.stringify(method === 'POST' ? productData : productData.product[0])
             });
+    
             res = await res.json();
+    
             if (res.ok) {
                 toast.success('Operation Successful!');
-                onProductAdd();
                 onClose();
             } else {
-                toast.error(res.error);
+                toast.error('Operation Failed!');
             }
         } catch (err) {
             toast.error('Operation Failed!');
@@ -84,6 +87,7 @@ function ProductFormModal({ onClose, onProductAdd, apiRoute, storagePath, mainti
             setUploading(false);
         }
     };
+    
 
     return (
         <div className="absolute top-20 left-40 p-4 bg-white border border-black rounded-md text-black mt-10">

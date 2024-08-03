@@ -74,12 +74,6 @@ function Product({ product, img, title, categories }) {
     setIsProductFormOpen(!isProductFormOpen);
   };
 
-  const handleProductAdd = async () => {
-    const updatedData = await getData(title);
-    setProducts(updatedData.products);
-    setIsProductFormOpen(false);
-  };
-
   return (
     <div className='pt-24'>
       <div className='h-80 relative'>
@@ -151,7 +145,7 @@ function Product({ product, img, title, categories }) {
           <button className='bg-black text-white p-3' onClick={closeProductFormModal}>Add Product</button>
         </div>
       )}
-      {isProductFormOpen && <ProductFormModal onClose={closeProductFormModal} maintitle={title} onProductAdd={handleProductAdd} apiRoute={`/api/products/${title}`}
+      {isProductFormOpen && <ProductFormModal onClose={closeProductFormModal} maintitle={title} apiRoute={`/api/products/${title}`}
         storagePath={'productImages/featured'} method={'POST'} />}
     </div>
   );

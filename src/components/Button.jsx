@@ -36,6 +36,8 @@ function Button({ category, id, title, sizes, amount, img, productType }) {
     }
 
     const deleteHandler = async (category, id, img) => {
+        console.log(img);
+        
         const storage = getStorage(app);
         let imageUrl = img[0];
         
@@ -48,7 +50,7 @@ function Button({ category, id, title, sizes, amount, img, productType }) {
         try {
             if (isFirebaseImage) {
                 // Create a reference to the Firebase Storage location
-                const storageRef = ref(storage, imageUrl.split('/').pop()); // Extract the file name from URL
+                const storageRef = ref(storage, imageUrl); // Extract the file name from URL
     
                 // Delete the image from Firebase Storage
                 await deleteObject(storageRef);
