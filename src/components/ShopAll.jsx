@@ -1,25 +1,18 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchExchangeRates } from '@/redux/slice';
-import usePrice from '@/hooks/usePrice';
+import ProductPrice from './ProductPrice';
+
 
 function ShopAll({ product, img, title, url, categories }) {
   const router = useRouter();
   const [visibleItems, setVisibleItems] = useState(10);
-  const dispatch = useDispatch();
-  const currency = useSelector((state) => state.currency.currency);
-  const currencySymbols = useSelector((state) => state.currency.currencySymbols);
 
   const handleViewMore = () => {
     setVisibleItems(prevVisibleItems => prevVisibleItems + 10);
   };
 
-  useEffect(() => {
-    dispatch(fetchExchangeRates());
-  }, [dispatch]);
 
   return (
     <div className='pt-24'>
@@ -70,7 +63,7 @@ function ShopAll({ product, img, title, url, categories }) {
                 <img className='h-64 w-56 object-cover' src={item.img[0]} alt={item.title} />
                 <div className='px-6 py-4'>
                   <p className='font-bold text-xl mb-2'>{item.title}</p>
-                  <p className='text-gray-700 text-base'>{currencySymbols[currency]} {currency === 'INR' ? usePrice(item.amount) : usePrice(item.amount).toFixed(2)}</p>
+                  <p className='text-gray-700 text-base'><ProductPrice price={item.amount}/></p>
                 </div>
               </div>
             </div>
