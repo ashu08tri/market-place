@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import ProductPrice from './ProductPrice';
 
 const { NEXT_PUBLIC_HOST_URL } = process.env;
 
@@ -38,7 +39,7 @@ async function Sales() {
                                     </div>
                                     <div className="flex flex-col items-center mt-3">
                                         <p>{item.title}</p>
-                                        <p>{item.amount} &#x20B9;</p>
+                                        <p><ProductPrice price={item.amount}/></p>
                                     </div>
                                 </Link>
 
