@@ -3,7 +3,7 @@ import shortid from "shortid";
 import { NextResponse } from "next/server";
 
 export const POST = async (request) => {
-  const {taxAmt} = await request.json();
+  const {taxAmt, selectedCurrency} = await request.json();
 
   if (!taxAmt) {
     return NextResponse.json({ error: "Tax amount is required" });
@@ -16,7 +16,7 @@ export const POST = async (request) => {
 
   const payment_capture = 1;
   const amount = taxAmt;
-  const currency = "INR";
+  const currency = selectedCurrency;
   const options = {
     amount: (amount * 100).toString(),
     currency,

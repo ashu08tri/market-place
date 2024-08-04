@@ -165,7 +165,10 @@ const Page = () => {
                                     <div className="mb-2">
                                         <strong className="font-semibold">Address:</strong> {order.address}
                                     </div>
-                                    <div className='flex justify-between'>
+                                    <div className='flex flex-col md:flex-row justify-between'>
+                                    <div className="mb-2">
+                                            <strong className="font-semibold">Country:</strong> {order.country}
+                                        </div>
                                         <div className="mb-2">
                                             <strong className="font-semibold">Phone No:</strong> {order.phoneNumber}
                                         </div>

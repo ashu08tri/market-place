@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import SizeSelector from '@/components/SizeSelector';
+import ProductPrice from '@/components/ProductPrice';
 
 const {NEXT_PUBLIC_HOST_URL} = process.env;
 
@@ -33,7 +34,7 @@ async function page({ params }) {
           </div>
           <div className='md:w-4/12 px-6 pt-8 md:pt-20'>
           <h1 className='text-2xl font-bold tracking-widest'>{item[0].title}</h1>
-          <p className='font-semibold py-2'>&#x20B9; {item[0].amount}</p>
+          <p className='font-semibold py-2'><ProductPrice price={item[0].amount}/></p>
           <p className='text-xs py-1 md:text-sm'>Tax included. Shipping calculated at checkout.</p>
           <div className='py-4'>
             <p className='text-sm pb-2'>SIZE:</p>

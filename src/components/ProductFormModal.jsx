@@ -14,7 +14,6 @@ function ProductFormModal({ onClose, apiRoute, storagePath, maintitle, method,
     const [images, setImages] = useState([]);
     const [uploading, setUploading] = useState(false);
     const [quantity, setQuantity] = useState([]);
-    const router = useRouter();
 
     useEffect(() => {
         // Define all possible sizes

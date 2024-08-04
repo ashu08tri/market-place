@@ -5,6 +5,7 @@ import Link from 'next/link';
 import ProductFormModal from './ProductFormModal';
 import { useSession } from 'next-auth/react';
 import { decode } from 'jsonwebtoken';
+import ProductPrice from './ProductPrice';
 
 const {NEXT_PUBLIC_HOST_URL} = process.env;
 
@@ -123,7 +124,7 @@ function Product({ product, img, title, categories }) {
                 </div>
                 <div className='px-6 py-4'>
                   <p className='font-bold text-xl mb-2'>{item.title}</p>
-                  <p className='text-gray-700 text-base font-semibold'>&#x20B9; {item.amount}</p>
+                  <p className='text-gray-700 text-base font-semibold'><ProductPrice price={item.amount}/></p>
                 </div>
               </div>
             </div>

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
+import CurrencySwitcher from './CurrencySwitcher';
 import SearchModal from './SearchModal';
 import CartModal from './CartModal';
 import { decode } from 'jsonwebtoken';
@@ -344,6 +345,7 @@ function Navbar() {
             </ul>
           </li>
           <li className={dynamicStyles.menuItem}><Link href='/blog'>Blogs</Link></li>
+          <li className={dynamicStyles.menuItem}><CurrencySwitcher /></li>
         </ul>
 
         <div className="md:hidden cursor-pointer" onClick={toggle}>

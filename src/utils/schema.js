@@ -107,6 +107,7 @@ const orderSchema = new mongoose.Schema({
   createdAt: {type: Date, default: Date.now()},
   address: String,
   phoneNumber: Number,
+  country: String,
   state: String,
   city: String,
   zipcode: Number,

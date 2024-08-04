@@ -2,9 +2,21 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import SelectCountry from './SelectCountry';
+import ProductPrice from './ProductPrice';
+import { useSelector } from 'react-redux';
 import { RiDeleteBinLine } from "react-icons/ri";
 import FadeLoader from "react-spinners/FadeLoader";
 import BeatLoader from "react-spinners/BeatLoader";
+
+
+const countryCurrencyMap = {
+    INR: 'India',
+    USD: 'USA',
+    EUR: 'Europe',
+    GBP: 'UK'
+  };
+
 
 function PaymentForm() {
     const router = useRouter();
@@ -13,6 +25,7 @@ function PaymentForm() {
     const [processLoad, setProcessLoad] = useState(false);
     const [redirecting, setRedirecting] = useState(false);
     const [razorLoading, setRazorLoading] = useState(false);
+    const currency = useSelector((state) => state.currency.currency);
     const [formErrors, setFormErrors] = useState({});
 
     let payAmount = data.reduce((total, payment) => total + payment.amount, 0);
@@ -22,6 +35,7 @@ function PaymentForm() {
         lastName: '',
         phoneNumber: '',
         address: '',
+        country: countryCurrencyMap[currency],
         state: '',
         city: '',
         zipcode: '',
@@ -71,6 +85,11 @@ function PaymentForm() {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
+
+     const handleCountryChange = (currency) => {
+    const country = countryCurrencyMap[currency];
+    setFormData({ ...formData, country });
+  };
 
     const handleBlur = (e) => {
         const { name, value } = e.target;
@@ -122,26 +141,26 @@ function PaymentForm() {
         setFormErrors(errors);
     };
 
-    // const isFormValid = () => {
-    //     const { firstName, lastName, phoneNumber, address, state, city, zipcode, email } = formData;
-    //     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    //     const phonePattern = /^\d{10}$/;
-    //     return firstName && lastName && phoneNumber && phonePattern.test(phoneNumber) && address && state && city && zipcode && emailPattern.test(email);
-    // };
+    const isFormValid = () => {
+        const { firstName, lastName, phoneNumber, address, state, city, zipcode, email } = formData;
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phonePattern = /^\d{10}$/;
+        return firstName && lastName && phoneNumber && phonePattern.test(phoneNumber) && address && state && city && zipcode && emailPattern.test(email);
+    };
 
     const makePayment = async (e) => {
         e.preventDefault();
         setProcessLoad(true);
         setRazorLoading(true);
 
-        // if (!isFormValid()) {
-        //     toast.warning("Please fill out all the fields properly.",{
-        //         position: 'top-center'
-        //     });
-        //     setProcessLoad(false);
-        //     setRazorLoading(false);
-        //     return;
-        // }
+        if (!isFormValid()) {
+            toast.warning("Please fill out all the fields properly.",{
+                position: 'top-center'
+            });
+            setProcessLoad(false);
+            setRazorLoading(false);
+            return;
+        }
         // Add products IDs to formData
         const updatedFormData = {
             ...formData,
@@ -167,7 +186,8 @@ function PaymentForm() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    taxAmt: payAmount
+                    taxAmt: payAmount,
+                    selectedCurrency: currency
                 })
             });
 
@@ -248,8 +268,6 @@ function PaymentForm() {
                 },
                 prefill: {
                     name: "Golden Ghaf",
-                    email: "ggccomp.in",
-                    contact: '9930005234'
                 },
             };
 
@@ -334,6 +352,8 @@ function PaymentForm() {
         }
     }
 
+     console.log(formData.country);
+     
     return (
         <div className="font-[sans-serif] bg-white pt-24">
             {razorLoading && (
@@ -379,7 +399,7 @@ function PaymentForm() {
                                                         <ul className="text-xs text-gray-300 space-y-2 mt-2">
                                                             <li className="flex flex-wrap gap-4">Size <span className="ml-auto">{item.size}</span></li>
                                                             <li className="flex flex-wrap gap-4">Quantity <span className="ml-auto">{item.quantity}</span></li>
-                                                            <li className="flex flex-wrap gap-4">Amount <span className="ml-auto">{item.amount}</span></li>
+                                                            <li className="flex flex-wrap gap-4">Amount <span className="ml-auto"><ProductPrice price={item.amount} /></span></li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -392,7 +412,7 @@ function PaymentForm() {
                             </div>
                         </div>
                         <div className="bg-gray-800 w-full p-4">
-                            <h4 className="flex flex-wrap gap-4 text-base text-white">Total <span className="ml-auto">₹{payAmount}</span></h4>
+                            <h4 className="flex flex-wrap gap-4 text-base text-white">Total <span className="ml-auto"><ProductPrice price={payAmount} /></span></h4>
                         </div>
                     </div>
                 </div>
@@ -427,17 +447,21 @@ function PaymentForm() {
                                     <input type="text" name="address" id="address" autoComplete="street-address" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.address} onChange={handleChange} onBlur={handleBlur} required />
                                 </div>
                                 <div>
+                                <label htmlFor="country" className="block text-sm font-medium text-gray-700">Country</label>
+                                    <SelectCountry onGetCountry={handleCountryChange}/>
+                                </div>
+                                <div>
+                                    <label htmlFor="zipcode" className="block text-sm font-medium text-gray-700">Zip Code</label>
+                                    <input type="text" name="zipcode" id="zipcode" autoComplete="postal-code" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.zipcode} onChange={handleChange} onBlur={handleBlur} required />
+                                    {formErrors.zipcode && <p className="text-red-500 text-xs mt-1">{formErrors.zipcode}</p>}
+                                </div>
+                                <div>
                                     <label htmlFor="state" className="block text-sm font-medium text-gray-700">State</label>
                                     <input type="text" name="state" id="state" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.state} onChange={handleChange} onBlur={handleBlur} required />
                                 </div>
                                 <div>
                                     <label htmlFor="city" className="block text-sm font-medium text-gray-700">City</label>
                                     <input type="text" name="city" id="city" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.city} onChange={handleChange} onBlur={handleBlur} required />
-                                </div>
-                                <div>
-                                    <label htmlFor="zipcode" className="block text-sm font-medium text-gray-700">Zip Code</label>
-                                    <input type="text" name="zipcode" id="zipcode" autoComplete="postal-code" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.zipcode} onChange={handleChange} onBlur={handleBlur} required />
-                                    {formErrors.zipcode && <p className="text-red-500 text-xs mt-1">{formErrors.zipcode}</p>}
                                 </div>
                             </div>
 

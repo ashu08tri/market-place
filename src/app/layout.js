@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "@/components/AuthProvider";
+import Providers from "@/redux/Providers";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -16,11 +17,13 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${inter.className} overflow-x-hidden`}>
         <AuthProvider>
-        <Navbar />
-        {children}
-        <Footer />
+          <Providers>
+            <Navbar />
+            {children}
+            <Footer />
+          </Providers>
         </AuthProvider>
-        </body>
+      </body>
     </html>
   );
 }

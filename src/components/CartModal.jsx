@@ -7,6 +7,7 @@ import { HiMiniArrowUturnRight } from "react-icons/hi2";
 import { RiDeleteBinLine } from "react-icons/ri";
 import BeatLoader from "react-spinners/BeatLoader";
 import { useRouter } from 'next/navigation';
+import ProductPrice from './ProductPrice';
 
 function CartModal({ isOpen, onClose }) {
   const [cartData, setCartData] = useState([]);
@@ -194,7 +195,7 @@ function CartModal({ isOpen, onClose }) {
                           <p>Size: {item.size}</p>
                         </li>
                         <li>
-                          <p>Amount: ₹{item.amount}</p>
+                          <p>Amount: <ProductPrice price={item.amount}/></p>
                         </li>
                       </ul>
                       <button className='text-xl self-start' onClick={() => deleteItem(item._id)}><RiDeleteBinLine /></button>
