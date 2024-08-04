@@ -37,7 +37,6 @@ function Button({ category, id, title, sizes, amount, img, productType }) {
 
     const deleteHandler = async (category, id, img) => {
         const storage = getStorage();
-        const router = useRouter();
         const imageUrl = img[0];
 
         // Define the Firebase Storage URL pattern
