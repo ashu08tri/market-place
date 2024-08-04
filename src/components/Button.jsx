@@ -36,41 +36,40 @@ function Button({ category, id, title, sizes, amount, img, productType }) {
     }
 
     const deleteHandler = async (category, id, img) => {
-        console.log(img);
-        
-        const storage = getStorage(app);
-        let imageUrl = img[0];
-        
+        const storage = getStorage();
+        const router = useRouter();
+        const imageUrl = img[0];
+
         // Define the Firebase Storage URL pattern
         const firebaseStorageUrlPattern = /^https:\/\/firebasestorage.googleapis.com\//;
-    
+
         // Check if the image URL is from Firebase
         const isFirebaseImage = firebaseStorageUrlPattern.test(imageUrl);
-    
+
         try {
-            if (isFirebaseImage) {
-                // Create a reference to the Firebase Storage location
-                const storageRef = ref(storage, imageUrl); // Extract the file name from URL
-    
-                // Delete the image from Firebase Storage
-                await deleteObject(storageRef);
-            }
-    
             // Delete the data from the database
-            let res = await fetch(`/api/${productType}/${category}/${id}`, {
+            const res = await fetch(`/api/${category}/${id}`, {
                 method: 'DELETE',
-                cache: 'no-store'
+                cache: 'no-store',
             });
-    
-            res = await res.json();
+
             if (res.ok) {
-                toast.success('Item deleted!');
+                if (isFirebaseImage) {
+                    const storageRef = ref(storage, imageUrl); // Extract the file name from URL
+
+                    // Delete the image from Firebase Storage
+                    await deleteObject(storageRef);
+                    toast.success('Item and image deleted successfully!');
+                } else {
+                    toast.success('Item deleted!');
+                }
                 router.back();
             } else {
-                toast.error('Failed to delete item!');
+                toast.error('Failed to delete item from the database!');
             }
         } catch (err) {
             console.log(err);
+            toast.error('An error occurred while deleting the item.');
         }
     };
 
