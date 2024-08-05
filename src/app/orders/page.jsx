@@ -77,15 +77,7 @@ const Page = () => {
                 if (data.ok === false) {
                     toast.error(data.message);
                 } else {
-                    const groupedOrders = data.reduce((acc, order) => {
-                        const { email } = order;
-                        if (!acc[email]) {
-                            acc[email] = { ...order, products: [] };
-                        }
-                        acc[email].products = acc[email].products.concat(order.products.map(product => ({ ...product, createdAt: order.createdAt })));
-                        return acc;
-                    }, {});
-                    setOrderData(Object.values(groupedOrders));
+                    setOrderData(data);
                 }
             }
         };
@@ -98,15 +90,7 @@ const Page = () => {
         if (data.ok === false) {
             toast.error(data.message);
         } else {
-            const groupedOrders = data.reduce((acc, order) => {
-                const { email } = order;
-                if (!acc[email]) {
-                    acc[email] = { ...order, products: [] };
-                }
-                acc[email].products = acc[email].products.concat(order.products.map(product => ({ ...product, createdAt: order.createdAt })));
-                return acc;
-            }, {});
-            setOrderData(Object.values(groupedOrders));
+            setOrderData(data);
         }
     };
 
@@ -153,52 +137,42 @@ const Page = () => {
                     <div className="max-h-96 overflow-y-auto">
                         <ul className="space-y-4">
                             {orderData.map((order) => (
-                                <li key={order._id} className="bg-gray-50 p-4 rounded-lg shadow-md px-10">
-                                    <div className='flex justify-between'>
-                                        <div className="mb-2">
-                                            <strong className="font-semibold">Name:</strong> {order.firstName} {order.lastName}
-                                        </div>
-                                        <div className="mb-2">
-                                            <strong className="font-semibold">Email:</strong> {order.email}
-                                        </div>
-                                    </div>
-                                    <div className="mb-2">
-                                        <strong className="font-semibold">Address:</strong> {order.address}
-                                    </div>
-                                    <div className='flex flex-col md:flex-row justify-between'>
-                                    <div className="mb-2">
-                                            <strong className="font-semibold">Country:</strong> {order.country}
-                                        </div>
-                                        <div className="mb-2">
-                                            <strong className="font-semibold">Phone No:</strong> {order.phoneNumber}
-                                        </div>
-                                        <div className="mb-2">
-                                            <strong className="font-semibold">Ordered On:</strong> {new Intl.DateTimeFormat('en-GB', {
-                                                day: '2-digit',
-                                                month: 'long',
-                                                year: 'numeric',
-                                            }).format(new Date(order.createdAt))}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <strong className="font-semibold">Products:</strong>
-                                        <ul className="ml-4 mt-2 space-y-2">
-                                            {order.products.map((product) => (
-                                                <li key={product._id} className='flex items-center'>
-                                                    <img src={product.img} alt="" className='h-20 w-20 rounded' />
-                                                    <div className="ml-4">
-                                                        <div>{product.title}</div>
-                                                        <div>{product.amount} &#x20B9;</div>
-                                                        <div>Ordered On: {new Intl.DateTimeFormat('en-GB', {
-                                                            day: '2-digit',
-                                                            month: 'long',
-                                                            year: 'numeric',
-                                                        }).format(new Date(product.createdAt))}</div>
+                                <li key={order._id} className="bg-gray-50 p-4 rounded-lg shadow-md">
+                                    <ul className="space-y-2">
+                                        {order.products.map((product) => (
+                                            <li key={product._id} className="flex items-center p-4 border border-gray-200 rounded-md">
+                                                
+                                                <div className="flex flex-col">
+                                                    <div className="text-sm font-semibold">{product.title}</div>
+                                                    <div className="text-sm">{product.amount} &#x20B9;</div>
+                                                    <div className="text-sm text-gray-600">
+                                                        Ordered On: {order.createdAt && !isNaN(new Date(order.createdAt).getTime())
+                                                            ? new Intl.DateTimeFormat('en-GB', {
+                                                                day: '2-digit',
+                                                                month: 'long',
+                                                                year: 'numeric',
+                                                            }).format(new Date(order.createdAt))
+                                                            : 'Date not available'}
                                                     </div>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
+                                                    <img src={product.img[0]} alt={product.title} className="h-16 w-16 rounded mr-4" />
+                                                </div>
+                                                <div className="ml-auto text-right text-sm">
+                                                    <div className="font-semibold">Name: {order.firstName} {order.lastName}</div>
+                                                    <div>Email: {order.email}</div>
+                                                    <div>Number: {order.phoneNumber}</div>
+                                                    <div className="text-gray-600">
+                                                        Address:<br />
+                                                        {order.address.split(',').map((line, index) => (
+                                                            <div key={index}>{line.trim()}</div>
+                                                        ))}
+                                                    </div>
+
+                                                    <div className="text-gray-600">{order.city}, {order.state}, {order.zipcode}</div>
+                                                    <div className="text-gray-600">Order ID: {order.orderID}</div>
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </li>
                             ))}
                         </ul>

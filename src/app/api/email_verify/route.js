@@ -11,7 +11,7 @@ if (!mongoose.connection.readyState) {
 }
 
 export async function POST(request) {
-    const { email, isAdmin, filter } = await request.json();
+    const { email, isAdmin, filter, orderId } = await request.json();
     try {
         let query = {};
 
@@ -33,6 +33,13 @@ export async function POST(request) {
                 query.createdAt = { $gte: startDate, $lt: endDate };
             }
         }
+
+        // Include orderId in the query if provided
+        if (orderId) {
+            query.orderId = orderId;
+        }
+        console.log(orderId);
+        
 
         // Fetch orders based on the query
         const orders = await Order.find(query).populate('products');

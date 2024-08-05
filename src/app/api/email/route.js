@@ -7,8 +7,17 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request) {
     try {
-        const { products } = await request.json();
-        const emailContent = createEmailHtml(products);
+        const { email, orderId, products } = await request.json();
+
+        // Debug: Check the received payload
+        console.log('Received payload (Backend):', { email, orderId, products });
+
+        // Validate the required fields
+        if (!orderId || !products) {
+            return NextResponse.json({ error: 'Missing orderId or products', ok: false });
+        }
+
+        const emailContent = createEmailHtml(products, orderId);
 
         const response = await resend.emails.send({
             from: 'Acme <onboarding@resend.dev>',

@@ -8,7 +8,7 @@ const ProductPrice = ({ price }) => {
   const currency = useSelector((state) => state.currency.currency);
   const currencySymbols = useSelector((state) => state.currency.currencySymbols);
 
-  return <span className='font-semibold'> {currencySymbols[currency]} {currency === 'INR' ? convertedPrice : convertedPrice.toFixed(2)}</span>;
+  return <span className='font-semibold'> {currencySymbols[currency]} {currency === 'INR' ? convertedPrice : convertedPrice.toFixed(2) *2 }</span>;
 };
 
 export default ProductPrice;

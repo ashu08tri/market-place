@@ -7,7 +7,12 @@ import ProductPrice from './ProductPrice';
 import { useSelector } from 'react-redux';
 import { RiDeleteBinLine } from "react-icons/ri";
 import FadeLoader from "react-spinners/FadeLoader";
+import SavedAddress from './SavedAddress';
+import shortid from "shortid";
+import usePrice from '@/hooks/usePrice';
 import BeatLoader from "react-spinners/BeatLoader";
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 
 
 const countryCurrencyMap = {
@@ -15,13 +20,47 @@ const countryCurrencyMap = {
     USD: 'USA',
     EUR: 'Europe',
     GBP: 'UK'
-  };
+};
 
+const customStyles = `
+.react-tel-input .form-control {
+    padding-left: 50px; // Adjust this value as needed
+}
+`;
+
+const allowedCountries = ['us', 'gb', 'in', 'fr'];
+
+const getCountryCode = (currency) => {
+    switch (currency) {
+        case 'INR':
+            return 'in';
+        case 'USD':
+            return 'us';
+        case 'GBP':
+            return 'gb';
+        case 'EUR':
+            return 'fr';
+        default:
+            return 'in';
+    }
+};
+
+const convertToSmallestUnit = (amount, currency) => {
+    switch (currency) {
+      case 'EUR':
+        return Math.round(amount * 100); // Convert to cents
+      case 'GBP':
+        return Math.round(amount * 100); // Convert to pence
+      default:
+        return Math.round(amount); // Default case for INR or other currencies
+    }
+  };
 
 function PaymentForm() {
     const router = useRouter();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [showForm, setShowForm] = useState(false);
     const [processLoad, setProcessLoad] = useState(false);
     const [redirecting, setRedirecting] = useState(false);
     const [razorLoading, setRazorLoading] = useState(false);
@@ -29,6 +68,7 @@ function PaymentForm() {
     const [formErrors, setFormErrors] = useState({});
 
     let payAmount = data.reduce((total, payment) => total + payment.amount, 0);
+    let finalAmount = usePrice(currency === 'INR' ? payAmount : payAmount * 2).toFixed(2);
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -42,6 +82,16 @@ function PaymentForm() {
         email: '',
         products: []
     });
+
+    const savedFormUpdate = (data) => {
+        setFormData({ ...data })
+    }
+
+
+    const displayFormHandler = () => {
+        setShowForm(!showForm);
+    }
+
 
     const fetchCityAndState = async (zipcode) => {
         let response = await fetch(`https://api.postalpincode.in/pincode/${zipcode}`);
@@ -86,15 +136,25 @@ function PaymentForm() {
         setFormData({ ...formData, [name]: value });
     };
 
-     const handleCountryChange = (currency) => {
-    const country = countryCurrencyMap[currency];
-    setFormData({ ...formData, country });
-  };
+    const handleCountryChange = (currency) => {
+        const country = countryCurrencyMap[currency];
+        const countryCode = getCountryCode(currency);
+        setFormData({ ...formData, country, phoneNumber: `+${countryCode}` });
+    };
 
     const handleBlur = (e) => {
         const { name, value } = e.target;
         validateField(name, value);
     };
+
+    const handlePhoneChange = (value) => {
+        setFormData({ ...formData, phoneNumber: value });
+    };
+
+    useEffect(() => {
+        handleCountryChange(currency);
+    }, [currency]);
+
 
     const validateField = (name, value) => {
         let errors = { ...formErrors };
@@ -109,8 +169,9 @@ function PaymentForm() {
                 }
                 break;
             case "phoneNumber":
-                if (!/^\d{10}$/.test(value)) {
-                    errors[name] = "Phone number must be 10 digits";
+                // Validation handled by the phone input component
+                if (!value || !/^\+?\d{10,15}$/.test(value)) {
+                    errors[name] = "Phone number is invalid";
                 } else {
                     delete errors[name];
                 }
@@ -144,7 +205,7 @@ function PaymentForm() {
     const isFormValid = () => {
         const { firstName, lastName, phoneNumber, address, state, city, zipcode, email } = formData;
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phonePattern = /^\d{10}$/;
+        const phonePattern = /^\+?\d{10,15}$/; // Adjusted to match international format
         return firstName && lastName && phoneNumber && phonePattern.test(phoneNumber) && address && state && city && zipcode && emailPattern.test(email);
     };
 
@@ -152,25 +213,41 @@ function PaymentForm() {
         e.preventDefault();
         setProcessLoad(true);
         setRazorLoading(true);
-
+    
         if (!isFormValid()) {
-            toast.warning("Please fill out all the fields properly.",{
+            toast.warning("Please fill out all the fields properly or select a saved address.", {
                 position: 'top-center'
             });
             setProcessLoad(false);
             setRazorLoading(false);
             return;
         }
+    
         // Add products IDs to formData
         const updatedFormData = {
             ...formData,
+            orderID: shortid.generate(),
             products: data.map(product => ({
                 img: product.img,
                 amount: product.amount,
                 title: product.title,
             }))
         };
-
+    
+        // Debug: Check if orderID is generated
+        console.log("Generated orderID:", updatedFormData.orderID);
+    
+        const emailPayload = {
+            email: updatedFormData.email,
+            orderId: updatedFormData.orderID,
+            products: updatedFormData.products
+        };
+    
+        // Debug: Check if emailPayload is correctly constructed
+        console.log("Email Payload:", emailPayload);
+    
+        localStorage.setItem('formData', JSON.stringify(updatedFormData));
+    
         const res = await initializeRazorpay();
         if (!res) {
             alert("Razorpay SDK Failed to load");
@@ -178,7 +255,7 @@ function PaymentForm() {
             setRazorLoading(false);
             return;
         }
-
+    
         try {
             const response = await fetch("/api/razorpay", {
                 method: "POST",
@@ -186,11 +263,11 @@ function PaymentForm() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    taxAmt: payAmount,
+                    taxAmt: finalAmount,
                     selectedCurrency: currency
                 })
             });
-
+    
             if (!response.ok) {
                 const errorData = await response.json();
                 console.error('Server error:', errorData);
@@ -199,10 +276,11 @@ function PaymentForm() {
                 setRazorLoading(false);
                 return;
             }
-
+    
             const data = await response.json();
-            //console.log('Payment data:', data);
-
+            // Debug: Check the payment data
+            console.log('Payment data:', data);
+    
             var options = {
                 key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
                 name: "Golden Ghaf",
@@ -213,7 +291,7 @@ function PaymentForm() {
                 handler: async function (response) {
                     setRazorLoading(false);
                     setRedirecting(true);
-
+    
                     try {
                         let resOrder = await fetch('/api/orders', {
                             method: 'POST',
@@ -222,13 +300,9 @@ function PaymentForm() {
                             },
                             body: JSON.stringify(updatedFormData)
                         });
-
+    
                         resOrder = await resOrder.json();
                         if (resOrder.ok) {
-                            const emailPayload = {
-                                email: formData.email,
-                                products: updatedFormData.products
-                            };
                             let email = await fetch('/api/email', {
                                 method: "POST",
                                 headers: {
@@ -236,7 +310,7 @@ function PaymentForm() {
                                 },
                                 body: JSON.stringify(emailPayload)
                             });
-
+    
                             const emailText = await email.text();
                             email = JSON.parse(emailText);
                             if (email.ok) {
@@ -244,14 +318,14 @@ function PaymentForm() {
                                     method: 'DELETE',
                                     cache: 'no-store'
                                 });
-
+    
                                 res = await res.json();
                                 if (res.ok) {
                                     let cartDel = await fetch('/api/cart', {
                                         method: 'DELETE',
                                         credentials: 'include'
                                     });
-
+    
                                     cartDel = await cartDel.json();
                                     if (cartDel.ok) {
                                         setProcessLoad(false);
@@ -267,10 +341,12 @@ function PaymentForm() {
                     }
                 },
                 prefill: {
-                    name: "Golden Ghaf",
+                    name: `${formData.firstName}${formData.lastName}`,
+                    email: `${formData.email}`,
+                    contact: `${formData.phoneNumber}`,
                 },
             };
-
+    
             const paymentObject = new window.Razorpay(options);
             paymentObject.open();
         } catch (err) {
@@ -282,9 +358,9 @@ function PaymentForm() {
         }
     };
 
-    const deleteItem = async(id) => {
+    const deleteItem = async (id) => {
         try {
-            let res = await fetch('/api/payment/'+id, {
+            let res = await fetch('/api/payment/' + id, {
                 method: 'DELETE',
                 cache: 'no-store'
             });
@@ -301,7 +377,7 @@ function PaymentForm() {
                             throw new Error('Network response was not ok');
                         }
                         const data = await res.json();
-                        if(data.length === 0){
+                        if (data.length === 0) {
                             router.back();
                         }
                         setData(data);
@@ -352,8 +428,7 @@ function PaymentForm() {
         }
     }
 
-     console.log(formData.country);
-     
+
     return (
         <div className="font-[sans-serif] bg-white pt-24">
             {razorLoading && (
@@ -374,7 +449,7 @@ function PaymentForm() {
             )}
 
             <div className="flex max-sm:flex-col gap-12 max-lg:gap-4">
-                
+
                 <div className="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 sm:h-[calc(100vh-6rem)] sm:sticky sm:top-0 lg:min-w-[370px] sm:min-w-[300px] overflow-y-auto scrollbar-hide">
                     <div className="flex flex-col h-full relative">
                         <div className="px-4 py-8 flex-grow">
@@ -393,8 +468,8 @@ function PaymentForm() {
                                                     </div>
                                                     <div className="w-full">
                                                         <div className='flex justify-between mb-2'>
-                                                        <h3 className="text-base text-white">{item.title}</h3>
-                                                        <button className='text-xl text-white' onClick={() => deleteItem(item._id)}><RiDeleteBinLine /></button>
+                                                            <h3 className="text-base text-white">{item.title}</h3>
+                                                            <button className='text-xl text-white' onClick={() => deleteItem(item._id)}><RiDeleteBinLine /></button>
                                                         </div>
                                                         <ul className="text-xs text-gray-300 space-y-2 mt-2">
                                                             <li className="flex flex-wrap gap-4">Size <span className="ml-auto">{item.size}</span></li>
@@ -418,60 +493,135 @@ function PaymentForm() {
                 </div>
 
                 <div className="max-w-4xl w-full h-max rounded-md px-4 py-8 sticky top-0">
+
                     {data.length > 0 ? <>
                         <h2 className="text-2xl font-bold text-gray-800">Complete your order</h2>
-                        <form className="mt-8 space-y-6" onSubmit={makePayment}>
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name</label>
-                                    <input type="text" name="firstName" id="firstName" autoComplete="given-name" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.firstName} onChange={handleChange} onBlur={handleBlur} required />
-                                    {formErrors.firstName && <p className="text-red-500 text-xs mt-1">{formErrors.firstName}</p>}
+                        <SavedAddress onMakePayment={makePayment} onUpdateForm={savedFormUpdate} onAddNewDetails={displayFormHandler} dispalyForm={showForm} />
+                        {
+                            showForm && localStorage.getItem('formData') && <div>
+                            <style>{customStyles}</style>
+                            <form className="mt-8 space-y-6" onSubmit={makePayment}>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name</label>
+                                        <input type="text" name="firstName" id="firstName" autoComplete="given-name" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.firstName} onChange={handleChange} onBlur={handleBlur} required />
+                                        {formErrors.firstName && <p className="text-red-500 text-xs mt-1">{formErrors.firstName}</p>}
+                                    </div>
+                                    <div>
+                                        <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Last Name</label>
+                                        <input type="text" name="lastName" id="lastName" autoComplete="family-name" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.lastName} onChange={handleChange} onBlur={handleBlur} required />
+                                        {formErrors.lastName && <p className="text-red-500 text-xs mt-1">{formErrors.lastName}</p>}
+                                    </div>
+                                    <div>
+                                        <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">Phone Number</label>
+                                        <PhoneInput
+                                            country={getCountryCode(currency)}
+                                            value={formData.phoneNumber}
+                                            onChange={handlePhoneChange}
+                                            onBlur={() => handleBlur({ target: { name: 'phoneNumber', value: formData.phoneNumber } })}
+                                            inputProps={{
+                                                name: 'phoneNumber',
+                                                required: true,
+                                                autoComplete: 'tel',
+                                                className: 'mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm'
+                                            }}
+                                            onlyCountries={allowedCountries}
+                                        />
+                                        {formErrors.phoneNumber && <p className="text-red-500 text-xs mt-1">{formErrors.phoneNumber}</p>}
+                                    </div>
+                                    <div>
+                                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                                        <input type="email" name="email" id="email" autoComplete="email" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.email} onChange={handleChange} onBlur={handleBlur} required />
+                                        {formErrors.email && <p className="text-red-500 text-xs mt-1">{formErrors.email}</p>}
+                                    </div>
+                                    <div className="col-span-2">
+                                        <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
+                                        <input type="text" name="address" id="address" autoComplete="street-address" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.address} onChange={handleChange} onBlur={handleBlur} required />
+                                    </div>
+                                    <div>
+                                        <label htmlFor="country" className="block text-sm font-medium text-gray-700">Country</label>
+                                        <SelectCountry onGetCountry={handleCountryChange}/>
+                                    </div>
+                                    <div>
+                                        <label htmlFor="zipcode" className="block text-sm font-medium text-gray-700">Zip Code</label>
+                                        <input type="text" name="zipcode" id="zipcode" autoComplete="postal-code" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.zipcode} onChange={handleChange} onBlur={handleBlur} required />
+                                        {formErrors.zipcode && <p className="text-red-500 text-xs mt-1">{formErrors.zipcode}</p>}
+                                    </div>
+                                    <div>
+                                        <label htmlFor="state" className="block text-sm font-medium text-gray-700">State</label>
+                                        <input type="text" name="state" id="state" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.state} onChange={handleChange} onBlur={handleBlur} required />
+                                    </div>
+                                    <div>
+                                        <label htmlFor="city" className="block text-sm font-medium text-gray-700">City</label>
+                                        <input type="text" name="city" id="city" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.city} onChange={handleChange} onBlur={handleBlur} required />
+                                    </div>
                                 </div>
-                                <div>
-                                    <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Last Name</label>
-                                    <input type="text" name="lastName" id="lastName" autoComplete="family-name" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.lastName} onChange={handleChange} onBlur={handleBlur} required />
-                                    {formErrors.lastName && <p className="text-red-500 text-xs mt-1">{formErrors.lastName}</p>}
+                    
+                                <div className="flex justify-between items-center">
+                                    <button type="button" onClick={cancelHandler} className="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">Cancel</button>
+                                    <button type="submit" className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-white hover:text-black hover:border-black">
+                                        {processLoad ? <BeatLoader loading={processLoad} size={10} color='white' /> : "Pay Now"}
+                                    </button>
                                 </div>
-                                <div>
-                                    <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">Phone Number</label>
-                                    <input type="tel" name="phoneNumber" id="phoneNumber" autoComplete="tel" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.phoneNumber} onChange={handleChange} onBlur={handleBlur} required />
-                                    {formErrors.phoneNumber && <p className="text-red-500 text-xs mt-1">{formErrors.phoneNumber}</p>}
-                                </div>
-                                <div>
-                                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                                    <input type="email" name="email" id="email" autoComplete="email" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.email} onChange={handleChange} onBlur={handleBlur} required />
-                                    {formErrors.email && <p className="text-red-500 text-xs mt-1">{formErrors.email}</p>}
-                                </div>
-                                <div className="col-span-2">
-                                    <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
-                                    <input type="text" name="address" id="address" autoComplete="street-address" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.address} onChange={handleChange} onBlur={handleBlur} required />
-                                </div>
-                                <div>
-                                <label htmlFor="country" className="block text-sm font-medium text-gray-700">Country</label>
-                                    <SelectCountry onGetCountry={handleCountryChange}/>
-                                </div>
-                                <div>
-                                    <label htmlFor="zipcode" className="block text-sm font-medium text-gray-700">Zip Code</label>
-                                    <input type="text" name="zipcode" id="zipcode" autoComplete="postal-code" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.zipcode} onChange={handleChange} onBlur={handleBlur} required />
-                                    {formErrors.zipcode && <p className="text-red-500 text-xs mt-1">{formErrors.zipcode}</p>}
-                                </div>
-                                <div>
-                                    <label htmlFor="state" className="block text-sm font-medium text-gray-700">State</label>
-                                    <input type="text" name="state" id="state" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.state} onChange={handleChange} onBlur={handleBlur} required />
-                                </div>
-                                <div>
-                                    <label htmlFor="city" className="block text-sm font-medium text-gray-700">City</label>
-                                    <input type="text" name="city" id="city" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.city} onChange={handleChange} onBlur={handleBlur} required />
-                                </div>
-                            </div>
+                            </form>
+                        </div>
 
-                            <div className="flex justify-between items-center">
-                                <button type="button" onClick={cancelHandler} className="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">Cancel</button>
-                                <button type="submit" className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-white hover:text-black hover:border-black">
-                                    {processLoad ? <BeatLoader loading={processLoad} size={10} color='white' /> : "Pay Now"}
-                                </button>
-                            </div>
-                        </form>
+                        }
+                        {
+                            !localStorage.getItem('formData') && <form className="mt-8 space-y-6" onSubmit={makePayment}>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name</label>
+                                        <input type="text" name="firstName" id="firstName" autoComplete="given-name" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.firstName} onChange={handleChange} onBlur={handleBlur} required />
+                                        {formErrors.firstName && <p className="text-red-500 text-xs mt-1">{formErrors.firstName}</p>}
+                                    </div>
+                                    <div>
+                                        <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Last Name</label>
+                                        <input type="text" name="lastName" id="lastName" autoComplete="family-name" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.lastName} onChange={handleChange} onBlur={handleBlur} required />
+                                        {formErrors.lastName && <p className="text-red-500 text-xs mt-1">{formErrors.lastName}</p>}
+                                    </div>
+                                    <div>
+                                        <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">Phone Number</label>
+                                        <input type="tel" name="phoneNumber" id="phoneNumber" autoComplete="tel" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.phoneNumber} onChange={handleChange} onBlur={handleBlur} required />
+                                        {formErrors.phoneNumber && <p className="text-red-500 text-xs mt-1">{formErrors.phoneNumber}</p>}
+                                    </div>
+                                    <div>
+                                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                                        <input type="email" name="email" id="email" autoComplete="email" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.email} onChange={handleChange} onBlur={handleBlur} required />
+                                        {formErrors.email && <p className="text-red-500 text-xs mt-1">{formErrors.email}</p>}
+                                    </div>
+                                    <div className="col-span-2">
+                                        <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
+                                        <input type="text" name="address" id="address" autoComplete="street-address" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.address} onChange={handleChange} onBlur={handleBlur} required />
+                                    </div>
+                                    <div>
+                                        <label htmlFor="country" className="block text-sm font-medium text-gray-700">Country</label>
+                                        <SelectCountry onGetCountry={handleCountryChange} />
+                                    </div>
+                                    <div>
+                                        <label htmlFor="zipcode" className="block text-sm font-medium text-gray-700">Zip Code</label>
+                                        <input type="text" name="zipcode" id="zipcode" autoComplete="postal-code" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.zipcode} onChange={handleChange} onBlur={handleBlur} required />
+                                        {formErrors.zipcode && <p className="text-red-500 text-xs mt-1">{formErrors.zipcode}</p>}
+                                    </div>
+                                    <div>
+                                        <label htmlFor="state" className="block text-sm font-medium text-gray-700">State</label>
+                                        <input type="text" name="state" id="state" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.state} onChange={handleChange} onBlur={handleBlur} required />
+                                    </div>
+                                    <div>
+                                        <label htmlFor="city" className="block text-sm font-medium text-gray-700">City</label>
+                                        <input type="text" name="city" id="city" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.city} onChange={handleChange} onBlur={handleBlur} required />
+                                    </div>
+                                </div>
+
+                                <div className="flex justify-between items-center">
+                                    <button type="button" onClick={cancelHandler} className="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">Cancel</button>
+                                    <button type="submit" className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-white hover:text-black hover:border-black">
+                                        {processLoad ? <BeatLoader loading={processLoad} size={10} color='white' /> : "Pay Now"}
+                                    </button>
+                                </div>
+                            </form>
+                        }
+
                     </> : <p className='text-center text-2xl'>No Item to complete payment.</p>}
                 </div>
             </div>

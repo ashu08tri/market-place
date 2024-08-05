@@ -100,6 +100,7 @@ export const Payment = mongoose.models.Payment || mongoose.model('Payment', paym
 const orderSchema = new mongoose.Schema({
   firstName: String,
   lastName: String,
+  orderID: String,
   email: {
     type: String,
     required: true,

@@ -96,20 +96,22 @@ if (!mongoose.connection.readyState) {
         return new Response(JSON.stringify({ error: 'Invalid product ID' }), { status: 400 });
       }
   
-      // Find the product by id within the specified category and delete it
-      const result = await Type.updateOne(
-        { mainTitle: category },
-        { $pull: { product: { _id: id } } }
+      // Update all quantities in the sizes array to zero for the specified product
+      const updateResult = await Type.updateOne(
+        { mainTitle: category, 'product._id': id },
+        { $set: { 'product.$.quantity.size.$[elem].quantity': 0 } },
+        { arrayFilters: [{ 'elem.size': { $exists: true } }] }
       );
   
-      if (result.modifiedCount > 0) {
-        return NextResponse.json({ok: true});
+      // Check if any product quantity was updated
+      if (updateResult.modifiedCount > 0) {
+        return NextResponse.json({ ok: true });
       } else {
-        return NextResponse.json({ok:false});
+        return NextResponse.json({ ok: false });
       }
     } catch (err) {
       console.error(err);
-      return NextResponse.json({error: err});
+      return NextResponse.json({ error: err.message });
     }
   }
   

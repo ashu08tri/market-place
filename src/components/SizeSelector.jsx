@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useState, useEffect } from "react";
 import CartModal from "@/components/CartModal";
 import { CiStopwatch } from "react-icons/ci";
@@ -6,6 +6,7 @@ import { AnimatePresence } from "framer-motion";
 import { IoCheckmark } from "react-icons/io5";
 import Button from "./Button";
 import { usePathname } from "next/navigation";
+import { FaTimes } from 'react-icons/fa';
 
 function SizeSelector({ id, sizes, amount, title, img, category, productType }) {
     const [selected, setSelected] = useState(sizes[0].size);
@@ -50,7 +51,7 @@ function SizeSelector({ id, sizes, amount, title, img, category, productType }) 
             size: selected,
             availableQuantity: sizes.find(sizeObj => sizeObj.size === selected).quantity,
             unitPrice: amount
-        }
+        };
         try {
             let res = await fetch('/api/cart', {
                 headers: {
@@ -58,9 +59,8 @@ function SizeSelector({ id, sizes, amount, title, img, category, productType }) 
                 },
                 method: 'POST',
                 body: JSON.stringify(cartData)
-
-            })
-            res = await res.json()
+            });
+            res = await res.json();
             console.log(res);
         } catch (err) {
             console.log(err);
@@ -69,8 +69,10 @@ function SizeSelector({ id, sizes, amount, title, img, category, productType }) 
         setIsCartDrawerOpen(true);
     };
 
-    let selectedSizeObj = sizes.find(sizeObj => sizeObj.size === selected);
-    let sizeQuantity = selectedSizeObj.quantity;
+    // Determine if all sizes are sold out
+    const allSoldOut = sizes.every(sizeObj => sizeObj.quantity === 0);
+    const selectedSizeObj = sizes.find(sizeObj => sizeObj.size === selected);
+    const sizeQuantity = selectedSizeObj ? selectedSizeObj.quantity : 0;
 
     return (
         <>
@@ -79,29 +81,32 @@ function SizeSelector({ id, sizes, amount, title, img, category, productType }) 
             </AnimatePresence>
             <div className="border-b pb-10 md:pb-20">
                 <ul className='flex gap-3'>
-                    {sizes
-                        .filter(sizeObj => sizeObj.quantity > 0)
-                        .map((sizeObj, i) => (
-                            <li
-                                key={i}
-                                className='px-3 py-1 border cursor-pointer hover:bg-gray-300'
-                                style={{
-                                    backgroundColor: selected === sizeObj.size ? 'gray' : '',
-                                    color: selected === sizeObj.size ? 'white' : ''
-                                }}
-                                onClick={() => selectHandler(sizeObj.size)}
-                            >
-                                {sizeObj.size}
-                            </li>
-                        ))}
+                    {sizes.map((sizeObj, i) => (
+                        <li
+                            key={i}
+                            className={`px-3 py-1 border cursor-pointer flex items-center justify-center relative ${
+                                sizeObj.quantity === 0 ? 'text-gray-400 bg-gray-100' : 
+                                selected === sizeObj.size ? 'bg-gray-500 text-white' : ''
+                            }`}
+                            onClick={() => sizeObj.quantity > 0 && selectHandler(sizeObj.size)}
+                            style={{
+                                pointerEvents: sizeObj.quantity === 0 ? 'none' : 'auto'
+                            }}
+                        >
+                            {sizeObj.size}
+                            {sizeObj.quantity === 0 && (
+                                <FaTimes className="absolute top-1 right-1 text-red-500" />
+                            )}
+                        </li>
+                    ))}
                 </ul>
                 <div className="md:flex items-center gap-2 md:py-4">
                     <div className="flex border w-full md:w-1/4 h-12 items-center my-4 justify-between">
                         <button
                             onClick={quantityDecHandler}
                             className="w-14 p-4 text-xl"
-                            disabled={quantity === 1}
-                            style={{ color: quantity === 1 ? 'gray' : 'black' }}
+                            disabled={quantity === 1 || allSoldOut || sizeQuantity === 0}
+                            style={{ color: quantity === 1 || allSoldOut || sizeQuantity === 0 ? 'gray' : 'black' }}
                         >
                             -
                         </button>
@@ -109,8 +114,8 @@ function SizeSelector({ id, sizes, amount, title, img, category, productType }) 
                         <button
                             onClick={quantityIncHandler}
                             className="w-14 p-4 text-xl"
-                            disabled={quantity >= selectedSizeObj.quantity}
-                            style={{ color: quantity >= selectedSizeObj.quantity ? 'gray' : 'black' }}
+                            disabled={quantity >= sizeQuantity || allSoldOut || sizeQuantity === 0}
+                            style={{ color: quantity >= sizeQuantity || allSoldOut || sizeQuantity === 0 ? 'gray' : 'black' }}
                         >
                             +
                         </button>
@@ -119,8 +124,9 @@ function SizeSelector({ id, sizes, amount, title, img, category, productType }) 
                         <button
                             onClick={cartHandler}
                             className="p-3 md:p-2 w-full text-xl border border-black bg-black text-white hover:bg-white hover:text-black"
+                            disabled={allSoldOut || sizeQuantity === 0}
                         >
-                            Add to cart
+                            {allSoldOut ? "Sold Out" : "Add to cart"}
                         </button>
                     </div>
                 </div>

@@ -2,9 +2,7 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { decode } from 'jsonwebtoken';
-import app from "@/firebase";
 import { toast } from "sonner";
-import { getStorage, ref, deleteObject } from 'firebase/storage';
 import ProductFormModal from "./ProductFormModal";
 import { useRouter } from "next/navigation";
 
@@ -35,34 +33,17 @@ function Button({ category, id, title, sizes, amount, img, productType }) {
         await refreshData(category, id)
     }
 
-    const deleteHandler = async (category, id, img) => {
-        const storage = getStorage();
-        const imageUrl = img[0];
-
-        // Define the Firebase Storage URL pattern
-        const firebaseStorageUrlPattern = /^https:\/\/firebasestorage.googleapis.com\//;
-
-        // Check if the image URL is from Firebase
-        const isFirebaseImage = firebaseStorageUrlPattern.test(imageUrl);
+    const deleteHandler = async (category, id) => {
 
         try {
-            // Delete the data from the database
-            const res = await fetch(`/api/${category}/${id}`, {
+            const res = await fetch(`/api/${productType}/${category}/${id}`, {
                 method: 'DELETE',
                 cache: 'no-store',
             });
 
             if (res.ok) {
-                if (isFirebaseImage) {
-                    const storageRef = ref(storage, imageUrl); // Extract the file name from URL
-
-                    // Delete the image from Firebase Storage
-                    await deleteObject(storageRef);
-                    toast.success('Item and image deleted successfully!');
-                } else {
-                    toast.success('Item deleted!');
-                }
-                router.back();
+                setConfirm(false);
+                router.refresh();
             } else {
                 toast.error('Failed to delete item from the database!');
             }
@@ -105,7 +86,7 @@ function Button({ category, id, title, sizes, amount, img, productType }) {
 
             {
                 confirm && <div className="absolute left-1/2 top-1/2 h-44 w-96 bg-white rounded-md border flex flex-col justify-center items-center gap-8">
-                    <p>Are you sure you want to delete this item?</p>
+                    <p>Are all the sizes sold out?</p>
                     <div className="flex gap-5 px-2">
                         <button onClick={delConfirmHandler} className="px-3 py-1 bg-white border">Cancel</button>
                         <button onClick={() => deleteHandler(category, id, img)} className="px-3 py-1 bg-black text-white">Proceed</button>

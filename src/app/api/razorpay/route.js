@@ -3,7 +3,7 @@ import shortid from "shortid";
 import { NextResponse } from "next/server";
 
 export const POST = async (request) => {
-  const {taxAmt, selectedCurrency} = await request.json();
+  const { taxAmt, selectedCurrency } = await request.json();
 
   if (!taxAmt) {
     return NextResponse.json({ error: "Tax amount is required" });
@@ -15,10 +15,11 @@ export const POST = async (request) => {
   });
 
   const payment_capture = 1;
-  const amount = taxAmt;
+  // Assuming taxAmt is already in the correct unit (e.g., EUR in cents)
+  const amount = (selectedCurrency === 'INR') ? taxAmt * 100 : Math.round(taxAmt * 100);
   const currency = selectedCurrency;
   const options = {
-    amount: (amount * 100).toString(),
+    amount: amount.toString(),
     currency,
     receipt: shortid.generate(),
     payment_capture,

@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import SizeSelector from '@/components/SizeSelector';
 import Options from '@/components/Options';
 import ProductPrice from '@/components/ProductPrice';
@@ -44,7 +45,9 @@ async function page({ params }) {
           <div className='md:flex justify-evenly'>
           <div className='md:w-5/12 md:mr-10'>
           <p className='text-xs p-5 text-gray-400'><Link href='/' className='hover:underline pr-2'>Home</Link>/ <span className='pl-1 cursor-pointer'>{item[0].title}</span></p>
-          <img src={item[0].img} alt={item[0].title} className='h-[calc(100vh-7rem)] w-full'/>
+          <div className='flex justify-center'>
+          <Image src={item[0].img[0]} alt={item[0].title} height={10} width={380}/>
+          </div>
           </div>
           <div className='md:w-4/12 px-6 pt-8 md:pt-20'>
           <h1 className='text-2xl font-bold tracking-widest'>{item[0].title}</h1>
