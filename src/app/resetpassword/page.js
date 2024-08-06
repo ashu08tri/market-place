@@ -1,14 +1,15 @@
-"use client"
-import { useState } from 'react';
+'use client';
+
+import React, { Suspense, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
-export default function ResetPassword() {
+function ResetPassword() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const searchParams = useSearchParams();
   const router = useRouter();
-  const token  = searchParams.get('token');
+  const token = searchParams.get('token');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,33 +40,42 @@ export default function ResetPassword() {
 
   return (
     <div className='pt-24 h-[calc(100vh-6rem)] flex justify-center items-center'>
-      
       <form onSubmit={handleSubmit} className='w-4/12 h-72 flex gap-5 flex-col justify-center items-center shadow-lg rounded-md'>
-      <h1 className='text-2xl'>Reset Password</h1>
-       <div className='flex items-center gap-3 w-full px-6'>
-        <label htmlFor="password" className='w-1/2'>Set new password:</label>
-        <input
-        id='password'
-          type="password"
-          placeholder="New password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className='p-2 border block w-3/4 border-gray-300 rounded-md shadow-sm'
-        />
-       </div>
+        <h1 className='text-2xl'>Reset Password</h1>
+        <div className='flex items-center gap-3 w-full px-6'>
+          <label htmlFor="password" className='w-1/2'>Set new password:</label>
+          <input
+            id='password'
+            type="password"
+            placeholder="New password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className='p-2 border block w-3/4 border-gray-300 rounded-md shadow-sm'
+          />
+        </div>
         <div className='flex items-center gap-3 w-full px-6'>
           <label htmlFor="cnfrm" className='w-1/2'>Confirm Password:</label>
           <input
-          id='cnfrm'
-          type="password"
-          placeholder="Confirm new password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          className='p-2 border block w-3/4 border-gray-300 rounded-md shadow-sm'
-        />
+            id='cnfrm'
+            type="password"
+            placeholder="Confirm new password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className='p-2 border block w-3/4 border-gray-300 rounded-md shadow-sm'
+          />
         </div>
-        <button type="submit" className='px-3 py-1 bg-black text-white rounded-sm hover:bg-white hover:text-black hover:border border-black'>Reset Password</button>
+        <button type="submit" className='px-3 py-1 bg-black text-white rounded-sm hover:bg-white hover:text-black hover:border border-black'>
+          Reset Password
+        </button>
       </form>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResetPassword />
+    </Suspense>
   );
 }
