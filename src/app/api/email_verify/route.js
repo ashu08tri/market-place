@@ -11,7 +11,7 @@ if (!mongoose.connection.readyState) {
 }
 
 export async function POST(request) {
-    const { email, isAdmin, filter, orderId } = await request.json();
+    const { email, isAdmin, filter, orderID } = await request.json();
     try {
         let query = {};
 
@@ -35,21 +35,22 @@ export async function POST(request) {
         }
 
         // Include orderId in the query if provided
-        if (orderId) {
-            query.orderId = orderId;
+        if (orderID) {
+            query.orderID = orderID;
         }
-        console.log(orderId);
+        console.log(orderID);
+        
         
 
         // Fetch orders based on the query
-        const orders = await Order.find(query).populate('products');
+        const orders = await Order.find({orderID: orderID}).populate('products');
 
         if (orders.length > 0) {
             return NextResponse.json(orders);
         } else {
             const message = isAdmin
                 ? 'No orders are placed yet!'
-                : `No order is associated with ${email}!`;
+                : `No order is associated with ${orderID}!`;
             return NextResponse.json({ ok: false, message });
         }
     } catch (err) {

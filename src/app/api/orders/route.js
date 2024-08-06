@@ -21,6 +21,8 @@ if (!mongoose.connection.readyState) {
 
   export async function POST(request) {
     const payload = await request.json();
+    console.log(payload.products);
+    
   
     try {
       const { products, ...orderData } = payload;

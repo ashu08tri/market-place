@@ -39,4 +39,35 @@ export async function POST(request) {
     console.error("Error during authentication:", e.message);
     return NextResponse.json({ message: "Something went wrong!", error: e.message, ok: false }, { status: 500 });
   }
+};
+
+
+export async function PUT(request) {
+  try {
+    const { token, password } = await request.json();
+
+    const user = await User.findOne({
+        resetPasswordToken: token,
+    });
+
+    if (!user || user.resetPasswordExpires < Date.now()) {
+        if (user) {
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpires = undefined;
+            await user.save();
+        }
+        return NextResponse.json({ message: 'Invalid or expired token' }, { status: 400 });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    user.password = hashedPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = "";
+    await user.save();
+
+    return NextResponse.json({ message: 'Password reset successful' }, { status: 200 });
+} catch (error) {
+    console.error('Error resetting password:', error);
+    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
 }
+};

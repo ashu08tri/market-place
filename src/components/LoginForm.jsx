@@ -1,6 +1,7 @@
 "use client"
 import { useState } from 'react';
 import { Toaster, toast } from 'sonner';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import BeatLoader from "react-spinners/BeatLoader";
@@ -89,6 +90,7 @@ function LoginForm() {
           </button>
         </div>
       </form>
+      <Link className='pt-4 hover:underline underline-offset-2' href='/forgetpassword'>Forget Password?</Link>
     </>
   );
 }

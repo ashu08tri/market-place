@@ -35,7 +35,7 @@ async function page({ params }) {
                 Product Cost
               </p>
               <p className="font-medium text-lg leading-8 text-gray-900">
-              ₹{paidAmount}
+              {data.products[0].currency} {paidAmount}
               </p>
             </div>
             <div className="flex items-center justify-between gap-4">
@@ -52,7 +52,7 @@ async function page({ params }) {
               Subtotal
             </p>
             <h5 className="font-manrope font-bold text-2xl leading-9 text-indigo-600">
-            ₹{paidAmount}
+            {data.products[0].currency} {paidAmount}
             </h5>
           </div>
         </div>
@@ -100,7 +100,7 @@ async function page({ params }) {
                   ))}
                 </div>
                 <h6 className="font-medium text-xl leading-8 text-indigo-600">
-                ₹{paidAmount}
+                {data.products[0].currency} {paidAmount}
                 </h6>
               </div>
             </div>

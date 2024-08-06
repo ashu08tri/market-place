@@ -10,7 +10,9 @@ const userSchema = new mongoose.Schema({
   },
   password: String,
   accessToken: String,
-  isAdmin: {type: Boolean}
+  isAdmin: {type: Boolean},
+  resetPasswordToken: String,
+  resetPasswordExpires: Date
 })
 
 export const User = mongoose.models.User || mongoose.model('User', userSchema);
@@ -116,6 +118,7 @@ const orderSchema = new mongoose.Schema({
     img: [String],
     amount: Number,
     title: String,
+    currency: String
    }], 
 });
 

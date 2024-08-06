@@ -65,6 +65,7 @@ function PaymentForm() {
     const [redirecting, setRedirecting] = useState(false);
     const [razorLoading, setRazorLoading] = useState(false);
     const currency = useSelector((state) => state.currency.currency);
+    const currencySymbols = useSelector((state) => state.currency.currencySymbols);
     const [formErrors, setFormErrors] = useState({});
 
     let payAmount = data.reduce((total, payment) => total + payment.amount, 0);
@@ -229,14 +230,14 @@ function PaymentForm() {
             orderID: shortid.generate(),
             products: data.map(product => ({
                 img: product.img,
-                amount: product.amount,
+                amount: finalAmount,
                 title: product.title,
+                currency: currencySymbols[currency]
             }))
         };
     
-        // Debug: Check if orderID is generated
-        console.log("Generated orderID:", updatedFormData.orderID);
-    
+        console.log(updatedFormData);
+        
         const emailPayload = {
             email: updatedFormData.email,
             orderId: updatedFormData.orderID,
@@ -244,7 +245,6 @@ function PaymentForm() {
         };
     
         // Debug: Check if emailPayload is correctly constructed
-        console.log("Email Payload:", emailPayload);
     
         localStorage.setItem('formData', JSON.stringify(updatedFormData));
     

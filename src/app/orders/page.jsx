@@ -4,14 +4,14 @@ import { toast } from 'sonner';
 import { decode } from 'jsonwebtoken';
 import { useSession } from 'next-auth/react';
 
-const getData = async (email, isAdmin, filter) => {
+const getData = async (email, isAdmin, filter, orderID) => {
     try {
         const res = await fetch('/api/email_verify', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify({ email, isAdmin, filter }),
+            body: JSON.stringify({ email, isAdmin, filter, orderID }),
         });
         return await res.json();
     } catch (err) {
@@ -29,7 +29,7 @@ const getFilterOptions = async () => {
 };
 
 const Page = () => {
-    const [formData, setFormData] = useState({ email: '' });
+    const [formData, setFormData] = useState({ email: '', orderID: '' });
     const [orderData, setOrderData] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
     const [userEmail, setUserEmail] = useState('');
@@ -86,7 +86,9 @@ const Page = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const data = await getData(formData.email, isAdmin, { email: selectedEmail, date: selectedDate });
+        console.log(formData.orderID);
+        
+        const data = await getData(formData.email, isAdmin, { email: selectedEmail, date: selectedDate }, formData.orderID);
         if (data.ok === false) {
             toast.error(data.message);
         } else {
@@ -183,13 +185,13 @@ const Page = () => {
                     <h1 className='text-2xl font-semibold py-5'>Check for your orders.</h1>
                     <form onSubmit={handleSubmit}>
                         <div className="mb-4">
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email:</label>
+                            <label htmlFor="orderId" className="block text-sm font-medium text-gray-700">OrderID:</label>
                             <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                type="text"
+                                id="orderId"
+                                name="orderID"
+                                value={formData.orderID}
+                                onChange={(e) => setFormData({ ...formData, orderID: e.target.value })}
                                 required
                                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             />

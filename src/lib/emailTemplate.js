@@ -2,9 +2,12 @@ export function createEmailHtml(products, orderID) {
   const productHtml = products.map(product => `
     <div style="margin-bottom: 20px;">
       <h1>Your OrderID is: ${orderID}</h1>
+      <h2>You can register to our website using the same email and password of your choice to view all your orders or </br> 
+        use orderID to view specific order only.
+      </h2>
       <h2 style="font-size: 20px; color: #333333;">${product.title}</h2>
       <img src="${product.img[0]}" alt="${product.title}" style="width: 25%; height: 25%; object-fit: cover; border-radius: 8px;"/>
-      <p style="font-size: 18px; color: #1a8a27; font-weight: bold;">&#x20B9; ${product.amount}</p>
+      <p style="font-size: 18px; color: #1a8a27; font-weight: bold;">&#x20B9;${product.currency} ${product.amount}</p>
     </div>
   `).join('');
 
