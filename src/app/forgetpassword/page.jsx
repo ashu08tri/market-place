@@ -7,24 +7,28 @@ function Page() {
     const [email, setEmail] = useState('');
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-          const res = await fetch('/api/email/reset-password', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email }),
+      e.preventDefault();
+      try {
+          let res = await fetch('/api/email/reset-password', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ email }),
           });
+
+          res = await res.json();
+
           if (res.ok) {
-            toast.success('Password reset link sent!');
+              toast.success('Password reset link sent!');
           } else {
-            toast.error('Error sending reset link.');
+              toast.error(res.error || 'Error sending reset link.');
           }
-        } catch (error) {
+      } catch (error) {
           console.error('Error:', error);
-        }
-      };
+          toast.error('Error sending reset link.');
+      }
+  };
 
   return (
     <div className='pt-24 h-[calc(100vh-6rem)] flex justify-center items-center'>

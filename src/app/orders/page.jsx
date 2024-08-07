@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { decode } from 'jsonwebtoken';
 import { useSession } from 'next-auth/react';
+import OtpVerification from '@/components/OtpVerification';
 
 const getData = async (email, isAdmin, filter, orderID) => {
     try {
@@ -37,6 +38,7 @@ const Page = () => {
     const [filterOptions, setFilterOptions] = useState({ emails: [], dates: [] });
     const [selectedEmail, setSelectedEmail] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
+    const [showOtpVerification, setShowOtpVerification] = useState(false);
 
     const { data } = useSession();
 
@@ -146,7 +148,7 @@ const Page = () => {
                                                 
                                                 <div className="flex flex-col">
                                                     <div className="text-sm font-semibold">{product.title}</div>
-                                                    <div className="text-sm">{product.amount} &#x20B9;</div>
+                                                    <div className="text-sm">{product.amount} {product.currency ?  product.currency : <span>&#x20B9;</span>}</div>
                                                     <div className="text-sm text-gray-600">
                                                         Ordered On: {order.createdAt && !isNaN(new Date(order.createdAt).getTime())
                                                             ? new Intl.DateTimeFormat('en-GB', {
@@ -182,28 +184,77 @@ const Page = () => {
                 </div>
             ) : (
                 <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg p-6 mt-20">
-                    <h1 className='text-2xl font-semibold py-5'>Check for your orders.</h1>
+                <h1 className="text-2xl font-semibold py-5">Check for your orders.</h1>
+                {!showOtpVerification ? (
+                  <>
                     <form onSubmit={handleSubmit}>
-                        <div className="mb-4">
-                            <label htmlFor="orderId" className="block text-sm font-medium text-gray-700">OrderID:</label>
-                            <input
-                                type="text"
-                                id="orderId"
-                                name="orderID"
-                                value={formData.orderID}
-                                onChange={(e) => setFormData({ ...formData, orderID: e.target.value })}
-                                required
-                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            />
-                        </div>
-                        <button
-                            type="submit"
-                            className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      <div className="mb-4">
+                        <label
+                          htmlFor="orderId"
+                          className="block text-sm font-medium text-gray-700"
                         >
-                            Fetch Order Data
-                        </button>
+                          OrderID:
+                        </label>
+                        <input
+                          type="text"
+                          id="orderId"
+                          name="orderID"
+                          value={formData.orderID}
+                          onChange={(e) =>
+                            setFormData({ ...formData, orderID: e.target.value })
+                          }
+                          required
+                          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        />
+                      </div>
+          
+                      <button
+                        type="submit"
+                        className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      >
+                        Fetch Order Data
+                      </button>
                     </form>
-                </div>
+                    <button
+                      onClick={() => setShowOtpVerification(true)}
+                      className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-4"
+                    >
+                      View All Orders
+                    </button>
+                  </>
+                ) : (
+                    <>
+                      <div className="mb-4">
+                        <label
+                          htmlFor="email"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Email:
+                        </label>
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={(e) =>
+                            setFormData({ ...formData, email: e.target.value })
+                          }
+                          required
+                          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        />
+                        
+                      </div>
+                      <OtpVerification onSubmit={handleSubmit} />  
+                      <button
+                      onClick={() => setShowOtpVerification(false)}
+                      className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-4"
+                    >
+                      View single order
+                    </button>    
+                    </>
+                  
+                )}
+              </div>
             )}
         </div>
     );

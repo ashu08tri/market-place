@@ -45,17 +45,6 @@ const getCountryCode = (currency) => {
     }
 };
 
-const convertToSmallestUnit = (amount, currency) => {
-    switch (currency) {
-      case 'EUR':
-        return Math.round(amount * 100); // Convert to cents
-      case 'GBP':
-        return Math.round(amount * 100); // Convert to pence
-      default:
-        return Math.round(amount); // Default case for INR or other currencies
-    }
-  };
-
 function PaymentForm() {
     const router = useRouter();
     const [data, setData] = useState([]);
@@ -582,7 +571,19 @@ function PaymentForm() {
                                     </div>
                                     <div>
                                         <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">Phone Number</label>
-                                        <input type="tel" name="phoneNumber" id="phoneNumber" autoComplete="tel" className="mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm" value={formData.phoneNumber} onChange={handleChange} onBlur={handleBlur} required />
+                                        <PhoneInput
+                                            country={getCountryCode(currency)}
+                                            value={formData.phoneNumber}
+                                            onChange={handlePhoneChange}
+                                            onBlur={() => handleBlur({ target: { name: 'phoneNumber', value: formData.phoneNumber } })}
+                                            inputProps={{
+                                                name: 'phoneNumber',
+                                                required: true,
+                                                autoComplete: 'tel',
+                                                className: 'mt-1 p-2 border block w-full border-gray-300 rounded-md shadow-sm'
+                                            }}
+                                            onlyCountries={allowedCountries}
+                                        />
                                         {formErrors.phoneNumber && <p className="text-red-500 text-xs mt-1">{formErrors.phoneNumber}</p>}
                                     </div>
                                     <div>

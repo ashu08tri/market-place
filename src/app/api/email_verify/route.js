@@ -16,7 +16,7 @@ export async function POST(request) {
         let query = {};
 
         // If the user is an admin, query all orders, otherwise query based on email
-        if (!isAdmin) {
+        if (!isAdmin && email) {
             query.email = email;
         }
 
@@ -38,12 +38,16 @@ export async function POST(request) {
         if (orderID) {
             query.orderID = orderID;
         }
-        console.log(orderID);
+        console.log(query);
         
-        
+        Object.keys(query).forEach(key => {
+            if (query[key] === '') {
+                delete query[key];
+            }
+        });
 
         // Fetch orders based on the query
-        const orders = await Order.find({orderID: orderID}).populate('products');
+        const orders = await Order.find(query).populate('products');
 
         if (orders.length > 0) {
             return NextResponse.json(orders);
