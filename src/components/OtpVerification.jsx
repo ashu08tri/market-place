@@ -6,6 +6,7 @@ import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth
 import { toast } from "sonner";
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
+import { BeatLoader } from "react-spinners";
 
 const allowedCountries = ['us', 'gb', 'in', 'fr'];
 
@@ -29,6 +30,7 @@ const OtpVerification = ({onSubmit}) => {
   const [otp, setOtp] = useState("");
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [otpSent, setOtpSent] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const auth = getAuth(app);
   const currency = useSelector((state) => state.currency.currency);
@@ -52,6 +54,7 @@ const OtpVerification = ({onSubmit}) => {
     }
     const appVerifier = window.recaptchaVerifier;
     try {
+      setLoading(true)
       const confirmation = await signInWithPhoneNumber(auth, phoneNumberString, appVerifier);
       setConfirmationResult(confirmation);
       setOtpSent(!otpSent);
@@ -60,12 +63,14 @@ const OtpVerification = ({onSubmit}) => {
     } catch (err) {
       setError(err.message);
       console.log(err);
-
+    }finally{
+      setLoading(false);
     }
   };
 
   const onVerifyCodeSubmit = async () => {
     try {
+      setLoading(true);
       await confirmationResult.confirm(otp);
       onSubmit();
       setOtp('');
@@ -73,6 +78,8 @@ const OtpVerification = ({onSubmit}) => {
     } catch (err) {
       setError(err.message);
       console.log(err);
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -93,7 +100,9 @@ const OtpVerification = ({onSubmit}) => {
         }}
         onlyCountries={allowedCountries}
       />
-      <button type="button" onClick={onSignInSubmit} className=" my-4 w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Send OTP</button>
+      <button disabled={loading} type="button" onClick={onSignInSubmit} className=" my-4 w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+      {loading ? <BeatLoader loading={loading} size={15} color='white' aria-label="Loading Spinner" data-testid="loader" /> : 'Send OTP'}
+        </button>
 
 
       {confirmationResult && (
@@ -106,7 +115,7 @@ const OtpVerification = ({onSubmit}) => {
             placeholder="OTP"
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
-          <button onClick={onVerifyCodeSubmit}
+          <button onClick={onVerifyCodeSubmit} disabled={loading}
             className="my-4 w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >Verify OTP</button>
         </>
