@@ -24,7 +24,7 @@ const getCountryCode = (currency) => {
   }
 };
 
-const OtpVerification = ({ onSubmit }) => {
+const OtpVerification = ({onSubmit}) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [confirmationResult, setConfirmationResult] = useState(null);
@@ -69,6 +69,7 @@ const OtpVerification = ({ onSubmit }) => {
       await confirmationResult.confirm(otp);
       onSubmit();
       setOtp('');
+      toast.success('OTP verified!')
     } catch (err) {
       setError(err.message);
       console.log(err);
@@ -92,7 +93,7 @@ const OtpVerification = ({ onSubmit }) => {
         }}
         onlyCountries={allowedCountries}
       />
-      <button onClick={onSignInSubmit} className=" my-4 w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Send OTP</button>
+      <button type="button" onClick={onSignInSubmit} className=" my-4 w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Send OTP</button>
 
 
       {confirmationResult && (

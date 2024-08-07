@@ -88,9 +88,21 @@ const Page = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData.orderID);
+        //console.log(formData.orderID);
         
         const data = await getData(formData.email, isAdmin, { email: selectedEmail, date: selectedDate }, formData.orderID);
+        if (data.ok === false) {
+            toast.error(data.message);
+        } else {
+            setOrderData(data);
+        }
+    };
+
+    
+    const handleSubmitAfterOTP = async () => {
+        //console.log(formData.orderID);
+        
+        const data = await getData(formData.email);
         if (data.ok === false) {
             toast.error(data.message);
         } else {
@@ -244,7 +256,7 @@ const Page = () => {
                         />
                         
                       </div>
-                      <OtpVerification onSubmit={handleSubmit} />  
+                      <OtpVerification onSubmit={handleSubmitAfterOTP} />  
                       <button
                       onClick={() => setShowOtpVerification(false)}
                       className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-4"
