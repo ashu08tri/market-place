@@ -5,7 +5,9 @@ import Sales from "@/components/Sales";
 import DualTiles from "@/components/DualTiles";
 import ItemSale from "@/components/ItemSale";
 import CounterSale from "@/components/CounterSale";
+import Review from "@/components/Review";
 import MissionnNews from "@/components/MissionnNews";
+import BeforeAfter from "@/components/BeforeAfter";
 
 export default function Home() {
   return (
@@ -17,6 +19,8 @@ export default function Home() {
       <DualTiles />
       <ItemSale />
       <CounterSale />
+      <Review />
+      <BeforeAfter/>
       <MissionnNews />
     </>
   );

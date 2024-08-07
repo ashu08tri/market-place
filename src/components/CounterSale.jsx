@@ -45,9 +45,9 @@ async function CounterSale() {
             <div className='flex flex-col md:flex-row px-10 md:px-40 gap-2 md:gap-10 h-[80%] md:h-[65%] text-center my-20'>
                 {
                     data ? data.map((item, i) =>
-                        <div key={i} className='bg-cover relative bg-center h-full w-full md:w-1/2' style={{ backgroundImage: `url(${item.image})` }}>
+                        <div key={i} className='bg-cover relative bg-center h-[70vh] w-full md:w-1/2' style={{ backgroundImage: `url(${item.image})` }}>
                             <EditCounterSale item={item} api={`${NEXT_PUBLIC_HOST_URL}/api/landingPage/counter/api/landingPage/counterSale`} storageUrl={'couterSale'}/>
-                            <div className='flex flex-col h-full justify-end items-center pb-8 gap-4'>
+                            <div className='flex flex-col h-full justify-end items-center pb-20 gap-4'>
                                 <p className='text-2xl tracking-widest font-semibold text-white'>
                                     {item.title.split(',').map((part, index) => (
                                         <React.Fragment key={index}>

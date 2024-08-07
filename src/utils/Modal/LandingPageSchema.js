@@ -65,3 +65,14 @@ const blogSchema = new mongoose.Schema({
 })
 
 export const Blog = mongoose.models.Blog || mongoose.model('Blog', blogSchema);
+
+const reviewSectionSchema = new mongoose.Schema({
+    title: String,
+    desc: String,
+    date: Date,
+    image: String,
+    url: String,
+    name: String
+})
+
+export const ReviewSection = mongoose.models.ReviewSection || mongoose.model('ReviewSection', reviewSectionSchema);

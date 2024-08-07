@@ -20,8 +20,8 @@ async function ItemSale() {
   const data = await getData();
 
   return (
-    <div className='h-screen uppercase md:flex text-white gap-1 tracking-wider'>
-       {data ? <div className='relative bg-cover bg-center h-3/4 md:h-full w-full md:w-1/2 flex flex-col gap-5 justify-end items-center pb-12' style={{backgroundImage: `url(${data[0].image})`}}>
+    <div className='h-[75vh] uppercase md:flex text-white gap-1 tracking-wider'>
+       {data ? <div className='relative bg-cover bg-center h-3/4 md:h-full w-full md:w-1/2 flex flex-col gap-5 justify-end items-center pb-28' style={{backgroundImage: `url(${data[0].image})`}}>
             <EditItemSale item={data[0]} api={`${NEXT_PUBLIC_HOST_URL}/api/landingPage/itemSale`} storageUrl={'itemSale'}/>
             <p className='text-3xl font-semibold uppercase'>{data[0].title}</p>
             <div><button className='border border-white bg-transparent hover:bg-white hover:text-black px-8 py-3'><Link href='/collections/mediterranean_love'>Shop Our Collection</Link></button></div>
