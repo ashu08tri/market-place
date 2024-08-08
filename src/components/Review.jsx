@@ -70,16 +70,11 @@ function Review() {
       <Carousel
         responsive={responsive}
         ssr={true}
-        infinite={true}
-        autoPlay={true}
-        autoPlaySpeed={3000}
-        transitionDuration={500}
         removeArrowOnDeviceType={["tablet", "mobile"]}
         customLeftArrow={<CustomLeftArrow />}
         customRightArrow={<CustomRightArrow />}
         containerClass="carousel-container"
         itemClass="carousel-item-padding-40-px"
-        dotListClass="custom-dot-list-style"
       >
         {data.map((item, i) => (
           <div key={i} className="flex flex-col md:flex-row px-4 md:px-20 h-auto md:h-screen pt-10 md:pt-20">

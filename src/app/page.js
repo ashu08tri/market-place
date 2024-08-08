@@ -8,6 +8,8 @@ import CounterSale from "@/components/CounterSale";
 import Review from "@/components/Review";
 import MissionnNews from "@/components/MissionnNews";
 import BeforeAfter from "@/components/BeforeAfter";
+import VideoSeenOn from "@/components/VideoSeenOn";
+import FindStore from "@/components/FindStore";
 
 export default function Home() {
   return (
@@ -21,6 +23,8 @@ export default function Home() {
       <CounterSale />
       <Review />
       <BeforeAfter/>
+      <VideoSeenOn />
+      <FindStore />
       <MissionnNews />
     </>
   );
