@@ -3,6 +3,7 @@ import React from 'react';
 import Carousel from 'react-multi-carousel';
 import { useRouter } from 'next/navigation';
 import 'react-multi-carousel/lib/styles.css';
+import ProductPrice from './ProductPrice';
 import { HiArrowLongLeft, HiArrowLongRight } from 'react-icons/hi2';
 
 const CustomLeftArrow = ({ onClick }) => (
@@ -45,10 +46,10 @@ const responsive = {
 const Options = ({ items }) => {
 
     const router = useRouter();
-
+    
   return (
     <div className="relative">
-    <p className='text-2xl tracking-widest font-semibold md:text-3xl py-8 pl-12'>You may also like!</p>
+    <p className='text-2xl tracking-widest md:text-3xl py-8 pl-12'>You may also like!</p>
       <Carousel
         swipeable={true}
         keyBoardControl={true}
@@ -58,14 +59,14 @@ const Options = ({ items }) => {
         customRightArrow={<CustomRightArrow />}
         itemClass="px-2" 
       >
-        {items.products.length > 0 && items.products.map((item, index) => (
+        {items.products.length > 0 && items.products.slice(4).map((item, index) => (
           <div key={index} className="flex flex-col items-center justify-start h-full md:h-[80vh] group" onClick={() => router.push('/featured/shop_all/' + item._id)}>
             <div className='bg-white w-full h-full md:h-[50vh] flex items-center'>
-            <img src={item.img} alt="img" className=" object-contain md:h-full w-full h-full group-hover:opacity-75" />
+            <img src={item.img[0]} alt="img" className=" object-contain md:h-full w-full h-full group-hover:opacity-75" />
             </div>
             <div className="flex flex-col items-center gap-1 p-4 h-1/3 md:h-auto">
-              <p className="text-lg font-semibold group-hover:underline underline-offset-2">{item.title}</p>
-              <p>&#x20B9;{item.amount}</p>
+              <p className="text-lg group-hover:underline underline-offset-2">{item.title}</p>
+              <ProductPrice price={item.amount} />
             </div>
           </div>
         ))}

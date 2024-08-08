@@ -14,7 +14,7 @@ async function OurCollections() {
 
     return (
         <div className='h-screen px-12 md:px-24 py-10'>
-            {data ? (
+            {data.length > 0 ? (
                 <>
                     <div className='py-10 flex justify-between relative'>
                         <h1 className='text-3xl font-semibold uppercase'>{data[0].mainTitle}</h1>

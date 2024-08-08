@@ -9,11 +9,11 @@ const renderer = ({ hours, minutes, seconds, completed }) => {
     return (
       <div className="flex space-x-4 text-center">
         <div className="flex flex-col items-center">
-          <span className="text-5xl font-semibold">{hours} :</span>
+          <span className="text-5xl font-semibold">{hours}</span>
           <span className="text-sm">HOURS</span>
         </div>
         <div className="flex flex-col items-center">
-          <span className="text-5xl font-semibold">{minutes} :</span>
+          <span className="text-5xl font-semibold">{minutes}</span>
           <span className="text-sm">MINUTES</span>
         </div>
         <div className="flex flex-col items-center">

@@ -29,26 +29,25 @@ const responsive = {
     },
 };
 
-const ButtonGroup = ({ next, previous }) => {
+const CustomLeftArrow = ({ onClick }) => (
+    <button
+        className='hidden text-white md:block absolute left-4 p-2'
+        onClick={onClick}
+    >
+        <HiArrowLongLeft size={40} />
+    </button>
+);
 
-    return (
-        <div className="text-white px-6 carousel-button-group absolute top-1/2 w-full flex justify-between transform -translate-y-1/2">
-            <button
-                onClick={previous}
-            >
-                <HiArrowLongLeft size={40} />
-            </button>
-            <button
-                onClick={next}
-            >
-                <HiArrowLongRight size={40} />
-            </button>
-        </div>
-    );
-};
+const CustomRightArrow = ({ onClick }) => (
+    <button
+        className='hidden text-white md:block absolute right-4 p-2'
+        onClick={onClick}
+    >
+        <HiArrowLongRight size={40} />
+    </button>
+);
 
 function HeaderCarousel() {
-    const [isDesktop, setIsDesktop] = useState(false);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [images, setImages] = useState([]);
     const [mainAdmin, setMainAdmin] = useState(null);
@@ -75,17 +74,6 @@ function HeaderCarousel() {
 
     useEffect(() => {
         fetchImages();
-    }, []);
-
-    useEffect(() => {
-        const handleResize = () => {
-            setIsDesktop(window.innerWidth > 1024);
-        };
-
-        handleResize();
-        window.addEventListener('resize', handleResize);
-
-        return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     useEffect(() => {
@@ -147,9 +135,10 @@ function HeaderCarousel() {
                 autoPlay={true}
                 autoPlaySpeed={3000}
                 transitionDuration={500}
-                arrows={false}
+                
                 removeArrowOnDeviceType={["tablet", "mobile"]}
-                customButtonGroup={isDesktop ? <ButtonGroup /> : null}
+                customLeftArrow={<CustomLeftArrow />}
+                customRightArrow={<CustomRightArrow />}
                 containerClass="carousel-container"
                 itemClass="carousel-item-padding-40-px"
                 dotListClass="custom-dot-list-style"

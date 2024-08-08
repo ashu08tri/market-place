@@ -1,8 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import ProductsCarousel from '@/components/ProductsCarousel';
 import SizeSelector from '@/components/SizeSelector';
 import ProductPrice from '@/components/ProductPrice';
+import CompleteSet from '@/components/CompleteSet';
+import Faq from '@/components/Faq';
+import Options from '@/components/Options';
 
 const {NEXT_PUBLIC_HOST_URL} = process.env;
 
@@ -17,10 +20,22 @@ const getProductData = async (category, id) => {
   }
 };
 
+const getMoreProducts = async() => {
+  try {
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/products/shop_all`,{cache: 'no-store'});
+    res = await res.json();
+    return res;
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+}
+
 async function page({ params }) {
   const { category ,id } = params;
   const data = await getProductData(category, id);
-  let item = []
+  let item = [];
+  const allData = await getMoreProducts();
   item.push(data)
   
   return (
@@ -31,9 +46,7 @@ async function page({ params }) {
           <div className='md:flex justify-evenly'>
           <div className='md:w-5/12 md:mr-10'>
           <p className='text-xs p-5 text-gray-400'><Link href='/' className='hover:underline pr-2'>Home</Link>/ <span className='pl-1 cursor-pointer'>{item[0].title}</span></p>
-          <div className='flex justify-center'>
-          <Image src={item[0].img[0]} alt={item[0].title} height={10} width={380}/>
-          </div>
+          <ProductsCarousel images={item[0].img}/>
           </div>
           <div className='md:w-4/12 px-6 pt-8 md:pt-20'>
           <h1 className='text-2xl font-bold tracking-widest'>{item[0].title}</h1>
@@ -46,6 +59,8 @@ async function page({ params }) {
           </div>
           </div>
           <div>
+          <CompleteSet items={allData} />
+          <Faq/>
           <div className='flex flex-col justify-center items-center px-20'>
           <p className='text-xl md:text-3xl tracking-widest pb-10 mt-16'>EXPLORE THE SEASON</p>
           <p className='text-center w-full md:w-3/4'>Our bikinis combine glamour and sustainability, giving you a look that will turn heads. With our luxuriously soft and sustainable fabrics, you can feel confident that you’re making an ethical choice while looking your best. Whether you’re hitting the beach or lounging by the pool, our bikinis are sure to make you feel your most confident and stylish self.</p>
@@ -67,6 +82,9 @@ async function page({ params }) {
         <p className='text-xl text-white'>Where sustainability meets understated luxury</p>
         <p className='tracking-widest text-2xl font-semibold text-white'>LUXURIOUS SWIMWEAR</p>
         <button className='px-8 py-3 bg-transparent text-white border border-white hover:bg-white hover:text-black'>Explore All Products</button>
+        </div>
+        <div className='bg-orange-50 mt-16 md:mt-20 pb-10 md:pb-0'>
+        <Options items={allData}/>
         </div>
           </div>
         </div>

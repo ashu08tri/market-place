@@ -353,12 +353,12 @@ function Navbar() {
         </div>
 
         {/* LOGO */}
-        <p onClick={() => {
+        <div onClick={() => {
           if (isOpen) {
             setIsOpen(false)
           }
           router.push('/')
-        }} className='text-2xl font-semibold cursor-pointer'>Golden Ghaf</p>
+        }} className='text-3xl font-semibold cursor-pointer'><p>Golden Ghaf</p><p className='text-sm text-center'>LUCKNOW</p></div>
 
         <div className='md:hidden text-2xl cursor-pointer' onClick={toggleCartDrawer}><IoBagOutline /></div>
 
