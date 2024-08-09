@@ -23,8 +23,9 @@ const GeneralForm = ({ api, initialData, storageUrl, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitting(true);
+
     if (title) {
+      setSubmitting(true);
       const storage = getStorage(app);
       let downloadUrl = initialData.image; // Use existing image URL by default
       let downloadUrlB = initialData.imageB; 
@@ -37,8 +38,8 @@ const GeneralForm = ({ api, initialData, storageUrl, onClose }) => {
       }
 
       if (imageB && imageT) {
-        const storageRefB = ref(storage, 'landingPage/'+storageUrl+'/'+imageB.name);
-        const storageRefT = ref(storage, 'landingPage/'+storageUrl+'/'+imageT.name);
+        const storageRefB = ref(storage, `landingPage/${storageUrl}/${imageB.name}`);
+        const storageRefT = ref(storage, `landingPage/${storageUrl}/${imageT.name}`);
         await uploadBytes(storageRefB, imageB);
         await uploadBytes(storageRefT, imageT);
         downloadUrlB = await getDownloadURL(storageRefB);
@@ -194,7 +195,7 @@ const GeneralForm = ({ api, initialData, storageUrl, onClose }) => {
         }
         {
           initialData.date && initialData.date.length > 0 && <div className="flex justify-between">
-            <label>Date In('year-month-day')</label>
+            <label>Date In(&apos;year-month-day&apos;)</label>
             <input
               className="text-black"
               type="text"
