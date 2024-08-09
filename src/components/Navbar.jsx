@@ -358,7 +358,7 @@ function Navbar() {
             setIsOpen(false)
           }
           router.push('/')
-        }} className='text-3xl font-semibold cursor-pointer'><p>Golden Ghaf</p><p className='text-sm text-center'>LUCKNOW</p></div>
+        }} className='text-3xl font-semibold cursor-pointer'><img src="/nav_logo.png" alt="logo" className='w-24 h-12'/><p className='text-sm text-center'>LUCKNOW</p></div>
 
         <div className='md:hidden text-2xl cursor-pointer' onClick={toggleCartDrawer}><IoBagOutline /></div>
 

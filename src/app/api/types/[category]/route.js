@@ -56,3 +56,14 @@ export async function POST(request,{params}) {
     return NextResponse.json({ error: 'Something went wrong!', details: err.message });
   }
 }
+
+export async function PUT(request){
+  const {banner} = await request.json();
+  
+  try{
+    await Type.updateMany({},{banner: banner});
+    return NextResponse.json({ ok: true });
+  }catch(err){
+    return NextResponse.json({ error: 'Something went wrong!', details: err.message });
+  }
+}

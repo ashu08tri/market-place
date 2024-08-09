@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import ProductFormModal from './ProductFormModal';
 import { useSession } from 'next-auth/react';
+import EditProductsBanner from './EditProductsBanner';
 import Image from 'next/image';
 import { decode } from 'jsonwebtoken';
 import ProductPrice from './ProductPrice';
@@ -25,6 +26,7 @@ function Collection({ product, img, title, categories }) {
   const [visibleItems, setVisibleItems] = useState(10);
   const [isProductFormOpen, setIsProductFormOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [token, setToken] = useState(null);
   const [products, setProducts] = useState(product || []);
   const [allCategories, setAllCategories] = useState(categories || []);
@@ -76,6 +78,9 @@ function Collection({ product, img, title, categories }) {
     setIsProductFormOpen(!isProductFormOpen);
   };
 
+  const closeEditBannerModal = () => {
+    setIsEditing(!isEditing);
+  };
 
   return (
     <div className='pt-24'>
@@ -143,12 +148,18 @@ function Collection({ product, img, title, categories }) {
         </div>
       )}
       {isAdmin && (
-        <div className='absolute top-40 p-5'>
+        <div className='absolute top-40 p-5 flex gap-8'>
           <button className='bg-black text-white p-3' onClick={closeProductFormModal}>Add Product</button>
+          <button className='bg-black text-white p-3' onClick={closeEditBannerModal}>Edit Banner</button>
         </div>
       )}
       {isProductFormOpen && <ProductFormModal onClose={closeProductFormModal} maintitle={title} apiRoute={`/api/collections/${title}`}
         storagePath={'productImages/collection'} method={'POST'} />}
+        {
+          isEditing && <EditProductsBanner onClose={closeEditBannerModal} api={`/api/collections/${title}`} banner={img}
+          storageUrl={'productImages/collections/banner'}
+          />
+        }
     </div>
   );
 }

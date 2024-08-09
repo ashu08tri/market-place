@@ -95,7 +95,6 @@ function ProductFormModal({ onClose, apiRoute, storagePath, maintitle, method,
             >
                 x
             </button>
-            <Toaster closeButton position="bottom-right" />
             <form onSubmit={submitHandler} className="flex flex-col gap-3">
                 <label htmlFor="title" className="text-black font-semibold">Title:</label>
                 <input
@@ -118,19 +117,21 @@ function ProductFormModal({ onClose, apiRoute, storagePath, maintitle, method,
                 />
 
                 <label className="text-black font-semibold">Quantity:</label>
-                {quantity.map((q) => (
-                    <div key={q.size} className="flex gap-2 mb-2">
-                        <span className="border border-black p-1 rounded-md flex-1">{q.size}</span>
-                        <input
-                            type="number"
-                            className="border border-black p-1 rounded-md flex-1"
-                            placeholder="Quantity"
-                            value={q.quantity}
-                            onChange={(e) => handleQuantityChange(q.size, e.target.value)}
-                        />
-                    </div>
-                ))}
-
+                <div className="grid grid-cols-3 gap-4">
+                    {quantity.map((q, index) => (
+                        <div key={index} className='flex gap-2 mb-2'>
+                            <span className="border border-black p-1 rounded-md">{q.size}</span>
+                            <input
+                                type="number"
+                                className="border border-black p-1 rounded-md"
+                                placeholder="Quantity"
+                                value={q.quantity}
+                                onChange={(e) => handleQuantityChange(q.size, e.target.value)}
+                            />
+                        </div>
+                    ))}
+                </div>
+  
                 <label className="text-black font-semibold">Images:</label>
                 <input
                     type="file"

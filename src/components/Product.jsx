@@ -7,6 +7,7 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { decode } from 'jsonwebtoken';
 import ProductPrice from './ProductPrice';
+import EditProductsBanner from './EditProductsBanner';
 
 const {NEXT_PUBLIC_HOST_URL} = process.env;
 
@@ -24,6 +25,7 @@ function Product({ product, img, title, categories }) {
   const router = useRouter();
   const [visibleItems, setVisibleItems] = useState(10);
   const [isProductFormOpen, setIsProductFormOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [token, setToken] = useState(null);
   const [products, setProducts] = useState(product);
@@ -74,6 +76,10 @@ function Product({ product, img, title, categories }) {
   
   const closeProductFormModal = () => {
     setIsProductFormOpen(!isProductFormOpen);
+  };
+
+  const closeEditBannerModal = () => {
+    setIsEditing(!isEditing);
   };
 
   return (
@@ -143,12 +149,18 @@ function Product({ product, img, title, categories }) {
         </div>
       )}
       {isAdmin && (
-        <div className='absolute top-40 p-5'>
+        <div className='absolute top-40 p-5 flex gap-8'>
           <button className='bg-black text-white p-3' onClick={closeProductFormModal}>Add Product</button>
+          <button className='bg-black text-white p-3' onClick={closeEditBannerModal}>Edit Banner</button>
         </div>
       )}
       {isProductFormOpen && <ProductFormModal onClose={closeProductFormModal} maintitle={title} apiRoute={`/api/products/${title}`}
         storagePath={'productImages/featured'} method={'POST'} />}
+        {
+          isEditing && <EditProductsBanner onClose={closeEditBannerModal} api={`/api/products/${title}`} banner={img}
+          storageUrl={'productImages/featured/banner'}
+          />
+        }
     </div>
   );
 }
