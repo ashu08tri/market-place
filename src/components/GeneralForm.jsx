@@ -26,19 +26,18 @@ const GeneralForm = ({ api, initialData, storageUrl, onClose }) => {
 
     if (title) {
       setSubmitting(true);
+      const storage = getStorage(app);
       let downloadUrl = initialData.image; // Use existing image URL by default
       let downloadUrlB = initialData.imageB; 
       let downloadUrlT = initialData.imageT; 
 
       if (image) {
-        const storage = getStorage(app);
         const storageRef = ref(storage, `landingPage/${storageUrl}/${image.name}`);
         await uploadBytes(storageRef, image);
         downloadUrl = await getDownloadURL(storageRef);
       }
 
       if (imageB && imageT) {
-        const storage = getStorage(app);
         const storageRefB = ref(storage, `landingPage/${storageUrl}/${imageB.name}`);
         const storageRefT = ref(storage, `landingPage/${storageUrl}/${imageT.name}`);
         await uploadBytes(storageRefB, imageB);
