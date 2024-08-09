@@ -4,7 +4,6 @@ import app from "@/firebase";
 import { getStorage, ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 import { Toaster, toast } from "sonner";
 import { BeatLoader } from "react-spinners";
-import { useRouter } from "next/navigation";
 
 function ProductFormModal({ onClose, apiRoute, storagePath, maintitle, method,
     titles, amounts, sizes, img

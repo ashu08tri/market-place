@@ -4,15 +4,16 @@ import { useSession } from 'next-auth/react';
 import GeneralForm from "../GeneralForm";
 import { decode } from 'jsonwebtoken';
 
-const EditCounterSale = ({ item, api, storageUrl }) => {
+const EditBeforeAfter = ({ item, api, storageUrl }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [token, setToken] = useState(null);
 
   const initialData = {
     title: item.title,
-    image: item.image,
-    url: item.url,
+    imageB: item.imageB,
+    imageT: item.imageT,
+    desc: item.desc,
   };
 
   const { data } = useSession();
@@ -44,9 +45,9 @@ const EditCounterSale = ({ item, api, storageUrl }) => {
 
   return (
     <>
-    {isAdmin && <div>
+    {isAdmin && <div className="">
       <button
-        className="absolute top-2 bg-white text-black py-1 px-3"
+        className="absolute top-2 bg-black text-white py-1 px-3"
         onClick={handleEditClick}
       >
         Edit
@@ -64,7 +65,7 @@ const EditCounterSale = ({ item, api, storageUrl }) => {
   );
 };
 
-export default EditCounterSale;
+export default EditBeforeAfter;
 
 
 

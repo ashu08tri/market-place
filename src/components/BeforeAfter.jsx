@@ -1,13 +1,33 @@
 import BeforeAfterSlider from "./BeforeAfterSlider";
+import EditBeforeAfter from "./landingPage/EditBeforeAfter";
 
-function BeforeAfter() {
+const {NEXT_PUBLIC_HOST_URL} = process.env;
+
+const getData = async() => {
+  try{
+  let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/beforeAfter`);
+  res = await res.json();
+  return res;  
+  }catch(err){
+      console.log(err);
+      return [];
+  }
+ }
+
+async function BeforeAfter() {
+  const data = await getData();
+  
   return (
-    <main className="flex flex-col md:flex-row h-[70vh] md:h-[90vh] items-center gap-6 md:justify-between px-3 md:px-20">
+    <main className="relative flex flex-col md:flex-row h-[70vh] md:h-[90vh] items-center gap-6 md:justify-between px-3 md:px-20">
+      <EditBeforeAfter item={data[0]} api={`${NEXT_PUBLIC_HOST_URL}/api/landingPage/beforeAfter`} storageUrl={'before-after'}/>
+     {data.length > 0 ? <>
       <div className="w-full md:w-4/12 self-start pt-10 md:pt-24">
-      <p className="text-4xl md:text-5xl tracking-widest">Our solid swimwear is produced using ECONYL®</p>
-      <p className="md:text-xl pt-5 tracking-wide">Using ECONYL® instead of sourcing new nylon allows us to recycle waste materials and give them a new life.</p>
+      
+      <p className="text-4xl md:text-5xl tracking-widest">{data[0].title}</p>
+      <p className="md:text-xl pt-5 tracking-wide">{data[0].desc}</p>
       </div>
-     <div className="w-full md:w-7/12"><BeforeAfterSlider /></div>
+     <div className="w-full md:w-7/12"><BeforeAfterSlider imgB={data[0].imageB} imgT={data[0].imageT}/></div>
+     </> : <p>Failed to load data!</p>}
     </main>
   )
 }

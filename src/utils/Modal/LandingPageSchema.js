@@ -76,3 +76,22 @@ const reviewSectionSchema = new mongoose.Schema({
 })
 
 export const ReviewSection = mongoose.models.ReviewSection || mongoose.model('ReviewSection', reviewSectionSchema);
+
+const beforeafterSchema = new mongoose.Schema({
+    title: String,
+    desc: String,
+    imageB: String,
+    imageT: String,
+})
+
+export const BeforeAfter = mongoose.models.BeforeAfter || mongoose.model('BeforeAfter', beforeafterSchema);
+
+const addressSchema = new mongoose.Schema({
+    storeName: String,
+    address: String,
+    zipcode: Number,
+    image: String,
+    openOn: String,
+})
+
+export const Address = mongoose.models.Address || mongoose.model('Address', addressSchema);

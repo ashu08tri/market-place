@@ -14,17 +14,18 @@ if (!mongoose.connection.readyState) {
 export async function GET(request, { params }) {
   try {
     const { category } = params;
+    const banner = await Featured.find().select('banner -_id');
     const categories = await Featured.find().select('mainTitle -_id');
     const uniqueCategories = categories.map(cat => cat.mainTitle);
 
     if (category === 'shop_all') {
       const Products = await Featured.find();
       const allProduct = Products.flatMap(item => item.product);
-      return NextResponse.json({ products: allProduct, categories: uniqueCategories });
+      return NextResponse.json({ products: allProduct, categories: uniqueCategories, img: banner[0] });
     } else {
       const product = await Featured.findOne({ mainTitle: category });
       if (product) {
-        return NextResponse.json({ products: product.product, categories: uniqueCategories });
+        return NextResponse.json({ products: product.product, categories: uniqueCategories, img: banner[0] });
       } else {
         return NextResponse.json({ status: 404, categories: uniqueCategories });
       }

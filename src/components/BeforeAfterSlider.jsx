@@ -5,7 +5,7 @@ import Image from "next/image";
 import { FaArrowsLeftRight } from "react-icons/fa6";
 
 
-function BeforeAfterSlider() {
+function BeforeAfterSlider({imgB, imgT}) {
     const [sliderPosition, setSliderPosition] = useState(50);
     const [isDragging, setIsDragging] = useState(false);
 
@@ -58,7 +58,7 @@ function BeforeAfterSlider() {
                     }}
                 >
                     {/* Bottom Image */}
-                    <Image src="https://sahara-theme.myshopify.com/cdn/shop/files/FAEStudioCrop-113_346e848b-5ba0-43d0-a71d-4b05690677dd.jpg" alt="sliderImage" fill style={{objectFit: 'cover'}}/>
+                    <Image src={imgB} alt="sliderImage" fill style={{objectFit: 'cover'}}/>
                     {/* Top Image with Clipping */}
                     <div
                         style={{
@@ -70,7 +70,7 @@ function BeforeAfterSlider() {
                             clipPath: `inset(0 ${100 - sliderPosition}% 0 0)`,
                         }}
                     >
-                        <Image src="https://sahara-theme.myshopify.com/cdn/shop/products/FAEStudioCrop-113.jpg" alt="sliderImage" fill style={{objectFit: 'cover'}}/>
+                        <Image src={imgT} alt="sliderImage" fill style={{objectFit: 'cover'}}/>
                     </div>
                     {/* Slider Handle */}
                     <div

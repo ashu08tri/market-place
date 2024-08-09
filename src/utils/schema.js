@@ -20,6 +20,7 @@ export const User = mongoose.models.User || mongoose.model('User', userSchema);
 
 export const allProductSchema = new mongoose.Schema({
   mainTitle: String,
+  banner: String,
   product : [{
     title: String,
     amount: Number,

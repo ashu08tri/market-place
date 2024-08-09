@@ -3,9 +3,11 @@ import {useState, useEffect} from 'react';
 import Carousel from 'react-multi-carousel';
 import Image from 'next/image';
 import Link from 'next/link';
+import EditReview from './landingPage/EditReview';
 import 'react-multi-carousel/lib/styles.css';
 import { HiArrowLongLeft, HiArrowLongRight } from "react-icons/hi2";
 
+const {NEXT_PUBLIC_HOST_URL} = process.env;
 
 const responsive = {
     desktop: {
@@ -78,6 +80,7 @@ function Review() {
       >
         {data.map((item, i) => (
           <div key={i} className="flex flex-col md:flex-row px-4 md:px-20 h-auto md:h-screen pt-10 md:pt-20">
+            <EditReview item={item} api={`/api/landingPage/reviewSection`} storageUrl={'reviews'}/>
             <div className="w-full md:w-3/4 self-start">
               <div className="w-full md:w-[68%]">
                 <p className="text-sm md:text-4xl tracking-widest font-thin leading-6 md:leading-12">

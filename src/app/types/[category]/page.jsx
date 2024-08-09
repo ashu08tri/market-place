@@ -17,6 +17,7 @@ const getData = async (category) => {
 async function Page({ params }) {
   const { category } = params;
   const data = await getData(category);
+  const imgSrc = data?.img.banner || '/no-pictures.png'
 
   return (
     <>
@@ -24,7 +25,7 @@ async function Page({ params }) {
         <ShopAll
           product={data.products}
           categories={data.categories}
-          img={'https://sahara-theme.myshopify.com/cdn/shop/collections/duo.jpg'}
+          img={imgSrc}
           title={'Shop All'}
           url={'types'}
         />
@@ -32,7 +33,7 @@ async function Page({ params }) {
         <Types
           product={data.products}
           categories={data.categories}
-          img={'https://sahara-theme.myshopify.com/cdn/shop/collections/duo.jpg'}
+          img={imgSrc}
           title={category}
         />
       )}

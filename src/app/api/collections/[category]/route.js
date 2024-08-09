@@ -16,13 +16,15 @@ export async function GET(request, { params }) {
     const { category } = params;
 
     // Ensure you're using the correct model and schema
+    const banner = await Collection.find().select('banner -_id');
     const categories = await Collection.find().select('mainTitle -_id');
     const uniqueCategories = categories.map(cat => cat.mainTitle);
+    
 
     const product = await Collection.findOne({ mainTitle: category });
 
     if (product) {
-      return NextResponse.json({ products: product.product, categories: uniqueCategories });
+      return NextResponse.json({ products: product.product, categories: uniqueCategories, img: banner[0] });
     } else {
       return NextResponse.json({ status: 404, categories: uniqueCategories });
     }
@@ -49,6 +51,16 @@ export async function POST(request,{params}) {
 
     return NextResponse.json({ ok: true });
   } catch (err) {
+    return NextResponse.json({ error: 'Something went wrong!', details: err.message });
+  }
+}
+
+export async function PUT(request){
+  const {banner} = await request.json();
+  try{
+    await Collection.updateMany({},{banner: banner});
+    return NextResponse.json({ ok: true });
+  }catch(err){
     return NextResponse.json({ error: 'Something went wrong!', details: err.message });
   }
 }

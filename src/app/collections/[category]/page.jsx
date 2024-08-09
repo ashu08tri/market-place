@@ -20,11 +20,13 @@ async function Page({ params }) {
   // Ensure data is properly destructured and default values are handled
   const products = data?.products || [];
   const categories = data?.categories || [];
+  const imgSrc = data?.img.banner || '/no-pictures.png';
+  
 
   return (
     <Collection 
       product={products} 
-      img={'https://sahara-theme.myshopify.com/cdn/shop/collections/duo.jpg'} 
+      img={imgSrc} 
       title={category} 
       categories={categories}
     />

@@ -58,6 +58,7 @@ const EditBanner= ({ item, api, storageUrl }) => {
         api={`${api}/${item._id}`}
         initialData={initialData}
         storageUrl={storageUrl}
+        onClose={handleEditClick}
     />
       )}
     </div>}
