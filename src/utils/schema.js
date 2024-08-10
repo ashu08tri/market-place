@@ -25,6 +25,9 @@ export const allProductSchema = new mongoose.Schema({
     title: String,
     amount: Number,
     img: [String],
+    desc: { info : String, features: [String], sizing: String},
+    styleTip: String,
+    modalInfo: String,
     quantity : {
       size: [
         {

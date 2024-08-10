@@ -58,7 +58,7 @@ const ImageSlider = ({ items }) => {
             <img src={item.image} alt={item.title} className="object-cover md:h-full w-full h-3/4 group-hover:opacity-75" />
             <div className="flex flex-col items-start gap-1 p-4 h-1/3 md:h-auto">
               <p className="text-lg font-semibold group-hover:underline underline-offset-2">{item.title}</p>
-              <p className="text-xs">{item.desc }</p>
+              <p className="text-xs h-16">{item.desc.split('').slice(0,160)}...</p>
             </div>
           </div>
         ))}

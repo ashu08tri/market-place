@@ -113,7 +113,6 @@ function VideoSeenOn() {
                           <img src={item.img} alt="product" className="w-24 h-28 md:w-16 md:h-20" />
                           <div className="flex flex-col">
                             <p className="text-xl md:text-lg">{item.title}</p>
-                            <p className="text-xl md:text-lg">{item.amount}</p>
                           </div>
                         </div>
                       </div>

@@ -8,7 +8,7 @@ import Button from "./Button";
 import { usePathname } from "next/navigation";
 import { FaTimes } from 'react-icons/fa';
 
-function SizeSelector({ id, sizes, amount, title, img, category, productType }) {
+function SizeSelector({ id, sizes, amount, title, img, category, productType, desc, styleTip, modalInfo }) {
     const [selected, setSelected] = useState(sizes[0].size);
     const [quantity, setQuantity] = useState(1);
     const [totalAmount, setTotalAmount] = useState(amount);
@@ -130,7 +130,9 @@ function SizeSelector({ id, sizes, amount, title, img, category, productType }) 
                         </button>
                     </div>
                 </div>
-                {!pathname.includes('shop_all') && <Button id={id} category={category} sizes={sizes} title={title} img={img} amount={amount} productType={productType} />}
+                {!pathname.includes('shop_all') && <Button id={id} category={category} sizes={sizes} title={title} img={img} amount={amount} productType={productType}
+                    desc={desc} styleTip={styleTip} modalInfo={modalInfo}
+                />}
                 <div className="pt-4 md:p-0">
                     <p className="mt-4 text-sm flex items-center gap-1"><span className="text-xl"><CiStopwatch /></span>Only {sizeQuantity} left in stock for selected size, Order soon.</p>
                     <p className="mt-4 text-sm flex items-center gap-1"><span className="pl-1"><IoCheckmark /></span>Free delivery and shipping</p>

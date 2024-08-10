@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import ProductFormModal from "./ProductFormModal";
 import { useRouter } from "next/navigation";
 
-function Button({ category, id, title, sizes, amount, img, productType }) {
+function Button({ category, id, title, sizes, amount, img, productType, desc, styleTip, modalInfo }) {
     const { data: session } = useSession();
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
@@ -102,8 +102,8 @@ function Button({ category, id, title, sizes, amount, img, productType }) {
 
 
             {isFormOpen && <ProductFormModal onClose={closeProductFormModal} onProductAdd={handleProductUpdate} apiRoute={`/api/${productType}/${category}/${id}`}
-                storagePath={`productImages/${category}`} method={'PUT'} maintitle={category}
-                titles={title} amounts={amount} sizes={sizes} img={img}
+                storagePath={`productImages/${category}`} method={'PUT'} maintitle={category} desc={desc} styleTip={styleTip} modalInfo={modalInfo}
+                titles={title} amounts={amount} sizes={sizes} img={img} 
             />}
         </>
     )

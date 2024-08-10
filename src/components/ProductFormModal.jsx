@@ -2,14 +2,17 @@
 import { useState, useEffect } from "react";
 import app from "@/firebase";
 import { getStorage, ref, getDownloadURL, uploadBytes } from 'firebase/storage';
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import { BeatLoader } from "react-spinners";
 
 function ProductFormModal({ onClose, apiRoute, storagePath, maintitle, method,
-    titles, amounts, sizes, img
+    titles, amounts, sizes, img, desc, styleTip, modalInfo
 }) {
     const [title, setTitle] = useState(titles || '');
     const [amount, setAmount] = useState(amounts || '');
+    const [description, setDesc] = useState(desc || {info: '', features: '', sizing: ''});
+    const [style, setStyle] = useState(styleTip || '');
+    const [modal, setModal] = useState(modalInfo || '');
     const [images, setImages] = useState([]);
     const [uploading, setUploading] = useState(false);
     const [quantity, setQuantity] = useState([]);
@@ -48,20 +51,23 @@ function ProductFormModal({ onClose, apiRoute, storagePath, maintitle, method,
     const submitHandler = async (e) => {
         e.preventDefault();
         setUploading(true);
-    
+
         try {
             const uploadedImageUrls = await Promise.all(Array.from(images).map(img => uploadImageToFirebase(img)));
-    
+
             const productData = {
                 maintitle,
                 product: [{
                     title,
                     quantity: { size: quantity },
                     amount: Number(amount),
-                    img: uploadedImageUrls.length > 0 ? uploadedImageUrls : img || []
+                    img: uploadedImageUrls.length > 0 ? uploadedImageUrls : img || [],
+                    desc : description,
+                    styleTip: style,
+                    modalInfo: modal
                 }]
             };
-    
+
             let res = await fetch(apiRoute, {
                 method: method,
                 headers: {
@@ -69,9 +75,9 @@ function ProductFormModal({ onClose, apiRoute, storagePath, maintitle, method,
                 },
                 body: JSON.stringify(method === 'POST' ? productData : productData.product[0])
             });
-    
+
             res = await res.json();
-    
+
             if (res.ok) {
                 toast.success('Operation Successful!');
                 onClose();
@@ -85,10 +91,10 @@ function ProductFormModal({ onClose, apiRoute, storagePath, maintitle, method,
             setUploading(false);
         }
     };
-    
+
 
     return (
-        <div className="absolute top-20 left-40 p-4 bg-white border border-black rounded-md text-black mt-10">
+        <div className="absolute top-20 left-40 p-4 bg-white border border-black rounded-md text-black mt-10 z-50">
             <button
                 onClick={onClose}
                 className="absolute top-2 right-2 text-black text-xl font-bold"
@@ -131,7 +137,7 @@ function ProductFormModal({ onClose, apiRoute, storagePath, maintitle, method,
                         </div>
                     ))}
                 </div>
-  
+
                 <label className="text-black font-semibold">Images:</label>
                 <input
                     type="file"
@@ -139,6 +145,27 @@ function ProductFormModal({ onClose, apiRoute, storagePath, maintitle, method,
                     multiple
                     onChange={(e) => handleImageChange(e.target.files)}
                 />
+
+                <label className="text-black font-semibold">Description:</label>
+              
+               
+                    <label htmlFor="info" className="text-black font-semibold">Info:</label>
+                    <textarea onChange={(e) => setDesc({...description,info: e.target.value})} className="border border-black" id="info" value={description.info}></textarea>
+                
+               
+                    <label htmlFor="features" className="text-black font-semibold">Features:</label>
+                    <input className="border border-black p-2 rounded-md" onChange={(e) => setDesc({...description,features: e.target.value})} id="features" value={description.features} />
+                
+                    <label htmlFor="sizing" className="text-black font-semibold">Sizing:</label>
+                    <input className="border border-black p-2 rounded-md" onChange={(e) => setDesc({...description,sizing: e.target.value})} id="sizing" value={description.sizing} />
+               
+             
+
+               <label htmlFor="style" className="text-black font-semibold">Style Tip:</label>
+               <input type="text" className="border border-black p-2 rounded-md" value={style} onChange={(e) => setStyle(e.target.value)}/>
+
+               <label htmlFor="modal" className="text-black font-semibold">Modal Info:</label>
+               <input type="text" className="border border-black p-2 rounded-md" value={modal} onChange={(e) => setModal(e.target.value)}/>
 
                 <button
                     type="submit"

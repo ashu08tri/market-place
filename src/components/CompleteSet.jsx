@@ -47,7 +47,7 @@ const responsive = {
     },
 };
 
-function CompleteSet({ items }) {
+function CompleteSet({ items, desc, styleTip, modalInfo }) {
     const [isOpen, setIsOpen] = useState(false);
     const [modalContent, setModalContent] = useState({ title: '', body: '' });
 
@@ -60,17 +60,36 @@ function CompleteSet({ items }) {
         setIsOpen(false);
     };
 
+    // Ensure desc is an object and has the required structure
+    const descriptionContent = desc && typeof desc === 'object' && Object.keys(desc).length > 0 ? desc : {
+        info: 'Sorry no description for this product.',
+        features: '',
+        sizing: '',
+    };
+
     const contents = [
-        { title: 'Description', body: 'This is the description of the product.' },
-        { title: 'Delivery & Returns', body: 'Delivery and returns policy.' },
-        { title: 'Stylist tip', body: 'Stylist tip for the product.' },
-        { title: 'Model Measurements', body: 'Measurements of the model.' },
+        { title: 'Description', body: descriptionContent },
+        {
+            title: 'Delivery & Returns', body: (
+                <div>
+                    <p>Shipping & Returns</p>
+                    <ul>
+                        <li>Free shipping on US orders over $150</li>
+                        <li>US Flat Rate Shipping $5</li>
+                        <li>International shipping & duties charges calculated at checkout</li>
+                        <li>Carbon-Neutral Shipping</li>
+                        <li>All of our packaging is plastic-free and recyclable...</li>
+                    </ul>
+                    <p>For more info on shipping, returns, & international orders swing by our FAQs</p>
+                </div>
+            )
+        },
+        { title: 'Stylist tip', body: styleTip ? styleTip : 'Stylist tip for the product.' },
+        { title: 'Model Measurements', body: modalInfo ? modalInfo : 'Measurements of the model.' },
     ];
 
     return (
         <div className='md:flex justify-between px-2 md:px-10 h-screen'>
-
-            {/* This div will appear first on smaller screens and second on medium screens and above */}
             <div className='w-full md:w-1/2 flex flex-col items-start justify-center gap-6 pl-8 md:pl-36 md:order-last py-6'>
                 <ul className='h-1/2 cursor-pointer w-11/12 md:w-3/4 text-gray-500 text-lg md:text-2xl tracking-wider'>
                     {contents.map((item, i) => (
@@ -95,8 +114,6 @@ function CompleteSet({ items }) {
                 <AnimatePresence>{isOpen && <SinglePageModal isOpen={isOpen} onClose={handleCloseModal} content={modalContent} />}</AnimatePresence>
             </div>
 
-
-            {/* This div will appear second on smaller screens and first on medium screens and above */}
             <div className='w-full md:w-1/2 md:order-first'>
                 <p className='text-2xl tracking-wide py-3'>Complete the set!</p>
                 <Carousel
@@ -120,10 +137,9 @@ function CompleteSet({ items }) {
                     ))}
                 </Carousel>
             </div>
-
         </div>
-
     )
 }
+
 
 export default CompleteSet;
