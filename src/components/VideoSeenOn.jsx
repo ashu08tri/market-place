@@ -7,6 +7,7 @@ import { HiArrowLongLeft, HiArrowLongRight } from 'react-icons/hi2';
 const CustomLeftArrow = ({ onClick }) => (
     <button
         className='absolute p-1 left-8 bg-white'
+        aria-label="Previous Slide"
         onClick={onClick}
     >
         <HiArrowLongLeft size={20} />
@@ -16,6 +17,7 @@ const CustomLeftArrow = ({ onClick }) => (
 const CustomRightArrow = ({ onClick }) => (
     <button
         className='absolute right-8 p-1 bg-white'
+        aria-label="Next Slide"
         onClick={onClick}
     >
         <HiArrowLongRight size={20} />

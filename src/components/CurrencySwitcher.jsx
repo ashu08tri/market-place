@@ -35,12 +35,15 @@ const CurrencySwitcher = () => {
   }, []);
 
   return (
-    <select value={currency} onChange={handleCurrencyChange} className='w-20' style={{background: pathname==='/'?(isScrolled ? 'white': 'transparent'):'white', color: pathname==='/'?(isScrolled ? 'black': 'white'):'black'}}>
+    <>
+    <label htmlFor="currency-switch" className='hidden'></label>
+    <select id='currency-switch' value={currency} onChange={handleCurrencyChange} className='w-20' style={{background: pathname==='/'?(isScrolled ? 'white': 'transparent'):'white', color: pathname==='/'?(isScrolled ? 'black': 'white'):'black'}}>
       <option value="INR" style={{background: pathname==='/'?(isScrolled ? 'white': 'black'):'white'}}>&#x20B9; INR</option>
       <option value="USD" style={{background: pathname==='/'?(isScrolled ? 'white': 'black'):'white'}}>&#x24; USD</option>
       <option value="EUR" style={{background: pathname==='/'?(isScrolled ? 'white': 'black'):'white'}}>&#8364; EUR</option>
       <option value="GBP" style={{background: pathname==='/'?(isScrolled ? 'white': 'black'):'white'}}>&#163; GBP</option>
     </select>
+    </>
   );
 };
 

@@ -34,14 +34,14 @@ const Footer = () => {
       <div className='container mx-auto px-4 md:px-8'>
         <div className='grid grid-cols-2 md:grid-cols-4 gap-8'>
           <div>
-            <h3 className='text-lg font-semibold mb-4'>Company</h3>
+            <p className='text-lg font-semibold mb-4'>Company</p>
             <ul className='space-y-2'>
               <li><Link href='/contact'>Contact Us</Link></li>
               <li><Link href='/blog'>Blog</Link></li>
             </ul>
           </div>
           <div>
-            <h3 className='text-lg font-semibold mb-4'>Get Help</h3>
+            <p className='text-lg font-semibold mb-4'>Get Help</p>
             <ul className='space-y-2'>
               <li><Link href='/FAQ'>FAQ</Link></li>
               <li><Link href='/terms-of-service'>Terms of Service</Link></li>
@@ -50,14 +50,14 @@ const Footer = () => {
             </ul>
           </div>
           <div>
-            <h3 className='text-lg font-semibold mb-4'>Account</h3>
+            <p className='text-lg font-semibold mb-4'>Account</p>
             <ul className='space-y-2'>
               <li><Link href='/login'>Log In</Link></li>
               <li><Link href='/register'>Sign Up</Link></li>
             </ul>
           </div>
           <div>
-            <h3 className='text-lg font-semibold mb-4'>Connect</h3>
+            <p className='text-lg font-semibold mb-4'>Connect</p>
             {/* Add your social media icons or links here */}
           </div>
         </div>

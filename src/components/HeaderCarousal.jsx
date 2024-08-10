@@ -32,6 +32,7 @@ const responsive = {
 const CustomLeftArrow = ({ onClick }) => (
     <button
         className='hidden text-white md:block absolute left-4 p-2'
+        aria-label="Previous Slide"
         onClick={onClick}
     >
         <HiArrowLongLeft size={40} />
@@ -41,6 +42,7 @@ const CustomLeftArrow = ({ onClick }) => (
 const CustomRightArrow = ({ onClick }) => (
     <button
         className='hidden text-white md:block absolute right-4 p-2'
+        aria-label="Next Slide"
         onClick={onClick}
     >
         <HiArrowLongRight size={40} />

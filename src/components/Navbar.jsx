@@ -369,7 +369,7 @@ function Navbar() {
           <li className="text-2xl py-9" onClick={toggleDrawer}><CiSearch /></li>
 
           {user ? <li className="text-2xl py-9" onClick={logOutHandler}><LuUserX2 /></li> :
-            <li className="text-2xl py-9"><Link href='/login'><CiUser /></Link></li>}
+            <li className="text-2xl py-9"><Link href='/login' aria-label="Go to login page"><CiUser /></Link></li>}
 
           <li className="text-2xl py-9" onClick={toggleCartDrawer}><IoBagOutline /></li>
         </ul>
