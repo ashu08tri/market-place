@@ -5,11 +5,11 @@
       "schedule": "0 0 1 * *"
     },
     {
-      "path": "/api/sendEmail",
+      "path": "/api/exportEmail",
       "schedule": "0 0 1 * *"
     },
     {
-      "path": "/api/deleteOldOrders",
+      "path": "/api/deleteOrders",
       "schedule": "0 0 1 */6 *"
     }
   ]
