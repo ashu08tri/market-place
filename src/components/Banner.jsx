@@ -27,8 +27,8 @@ async function Banner() {
      <p className='text-4xl py-2'>{item.title2}</p>
      </div>
       <div className='flex gap-3 absolute top-[65%]'>
-          <button className='px-6 py-3 border border-white text-white bg-transparent hover:bg-white hover:text-black text-sm'><Link href={item.url}>Shop New In</Link></button>
-          <button className='px-6 py-3 border border-white text-white bg-transparent hover:bg-white hover:text-black text-sm'><Link href={item.url2}>All Products</Link></button>
+          <Link href={item.url} className='px-6 py-3 border border-white text-white bg-transparent hover:bg-white hover:text-black text-sm'>Shop New In</Link>
+         <Link href={item.url2} className='px-6 py-3 border border-white text-white bg-transparent hover:bg-white hover:text-black text-sm'>All Products</Link>
       </div>
   </div>) : <p>Failed to load data!</p>
     }

@@ -58,9 +58,9 @@ async function CounterSale() {
                                         </React.Fragment>
                                     ))}
                                 </p>
-                                <button className='px-6 py-2 bg-transparent border text-white border-white hover:border-black hover:bg-black hover:text-white'>
-                                    <Link href={item.url}>shop now</Link>
-                                </button>
+                             
+                                    <Link href={item.url} className='px-6 py-2 bg-transparent border text-white border-white hover:border-black hover:bg-black hover:text-white'>shop now</Link>
+                              
                             </div>
                         </div>
                     ) : <p>Failed to load data!</p>

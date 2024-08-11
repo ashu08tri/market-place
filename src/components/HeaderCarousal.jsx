@@ -69,7 +69,7 @@ function HeaderCarousel() {
     };
 
     const fetchImages = async () => {
-        let res = await fetch('/api/updates/carousel', { cache: 'no-store' });
+        let res = await fetch('/api/updates/carousel');
         res = await res.json();
         setImages(res);
     };
@@ -147,7 +147,7 @@ function HeaderCarousel() {
             >
                 {images.length > 0 && images.map((item, i) => (
                     <div key={i} className='h-screen w-screen'>
-                        <Image src={item.images} fill alt='carousel_images' style={{objectFit: 'cover'}}/>
+                        <Image src={item.images} alt='carousel_images' fill style={{objectFit: 'cover'}} priority/>
                         {mainAdmin === 'alok@admin.com' && <button onClick={() => deleteImage(item.images)} className='p-2 absolute top-40 right-5 bg-black text-white'>Delete Image</button>}
                     </div>
                 ))}

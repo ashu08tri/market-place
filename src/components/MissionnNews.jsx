@@ -39,7 +39,7 @@ async function MissionnNews() {
         <ImageSlider items={items} />
 
         <div className='md:hidden flex justify-center my-8'>
-          <button className='px-12 py-3 tracking-wide text-sm border border-black hover:bg-black hover:text-white uppercase'><Link href='/blog'>Visit Blog</Link></button>
+          <Link href='/blog' className='px-12 py-3 tracking-wide text-sm border border-black hover:bg-black hover:text-white uppercase'>Visit Blog</Link>
         </div>
       </div>
     </div>

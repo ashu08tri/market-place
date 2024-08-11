@@ -1,8 +1,9 @@
 "use client"
-import React from 'react'
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import Carousel from 'react-multi-carousel';
 import { HiArrowLongLeft, HiArrowLongRight } from 'react-icons/hi2';
+
+const Carousel = dynamic(() => import('react-multi-carousel'), { ssr: false });
 
 const CustomLeftArrow = ({ onClick }) => (
     <button
@@ -87,7 +88,7 @@ function VideoSeenOn() {
         <div className='px-6 md:px-12 flex flex-col justify-center h-[98vh] mt-48 md:mt-0'>
             <div className='flex justify-between items-center mb-10'>
                 <p className='text-xl md:text-3xl uppercase tracking-wider'>As Seen On</p>
-                <Link href='/' className='px-6 py-3 bg-white border border-black hover:bg-black hover:text-white text-black '>Follow @ Golden Ghaf</Link>
+                <Link href='/' className='px-6 py-3 bg-white border border-black hover:bg-black hover:text-white text-black'>Follow @ Golden Ghaf</Link>
             </div>
             <div>
                 <Carousel
@@ -99,33 +100,31 @@ function VideoSeenOn() {
                     customLeftArrow={<CustomLeftArrow />}
                     customRightArrow={<CustomRightArrow />}
                     itemClass='mr-3'
-
-                >{videoData.map((item, i) => (
-                    <div key={i} className="w-full md:w-11/12 h-full relative flex justify-center">
-                      <video
-                        src={item.video}
-                        muted
-                        playsInline
-                        autoPlay
-                        loop
-                        className="h-full w-full object-cover"
-                      ></video>
-                      <div className="absolute bottom-0 left-0 w-full p-4 text-white">
-                        <div className="flex items-center gap-4">
-                          <img src={item.img} alt="product" className="w-24 h-28 md:w-16 md:h-20" />
-                          <div className="flex flex-col">
-                            <p className="text-xl md:text-lg">{item.title}</p>
-                          </div>
+                >
+                    {videoData.map((item, i) => (
+                        <div key={i} className="w-full md:w-11/12 h-full relative flex justify-center">
+                            <video
+                                src={item.video}
+                                muted
+                                playsInline
+                                autoPlay
+                                loop
+                                className="h-full w-full object-cover"
+                            ></video>
+                            <div className="absolute bottom-0 left-0 w-full p-4 text-white">
+                                <div className="flex items-center gap-4">
+                                    <img src={item.img} alt="product" className="w-24 h-28 md:w-16 md:h-20" />
+                                    <div className="flex flex-col">
+                                        <p className="text-xl md:text-lg">{item.title}</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                    </div>
-                  ))}
-                  
-
+                    ))}
                 </Carousel>
             </div>
         </div>
-    )
+    );
 }
 
 export default VideoSeenOn;

@@ -312,7 +312,7 @@ function Navbar() {
                         </button>
                       
                     )}
-                    <Link href={img.url}><img src={img.img} alt={img.alt} className='w-64 h-full object-cover' /></Link>
+                    <Link href={img.url}><img src={img.img} alt='navbar_Images' className='w-64 h-full object-cover' loading='lazy'/></Link>
                     <p className='absolute bottom-0 left-0 right-0 text-center text-white bg-black bg-opacity-50 py-2'>
                       {img.text}
                     </p>
@@ -336,7 +336,7 @@ function Navbar() {
                       </button>
                     
                   )}
-                   <Link href={img.url}><img src={img.img} alt={img.alt} className='w-64 h-[95%] object-cover'/></Link>
+                   <Link href={img.url}><img src={img.img} alt='navbar_Images' className='w-64 h-[95%] object-cover' loading='lazy'/></Link>
                   <p className='absolute bottom-4 left-0 right-0 text-center text-white bg-black bg-opacity-50 py-2'>
                     {img.text}
                   </p>
@@ -358,7 +358,7 @@ function Navbar() {
             setIsOpen(false)
           }
           router.push('/')
-        }} className='text-3xl font-semibold cursor-pointer flex flex-col items-center'><img src="/nav_logo.png" alt="logo" className='w-28 h-16'/><img src="/GGC.jpg" alt="" className='w-52 h-12'/><p className='text-sm text-center text-amber-900'>LUCKNOW</p></div>
+        }} className='text-3xl font-semibold cursor-pointer flex flex-col items-center'><img src="/nav_logo.webp" alt="logo" className='w-28 h-16'/><img src="/GGC.jpg" alt="" className='w-52 h-12'/><p className='text-sm text-center text-amber-900'>LUCKNOW</p></div>
 
         <div className='md:hidden text-2xl cursor-pointer' onClick={toggleCartDrawer}><IoBagOutline /></div>
 

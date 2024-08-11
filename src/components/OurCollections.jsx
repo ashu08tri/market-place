@@ -19,9 +19,7 @@ async function OurCollections() {
                     <div className='py-10 flex justify-between relative'>
                         <h1 className='text-3xl font-semibold uppercase'>{data[0].mainTitle}</h1>
                         <div className='hidden md:block'>
-                            <button className='px-12 py-3 tracking-wide text-sm border border-black hover:bg-black hover:text-white uppercase'>
-                                <Link href='/types/shop_all'>Explore All</Link>
-                            </button>
+                        <Link href='/types/shop_all' className='px-12 py-4 tracking-wide text-sm border border-black hover:bg-black hover:text-white uppercase'>Explore All</Link>
                         </div>
                     </div>
                     <div className='w-full h-3/4 overflow-x-scroll md:overflow-x-auto scrollbar-hide'>
@@ -32,9 +30,7 @@ async function OurCollections() {
                         </div>
                     </div>
                     <div className='md:hidden flex justify-center my-8'>
-                        <button className='px-12 py-3 tracking-wide text-sm border border-black hover:bg-black hover:text-white uppercase'>
-                            <Link href='/types/shop_all'>Explore All</Link>
-                        </button>
+                    <Link href='/types/shop_all' className='px-12 py-3 tracking-wide text-sm border border-black hover:bg-black hover:text-white uppercase'>Explore All</Link>
                     </div>
                 </>
             ) : <p>Problem loading data from backend.</p>}

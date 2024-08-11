@@ -23,7 +23,7 @@ async function Sales() {
             <div className='py-6 flex justify-between'>
                 <h1 className='text-3xl font-semibold uppercase'>Best Sellers</h1>
                 <div className='hidden md:block '>
-                    <button className='px-12 py-3 tracking-wide text-sm border border-black hover:bg-black hover:text-white uppercase'><Link href='/featured/best_seller'>Explore All</Link></button>
+                    <Link href='/featured/best_seller' className='px-12 py-4 tracking-wide text-sm border border-black hover:bg-black hover:text-white uppercase'>Explore All</Link>
                 </div>
             </div>
 
@@ -50,7 +50,7 @@ async function Sales() {
 
 
             <div className='md:hidden flex justify-center my-8'>
-                <button className='px-12 py-3 tracking-wide text-sm border border-black hover:bg-black hover:text-white uppercase'><Link href='/featured/best_seller'>Explore All</Link></button>
+              <Link href='/featured/best_seller' className='px-12 py-3 tracking-wide text-sm border border-black hover:bg-black hover:text-white uppercase'>Explore All</Link>
             </div>
         </div>
     )
