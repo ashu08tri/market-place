@@ -40,7 +40,7 @@ async function CounterSale() {
                 <div className="md:border-x border-y md:border-y-0 px-20 md:px-48 py-4 md:py-8">
                     <CounDown date={count[0].count}/>
                 </div>
-                <div><button className='px-10 py-4 text-sm bg-black border text-white border-black hover:bg-white hover:text-black mt-4'><Link href={count[0].url}>Sale</Link></button></div>
+                <div><Link href={count[0].url} className='px-10 py-4 text-sm bg-black border text-white border-black hover:bg-white hover:text-black mt-4'>Sale</Link></div>
             </div>}
 
             <div className='flex flex-col md:flex-row px-10 md:px-40 gap-2 md:gap-10 h-[80%] md:h-[65%] text-center my-20'>

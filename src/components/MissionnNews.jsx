@@ -32,7 +32,7 @@ async function MissionnNews() {
         <div className='py-6 flex justify-between'>
           <h1 className='text-3xl font-semibold uppercase'>News</h1>
           <div className='hidden md:block'>
-            <button className='px-12 py-3 tracking-wide text-sm border border-black hover:bg-black hover:text-white uppercase'><Link href='/blog'>Visit Blog</Link></button>
+            <Link href='/blog' className='px-12 py-3 tracking-wide text-sm border border-black hover:bg-black hover:text-white uppercase'>Visit Blog</Link>
           </div>
         </div>
 
