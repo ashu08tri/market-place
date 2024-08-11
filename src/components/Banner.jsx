@@ -19,7 +19,7 @@ async function Banner() {
   return (
     <>
     {
-      data ? data.map((item,i) => <div key={i} className='h-96 relative flex flex-col tracking-wider justify-center text-white gap-5 items-center bg-cover bg-center'>
+      data.length > 0 ? data.map((item,i) => <div key={i} className='h-96 relative flex flex-col tracking-wider justify-center text-white gap-5 items-center bg-cover bg-center'>
       <Image src={item.image} alt='banner' fill objectFit='cover'/>
       <EditBanner item={item} api={`${NEXT_PUBLIC_HOST_URL}/api/landingPage/banner`} storageUrl={'banner'}/>
      <div className='absolute text-center'>

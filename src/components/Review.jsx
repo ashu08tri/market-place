@@ -78,7 +78,7 @@ function Review() {
         containerClass="carousel-container"
         itemClass="carousel-item-padding-40-px"
       >
-        {data.map((item, i) => (
+        {data.length > 0 && data.map((item, i) => (
           <div key={i} className="flex flex-col md:flex-row px-4 md:px-20 h-auto md:h-screen pt-10 md:pt-20">
             <EditReview item={item} api={`/api/landingPage/reviewSection`} storageUrl={'reviews'}/>
             <div className="w-full md:w-3/4 self-start">

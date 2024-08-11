@@ -419,7 +419,7 @@ function PaymentForm() {
 
 
     return (
-        <div className="font-[sans-serif] bg-white pt-24">
+        <div className="font-[sans-serif] bg-white pt-32">
             {razorLoading && (
                 <div className="fixed inset-0 z-50 flex justify-center items-center bg-transparent">
                     <div className='flex flex-col items-center'>
@@ -439,7 +439,7 @@ function PaymentForm() {
 
             <div className="flex max-sm:flex-col gap-12 max-lg:gap-4">
 
-                <div className="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 sm:h-[calc(100vh-6rem)] sm:sticky sm:top-0 lg:min-w-[370px] sm:min-w-[300px] overflow-y-auto scrollbar-hide">
+                <div className="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 sm:h-[calc(100vh-8rem)] sm:sticky sm:top-0 lg:min-w-[370px] sm:min-w-[300px] overflow-y-auto scrollbar-hide">
                     <div className="flex flex-col h-full relative">
                         <div className="px-4 py-8 flex-grow">
                             <div className="space-y-4">

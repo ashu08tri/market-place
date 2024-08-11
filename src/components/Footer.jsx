@@ -63,8 +63,9 @@ const Footer = () => {
         </div>
       </div>
       <div className='h-full flex flex-col justify-center items-center'>
-        <div className='h-full flex items-center w-1/2'>
+        <div className='h-full flex flex-col justify-center gap-4 items-center w-1/2'>
         <img src="/banner.png" alt="banner" className='w-full' />
+        <p className='text-2xl text-center'>LUCKNOW</p>
         </div>
         <p className='self-start p-4 text-sm'>© 2024 GOLDEN GHAF, All rights reserved.</p>
       </div>
