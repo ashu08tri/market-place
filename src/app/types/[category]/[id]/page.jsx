@@ -11,7 +11,7 @@ const {NEXT_PUBLIC_HOST_URL} = process.env;
 
 const getProductData = async (category, id) => {
   try {
-    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/types/${category}/${id}`,{cache: 'no-store'});
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/types/${category}/${id}`);
     res = await res.json();
     return res;
   } catch (err) {
@@ -22,7 +22,7 @@ const getProductData = async (category, id) => {
 
 const getMoreProducts = async() => {
   try {
-    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/products/shop_all`,{cache: 'no-store'});
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/products/shop_all`);
     res = await res.json();
     return res;
   } catch (err) {
@@ -74,7 +74,7 @@ async function page({ params }) {
           </div>
 
           <div className='hidden md:block w-4/12'>
-            <img src="https://sahara-theme.myshopify.com/cdn/shop/files/FAE_Hotel_Sages_-794_1.jpg?v=1677685612&width=720" alt="" className='w-full h-5/6'/>
+            <img src="https://sahara-theme.myshopify.com/cdn/shop/files/FAE_Hotel_Sages_-794_1.jpg?v=1677685612&width=720" loading='lazy' alt="banner" className='w-full h-5/6'/>
           </div>
           
         </div>
