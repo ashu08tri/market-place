@@ -1,17 +1,16 @@
 {
-    "functions": {
-      "api/exportOrders.js": {
-        "runtime": "edge",
-        "schedule": "0 0 1 * *"  
-      },
-      "api/sendEmail.js": {
-        "runtime": "edge",
-        "schedule": "0 0 1 * *"  
-      },
-      "api/deleteOldOrders.js": {
-        "runtime": "edge",
-        "schedule": "0 0 1 */6 *" 
-      }
+  "crons": [
+    {
+      "path": "/api/exportOrders",
+      "schedule": "0 0 1 * *"
+    },
+    {
+      "path": "/api/sendEmail",
+      "schedule": "0 0 1 * *"
+    },
+    {
+      "path": "/api/deleteOldOrders",
+      "schedule": "0 0 1 */6 *"
     }
-  }
-  
+  ]
+}
