@@ -40,7 +40,7 @@ async function page({ params }) {
   
   
   return (
-    <div className='pt-24'>
+    <div className='pt-36'>
       {item.length > 0 ? (
         <>
         <div>

@@ -37,7 +37,7 @@ export async function POST(request) {
 
         const response = await resend.emails.send({
             from: 'Acme <onboarding@resend.dev>',
-            to: ["vani.s.30012001@gmail.com"],
+            to: ["alok.akrt@gmail.com"],
             subject: 'Password Reset',
             html: `<p>You requested a password reset. Click the link to reset your password: <a href="${resetUrl}">${resetUrl}</a></p>`,
         });

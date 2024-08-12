@@ -83,7 +83,7 @@ function Product({ product, img, title, categories }) {
   };
 
   return (
-    <div className='pt-24'>
+    <div className='pt-36'>
       <div className='h-80 relative'>
         <img
           src={img}

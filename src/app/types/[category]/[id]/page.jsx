@@ -39,7 +39,7 @@ async function page({ params }) {
   item.push(data)
   
   return (
-    <div className='pt-24'>
+    <div className='pt-36'>
       {item.length > 0 ? (
         <>
         <div>

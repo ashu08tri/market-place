@@ -31,7 +31,7 @@ function Page() {
   };
 
   return (
-    <div className='pt-24 h-[calc(100vh-6rem)] flex justify-center items-center'>
+    <div className='pt-36 h-[calc(100vh-6rem)] flex justify-center items-center'>
         
         <form onSubmit={handleSubmit} className='w-4/12 h-72 flex gap-4 flex-col justify-center items-center shadow-lg rounded-md'>
         <h1 className='text-2xl'>Reset Password!</h1>

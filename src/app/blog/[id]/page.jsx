@@ -22,7 +22,7 @@ async function page({params}) {
   const data = await getData(params.id);
 
   return (
-    <div className='pt-24'>
+    <div className='pt-36'>
       <div className='h-48'>
       <p className='text-sm text-center py-4'><Link href='/'>Home</Link> / <Link href='/blog'>News</Link> / {data && data.title}</p>
       </div>

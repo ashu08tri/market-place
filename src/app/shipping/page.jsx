@@ -2,7 +2,7 @@ import React from 'react';
 
 const page = () => {
   return (
-    <div className="p-4 pt-24">
+    <div className="p-4 pt-36">
       <h1 className="text-2xl font-semibold mb-4">DELIVERY AND SHIPPING POLICY</h1>
 
       <h2 className="text-xl font-semibold mt-6">GENERAL</h2>

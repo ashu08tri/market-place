@@ -30,7 +30,7 @@ const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ mainTitle: newMainTitle, sublink: sublinkTitle, title, url }),
+          body: JSON.stringify({ mainTitle: newMainTitle, sublink: sublinkTitle, title, url: url.trim().toLowerCase().replace(/\s+/g, '_') }),
         });
       } else if (mode === 'edit') {
         response = await fetch('/api/navlink', {
@@ -38,7 +38,7 @@ const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ mainTitle: newMainTitle, sublink: sublinkTitle, oldTitle, newTitle: title, newUrl: url.trim().toLowerCase().replace(/\s+/g, '_')}),
+          body: JSON.stringify({ mainTitle, newMainTitle, sublink: sublinkTitle, oldTitle, newTitle: title, newUrl: url.trim().toLowerCase().replace(/\s+/g, '_')}),
         });
       } else if (mode === 'delete') {
         response = await fetch('/api/navlink', {
@@ -75,6 +75,7 @@ const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle
           },
           body: JSON.stringify({ 
             mainTitle, 
+            newMainTitle,
             oldImageUrl: oldImage.img, 
             newImage: downloadUrl,
             imageUpdates,
@@ -154,6 +155,16 @@ const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle
           {mode === 'imageEdit' && (
             <div>
               <div>
+                <label className="block text-sm font-medium text-gray-700">Main Title:</label>
+                <input
+                  type="text"
+                  value={newMainTitle}
+                  onChange={(e) => setNewMainTitle(e.target.value)}
+                  required
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black"
+                />
+              </div>
+              <div>
                 <label className="block text-sm font-medium text-gray-700">New Image URL:</label>
                 <input
                   type="file"
@@ -167,7 +178,7 @@ const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle
                   type="text"
                   value={newImage.url}
                   onChange={(e) => handleNewImageChange('url', e.target.value)}
-                  required
+                  
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black"
                 />
               </div>
@@ -177,7 +188,7 @@ const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle
                   type="text"
                   value={newImage.alt}
                   onChange={(e) => handleNewImageChange('alt', e.target.value)}
-                  required
+                  
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black"
                 />
               </div>
@@ -187,7 +198,7 @@ const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle
                   type="text"
                   value={newImage.text}
                   onChange={(e) => handleNewImageChange('text', e.target.value)}
-                  required
+                 
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black"
                 />
               </div>

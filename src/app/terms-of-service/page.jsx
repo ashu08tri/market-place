@@ -2,7 +2,7 @@ import React from "react";
 
 const page = () => {
     return (
-        <div className="p-8 pt-24">
+        <div className="p-8 pt-36">
             <h1 className="text-2xl font-semibold mb-6">Terms and Conditions</h1>
 
             <p className="mt-4">Welcome to Golden Ghaf!</p>

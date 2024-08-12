@@ -210,8 +210,9 @@ function Navbar() {
   const uniqueTitles = new Set();
 
   const dynamicStyles = {
-    navbar: `fixed top-0 md:flex justify-center text-black w-full transition-colors duration-300 z-50 bg-white
-      `,
+    navbar: `fixed top-0 md:flex justify-center w-full transition-colors duration-300 z-50 ${
+      isMainPage ? (isScrolled ? 'bg-white text-black' : 'bg-transparent text-white') : 'bg-white text-black'
+    }`,
     menuItem: `${isScrolled ? 'underline-black' : ''} animated-underline py-16`,
     drawerContainer: "h-screen bg-white md:hidden text-black overscroll-none no-doc-scroll z-50",
     searchInput: "p-4 w-80 border-r-0 focus:outline-none",
@@ -280,20 +281,20 @@ function Navbar() {
         {isDrawerOpen && <SearchModal isOpen={isDrawerOpen} onClose={toggleDrawer} />}
         {isCartDrawerOpen && <CartModal isOpen={isCartDrawerOpen} onClose={toggleCartDrawer} />}
       </AnimatePresence>
-      <nav className="md:w-11/12 flex items-center justify-between h-36 text-xl px-8 border-b">
+      <nav className={`md:w-11/12 flex items-center justify-between h-36 text-xl px-8 border-b`}>
         <ul className="hidden md:flex gap-6 z-50">
           <li className={`${dynamicStyles.menuItem} group relative`}>{links.length > 0 ? links[0].title : 'New In'}
             <ul className='w-[calc(90.7vw)] bg-white text-black h-72 hidden group-hover:flex absolute top-[86%] -left-8 mt-4 justify-between px-6 py-4'>
 
               {links.length > 0 && links[0].subLinks.map((link, i) => (
                 <li key={i} className='font-semi-bold'>{link.title}
-                  {isAdmin && <li className='p-1 w-1/2 bg-black text-white' onClick={() => handleAdd('New In', link.title)}>Add</li>}
+                  {isAdmin && <li className='p-1 w-1/2 bg-black text-white' onClick={() => handleAdd(links[0].title, link.title)}>Add</li>}
                   {link.sublink.map((l, j) => (
                     <li className='flex' key={j}>
                       <Link href={l.url} className='block text-sm py-2 hover:underline underline-offset-2'>{l.title}</Link>
                       <li className='flex gap-2 m-2 text-xs'>
-                        {isAdmin && <><button className='py-1 px-2 bg-black text-white' onClick={() => handleEdit('New In', link.title, l.title)}>Edit</button>
-                          {mainAdmin === "alok@admin.com" && <button className='py-1 px-2 bg-black text-white' onClick={() => handleDelete('New In', link.title, l.title)}>Delete</button>}</>}
+                        {isAdmin && <><button className='py-1 px-2 bg-black text-white' onClick={() => handleEdit(links[0].title, link.title, l.title)}>Edit</button>
+                          {mainAdmin === "alok@admin.com" && <button className='py-1 px-2 bg-black text-white' onClick={() => handleDelete(links[0].title, link.title, l.title)}>Delete</button>}</>}
                       </li>
                     </li>
                   ))}
@@ -358,7 +359,7 @@ function Navbar() {
             setIsOpen(false)
           }
           router.push('/')
-        }} className='text-3xl font-semibold cursor-pointer flex flex-col items-center'><img src="/nav_logo.webp" alt="logo" className='w-28 h-16'/><img src="/GGC.jpg" alt="" className='w-52 h-12'/><p className='text-sm text-center text-amber-900'>LUCKNOW</p></div>
+        }} className='text-3xl font-semibold cursor-pointer flex flex-col items-center'><img src="/nav_logo.webp" alt="logo" className='w-28 h-16'/><img src="/GGC.webp" alt="" className='w-52 h-12'/><p className='text-sm text-center'>LUCKNOW</p></div>
 
         <div className='md:hidden text-2xl cursor-pointer' onClick={toggleCartDrawer}><IoBagOutline /></div>
 

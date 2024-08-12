@@ -1,6 +1,6 @@
 function page() {
     return (
-        <div className="pt-24 px-4 sm:px-6 lg:px-8">
+        <div className="pt-36 px-4 sm:px-6 lg:px-8">
           {/* First Section */}
           <section className="bg-[#f5ebdf] flex flex-col items-center text-center py-12">
             <div className="space-y-4 max-w-2xl mx-auto">

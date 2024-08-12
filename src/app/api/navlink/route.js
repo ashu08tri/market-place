@@ -23,11 +23,11 @@ export async function POST(request) {
     const {mainTitle, sublink ,url, title} = await request.json();
   
     try {
-      const navLink = await Link.updateOne(
+      await Link.updateOne(
         { title: mainTitle, 'subLinks.title': sublink },
         { $push: { 'subLinks.$.sublink': { url, title } } }
       );
-      return NextResponse.json(navLink);
+      return NextResponse.json({ok: true});
     } catch (err) {
       console.error('Error inserting navigation data:', err);
       return NextResponse.json({ message: 'Error inserting navigation data', details: err.message });
@@ -38,7 +38,7 @@ export async function POST(request) {
 // PUT: Update a sublink's title or url
 export async function PUT(request) {
     const { mainTitle, sublink, oldTitle, newTitle, newUrl, newMainTitle, oldImageUrl, newImage, imageUpdates } = await request.json();
-    console.log(`Old Image: ${oldImageUrl}, New Image: ${newImage}`);
+    console.log(`mainTitle: ${newTitle}, New Image: ${oldTitle}`);
     
     try {
   
@@ -109,7 +109,7 @@ export async function PUT(request) {
       // Execute all updates
       await Promise.all(updatePromises);
   
-      return NextResponse.json({ message: 'Update successful' });
+      return NextResponse.json({ ok: true });
     } catch (err) {
       console.error('Error updating navigation data:', err);
       return NextResponse.json({ message: 'Error updating navigation data', details: err.message }, { status: 500 });

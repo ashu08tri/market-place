@@ -18,6 +18,10 @@ const Page = () => {
       answer: "We use a large network of courier partners to deliver your products including Blue Dart, Delhivery, and Xpressbees, etc for domestic orders, and DHL for International Orders."
     },
     {
+      question: 'Are there any charges for international shipping?',
+      answer: "Yes, we levy a minimal shipping fee to deliver goods internationally. Information on the same can be found by following this link - https://ggccomp.in/shipping"
+    },
+    {
       question: "What are the charges for shipping in India?",
       answer: "Shipping is free for orders above 1500 Rupees. Orders below 1500 Rupees will carry a charge of additional 99 Rupees which is non-refundable."
     },
@@ -32,7 +36,7 @@ const Page = () => {
   ];
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg pt-28">
+    <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg pt-36">
       <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">Frequently Asked Questions - Golden Ghaf</h1>
       {faqs.map((faq, index) => (
         <div key={index} className="mb-4">
