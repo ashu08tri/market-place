@@ -44,11 +44,8 @@ const OtpVerification = ({ onSubmit }) => {
     if (phoneNumber === "") {
       return toast.warning('Please enter the phone number first');
     }
-    //const appVerifier = window.recaptchaVerifier;
     try {
       setLoading(true)
-
-
       const token = await account.createPhoneToken(
         ID.unique(),
         phoneNumber
@@ -92,8 +89,6 @@ const OtpVerification = ({ onSubmit }) => {
 
   return (
     <div>
-      {!otpSent ? (<div id="recaptcha-container"></div>) : null}
-
       <h3>Enter your phone number</h3>
       <PhoneInput
         country={getCountryCode(currency)}
@@ -110,8 +105,6 @@ const OtpVerification = ({ onSubmit }) => {
       <button disabled={loading} type="button" onClick={onSignInSubmit} className=" my-4 w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
         {loading ? <BeatLoader loading={loading} size={15} color='white' aria-label="Loading Spinner" data-testid="loader" /> : 'Send OTP'}
       </button>
-
-
 
       {confirmationResult && <>
         <h3>Enter the OTP</h3>
