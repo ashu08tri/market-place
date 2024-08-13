@@ -41,7 +41,6 @@ const OtpVerification = ({ onSubmit }) => {
   const account = new Account(client);
 
   const onSignInSubmit = async () => {
-    const phoneNumberString = `+${phoneNumber.replace(/\D/g, '')}`;
     if (phoneNumber === "") {
       return toast.warning('Please enter the phone number first');
     }
@@ -52,7 +51,7 @@ const OtpVerification = ({ onSubmit }) => {
 
       const token = await account.createPhoneToken(
         ID.unique(),
-        phoneNumberString
+        phoneNumber
       );
 
       setUserId(token.userId);
