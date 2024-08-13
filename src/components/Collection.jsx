@@ -90,7 +90,7 @@ function Collection({ product, img, title, categories }) {
           className='h-full w-full object-cover'
         />
         <p className='text-white text-2xl uppercase font-semibold md:text-4xl tracking-wider absolute top-1/2 left-1/2 transform -translate-x-1/2 translate-y-[100%]'>
-          {title}
+          {title.replace(/_/g, ' ')}
         </p>
       </div>
 
@@ -100,7 +100,7 @@ function Collection({ product, img, title, categories }) {
             {allCategories.map((cat, index) => (
               <li key={index} className='group'>
                 <Link href={`/collections/${cat}`} className='text-sm whitespace-nowrap group-hover:underline underline-offset-2'>
-                  {cat}
+                  {cat.replace(/_/g, ' ')}
                 </Link>
               </li>
             ))}
@@ -114,7 +114,7 @@ function Collection({ product, img, title, categories }) {
             {allCategories.map((cat, index) => (
               <li key={index} className='group'>
                 <Link href={`/collections/${cat}`} className='group-hover:underline underline-offset-2'>
-                  {cat.toUpperCase()}
+                  {cat.replace(/_/g, ' ').toUpperCase()}
                 </Link>
               </li>
             ))}

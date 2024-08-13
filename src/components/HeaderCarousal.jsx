@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import Carousel from 'react-multi-carousel';
-import { Client, Storage, ID } from "appwrite";
+import { Client, Storage } from "appwrite";
 import FormModal from './FormModal';
 import 'react-multi-carousel/lib/styles.css';
 import { HiArrowLongLeft, HiArrowLongRight } from "react-icons/hi2";
 import { decode } from 'jsonwebtoken';
-import { Toaster, toast } from 'sonner';
+import { toast } from 'sonner';
 
 const responsive = {
     desktop: {
@@ -136,7 +136,6 @@ function HeaderCarousel() {
 
     return (
         <div className='h-screen relative'>
-            <Toaster closeButton position="bottom-right" />
             <Carousel
                 responsive={responsive}
                 ssr={true}

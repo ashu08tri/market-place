@@ -6,8 +6,6 @@ import EditReview from './landingPage/EditReview';
 import 'react-multi-carousel/lib/styles.css';
 import { HiArrowLongLeft, HiArrowLongRight } from "react-icons/hi2";
 
-const {NEXT_PUBLIC_HOST_URL} = process.env;
-
 const responsive = {
     desktop: {
         breakpoint: { max: 3000, min: 1024 },
