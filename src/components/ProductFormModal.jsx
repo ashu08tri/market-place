@@ -1,11 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
-import app from "@/firebase";
-import { getStorage, ref, getDownloadURL, uploadBytes } from 'firebase/storage';
+import { Client, Storage, ID } from "appwrite";
 import { toast } from "sonner";
 import { BeatLoader } from "react-spinners";
 
-function ProductFormModal({ onClose, apiRoute, storagePath, maintitle, method,
+function ProductFormModal({ onClose, apiRoute, maintitle, method,
     titles, amounts, sizes, img, desc, styleTip, modalInfo
 }) {
     const [title, setTitle] = useState(titles || '');
@@ -40,12 +39,31 @@ function ProductFormModal({ onClose, apiRoute, storagePath, maintitle, method,
     const handleImageChange = (files) => {
         setImages(Array.from(files));
     };
+    
+
 
     const uploadImageToFirebase = async (file) => {
-        const storage = getStorage(app);
-        const storageRef = ref(storage, `${storagePath}/${file.name}`);
-        await uploadBytes(storageRef, file);
-        return getDownloadURL(storageRef);
+        const client = new Client()
+            .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_URL)
+            .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID);
+        
+          const storage = new Storage(client);
+        
+          try {
+            const response = await storage.createFile(
+              process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID,
+              ID.unique(),
+              file
+            );
+            if(response){
+              const fileUrl = storage.getFileView( 
+                process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID ,
+                response.$id);
+              return fileUrl.href;  
+            }
+          } catch (error) {
+            console.log('Error uploading file:', error);
+          }
     };
 
     const submitHandler = async (e) => {

@@ -64,7 +64,7 @@ const Options = ({ items }) => {
         {items.products.length > 0 && items.products.slice(4).map((item, index) => (
           <div key={index} className="flex flex-col items-center justify-start h-full md:h-[80vh] group" onClick={() => router.push('/featured/shop_all/' + item._id)}>
             <div className='bg-white w-full h-full md:h-[50vh] flex items-center'>
-            <img src={item.img[0]} alt="img" className=" object-contain md:h-full w-full h-full group-hover:opacity-75" />
+            <img src={item.img[0]} alt="img" className=" object-contain md:h-full w-full h-full group-hover:opacity-75" loading='lazy'/>
             </div>
             <div className="flex flex-col items-center gap-1 p-4 h-1/3 md:h-auto">
               <p className="text-lg group-hover:underline underline-offset-2">{item.title}</p>

@@ -211,7 +211,7 @@ function Navbar() {
 
   const dynamicStyles = {
     navbar: `fixed top-0 md:flex justify-center w-full transition-colors duration-300 z-50 ${
-      isMainPage ? (isScrolled ? 'bg-white text-black' : 'bg-transparent text-white') : 'bg-white text-black'
+      isMainPage ? (isScrolled ? 'bg-white' : 'bg-transparent') : 'bg-white'
     }`,
     menuItem: `${isScrolled ? 'underline-black' : ''} animated-underline py-16`,
     drawerContainer: "h-screen bg-white md:hidden text-black overscroll-none no-doc-scroll z-50",

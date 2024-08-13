@@ -17,9 +17,7 @@ const EditReview= ({ item, api, storageUrl }) => {
     name: item.name,
     desc: item.desc,
   };
-  console.log(item._id);
   
-
   const { data } = useSession();
 
     useEffect(() => {

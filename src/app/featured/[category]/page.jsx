@@ -6,7 +6,7 @@ const {NEXT_PUBLIC_HOST_URL} = process.env;
 
 const getData = async (category) => {
   try {
-    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/products/${category}`);
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/products/${category}`, { cache: 'no-store' });
     res = await res.json();
     return res;
   } catch (err) {

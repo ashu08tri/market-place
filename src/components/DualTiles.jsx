@@ -51,7 +51,7 @@ async function DualTiles() {
                   </div>
                   <div className='flex justify-center md:w-1/2 h-1/2 md:h-full items-center'>
                     <div className='relative md:ml-10 h-full md:h-5/6 w-full md:w-8/12'>
-                      <Image src={item.image} alt={item.title} fill style={{ objectFit: 'cover' }} />
+                      <img src={item.image} alt={item.title} className='w-full h-full object-cover' loading='lazy'/>
                     </div>
                   </div>
                 </>
@@ -59,7 +59,7 @@ async function DualTiles() {
                 <>
                   <div className='flex justify-center md:w-1/2 h-1/2 md:h-full items-center'>
                     <div className='relative md:ml-10 h-full md:h-5/6 w-full md:w-8/12'>
-                      <Image src={item.image} alt={item.title} fill style={{ objectFit: 'cover' }} />
+                      <img src={item.image} alt={item.title} className='w-full h-full object-cover' loading='lazy'/>
                     </div>
                   </div>
                   <div className='text-center md:w-1/2 flex flex-col items-center justify-center tracking-widest md:my-12 gap-4'>

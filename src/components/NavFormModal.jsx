@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import app from '@/firebase';
-import { getStorage, ref, getDownloadURL, uploadBytes } from 'firebase/storage';
+import { BeatLoader } from 'react-spinners';
+import { Client, Storage, ID } from "appwrite";
 import { Toaster, toast } from 'sonner';
 
 const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle, onSuccess, imageEdit, oldImage }) => {
@@ -9,6 +9,7 @@ const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle
   const [url, setUrl] = useState('');
   const [newMainTitle, setNewMainTitle] = useState(mainTitle);
   const [newImage, setNewImage] = useState({ img: '', alt: '', text: '', url: '' });
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (mode === 'edit') {
@@ -23,6 +24,7 @@ const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle
     e.preventDefault();
 
     try {
+      setSubmitting(true);
       let response;
       if (mode === 'add') {
         response = await fetch('/api/navlink', {
@@ -52,10 +54,30 @@ const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle
         let downloadUrl;
       
         if (newImage.img) {
-          const storage = getStorage(app);
-          const storageRef = ref(storage, `navbar/${newImage.img.name}`);
-          await uploadBytes(storageRef, newImage.img);
-          downloadUrl = await getDownloadURL(storageRef);
+          const client = new Client()
+            .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_URL)
+            .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID);
+        
+          const storage = new Storage(client);
+        
+          try {
+            const response = await storage.createFile(
+              process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID,
+              ID.unique(),
+              newImage.img
+            );
+            if(response){
+              const fileUrl = storage.getFilePreview( 
+                process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID ,
+                response.$id );
+          
+              downloadUrl = fileUrl.href;
+              console.log(downloadUrl);
+              
+            }
+          } catch (error) {
+            console.log('Error uploading file:', error);
+          }
         }
       
         const imageUpdates = [
@@ -94,6 +116,8 @@ const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle
     } catch (error) {
       console.error('Error:', error);
       toast.error('Something went wrong!');
+    }finally{
+      setSubmitting(false);
     }
   };
 
@@ -168,7 +192,7 @@ const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle
                 <label className="block text-sm font-medium text-gray-700">New Image URL:</label>
                 <input
                   type="file"
-                  onChange={(e) => handleNewImageChange('img', e.target.value)}
+                  onChange={(e) => handleNewImageChange('img', e.target.files[0])}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black"
                 />
               </div>
@@ -211,8 +235,16 @@ const NavFormModal = ({ isOpen, onClose, mode, mainTitle, sublinkTitle, oldTitle
           <button
             type="submit"
             className="w-full bg-black text-white py-2 px-4 rounded-md"
+            disabled={submitting}
           >
-            {mode === 'add' ? 'Add' : mode === 'edit' ? 'Update' : mode === 'imageEdit' ? 'Edit Image' : 'Delete'}
+            {submitting ?  <BeatLoader
+              loading={submitting}
+              size={10}
+              color="white"
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            /> :  mode === 'add' ? 'Add' : mode === 'edit' ? 'Update' : mode === 'imageEdit' ? 'Edit Image' : 'Delete' }
+           
           </button>
         </form>
       </div>

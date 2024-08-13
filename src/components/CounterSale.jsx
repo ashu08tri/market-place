@@ -4,7 +4,7 @@ import Image from "next/image";
 import CounDown from "./CountDown";
 import EditCounterSale from "./landingPage/EditCounterSale";
 
-const {NEXT_PUBLIC_HOST_URL} = process.env;
+const { NEXT_PUBLIC_HOST_URL } = process.env;
 
 const getData = async () => {
     try {
@@ -35,20 +35,19 @@ async function CounterSale() {
     return (
         <div className='uppercase h-[120vh] w-screen md:w-auto pb-10'>
 
-           {count &&  <div className='h-1/4 md:h-[20%] flex flex-col md:flex-row justify-between items-center px-12 mt-10 md:m-0 md:border-b'>
+            {count && <div className='h-1/4 md:h-[20%] flex flex-col md:flex-row justify-between items-center px-12 mt-10 md:m-0 md:border-b'>
                 <h1 className='text-3xl tracking-widest font-semibold my-4 uppercase'>{count[0].title}</h1>
                 <div className="md:border-x border-y md:border-y-0 px-20 md:px-48 py-4 md:py-8">
-                    <CounDown date={count[0].count}/>
+                    <CounDown date={count[0].count} />
                 </div>
                 <div><Link href={count[0].url} className='px-10 py-4 text-sm bg-black border text-white border-black hover:bg-white hover:text-black mt-4'>Sale</Link></div>
             </div>}
 
             <div className='flex flex-col md:flex-row px-10 md:px-40 gap-2 md:gap-10 h-[80%] md:h-[65%] text-center my-20'>
                 {
-                    data ? data.map((item, i) =>
+                    data ? data.map((item, i) => (
                         <div key={i} className='bg-cover relative bg-center h-[70vh] w-full md:w-1/2'>
-                            <Image src={item.image} alt={item.title} fill style={{objectFit: 'cover'}}/>
-                            <EditCounterSale item={item} api={`${NEXT_PUBLIC_HOST_URL}/api/landingPage/counter/api/landingPage/counterSale`} storageUrl={'couterSale'}/>
+                            <img src={item.image} alt={item.title} className="w-full h-full object-cover" loading="lazy"/>
                             <div className='absolute top-0 flex flex-col h-full justify-end w-full items-center pb-20 gap-4'>
                                 <p className='text-xl md:text-3xl tracking-widest text-white'>
                                     {item.title.split(',').map((part, index) => (
@@ -58,14 +57,14 @@ async function CounterSale() {
                                         </React.Fragment>
                                     ))}
                                 </p>
-                             
-                                    <Link href={item.url} className='px-6 py-2 bg-transparent border text-white border-white hover:border-black hover:bg-black hover:text-white'>shop now</Link>
-                              
+                                <Link href={item.url} className='px-6 py-2 bg-transparent border text-white border-white hover:border-black hover:bg-black hover:text-white'>
+                                    shop now
+                                </Link>
                             </div>
+                            <EditCounterSale item={item} api={`${NEXT_PUBLIC_HOST_URL}/api/landingPage/counter/api/landingPage/counterSale`} storageUrl={'couterSale'} />
                         </div>
-                    ) : <p>Failed to load data!</p>
+                    )) : <p>Failed to load data!</p>
                 }
-
             </div>
         </div>
     )

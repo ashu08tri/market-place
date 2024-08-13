@@ -1,6 +1,5 @@
 "use client"
 import React from 'react'
-import Image from 'next/image';
 import Carousel from 'react-multi-carousel';
 import { HiArrowLongLeft, HiArrowLongRight } from 'react-icons/hi2';
 
@@ -57,12 +56,11 @@ function ProductsCarousel({images}) {
   itemClass="px-2"
 >
 {images.map((img, i) => (
-    <Image
+    <img
       key={i}
       src={img}
       alt='productImages'
-      height={10}
-      width={380}
+      className='object-cover w-full h-full'
     />
   ))}
 </Carousel>

@@ -87,7 +87,7 @@ function FindStore() {
                 {selectedStore ? (
                     <div className='relative w-full h-full'>
                         <EditAddress item={selectedStore} api={`/api/landingPage/store`} storageUrl={'stores'}/>
-                        <img src={selectedStore.image} alt="store" className='w-full h-full object-cover' />
+                        <img src={selectedStore.image} alt="store" className='w-full h-full object-cover' loading='lazy'/>
                         <div className='absolute bottom-0 w-full flex flex-col justify-center p-4 md:hidden'>
                             <div className='bg-white p-4'>
                                 <p className='text-lg text-gray-600'>{selectedStore.storeName}</p>

@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import app from "@/firebase";
-import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
+import { Client, Storage, ID } from "appwrite";
 import { Toaster, toast } from "sonner";
 import { BeatLoader } from "react-spinners";
 
@@ -20,10 +19,27 @@ const EditForms = ({ api, initialData, storageUrl }) => {
       let downloadUrl = initialData.image; // Use existing image URL by default
 
       if (image) {
-        const storage = getStorage(app);
-        const storageRef = ref(storage, `landingPage/${storageUrl}/${image.name}`);
-        await uploadBytes(storageRef, image);
-        downloadUrl = await getDownloadURL(storageRef);
+        const client = new Client()
+            .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_URL)
+            .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID);
+        
+          const storage = new Storage(client);
+        
+          try {
+            const response = await storage.createFile(
+              process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID,
+              ID.unique(),
+              image
+            );
+            if(response){
+              const fileUrl = storage.getFileView( 
+                process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID ,
+                response.$id);
+             downloadUrl = fileUrl.href;  
+            }
+          } catch (error) {
+            console.log('Error uploading file:', error);
+          }
       }
 
       const updatedItem = { image: downloadUrl, title, url, desc };

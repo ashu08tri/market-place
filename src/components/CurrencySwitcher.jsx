@@ -36,11 +36,11 @@ const CurrencySwitcher = () => {
 
   return (
     <>
-    <select id='currency-switch' aria-label="Select currency" value={currency} onChange={handleCurrencyChange} className='w-24' style={{background: pathname==='/'?(isScrolled ? 'white': 'transparent'):'white', color: pathname==='/'?(isScrolled ? 'black': 'white'):'black'}}>
-      <option value="INR" style={{background: pathname==='/'?(isScrolled ? 'white': 'black'):'white'}}>&#x20B9; INR</option>
-      <option value="USD" style={{background: pathname==='/'?(isScrolled ? 'white': 'black'):'white'}}>&#x24; USD</option>
-      <option value="EUR" style={{background: pathname==='/'?(isScrolled ? 'white': 'black'):'white'}}>&#8364; EUR</option>
-      <option value="GBP" style={{background: pathname==='/'?(isScrolled ? 'white': 'black'):'white'}}>&#163; GBP</option>
+    <select id='currency-switch' aria-label="Select currency" value={currency} onChange={handleCurrencyChange} className='w-24'  style={{background: pathname==='/'?(isScrolled ? 'white': 'transparent'):'white'}}>
+      <option value="INR">&#x20B9; INR</option>
+      <option value="USD">&#x24; USD</option>
+      <option value="EUR">&#8364; EUR</option>
+      <option value="GBP">&#163; GBP</option>
     </select>
     </>
   );

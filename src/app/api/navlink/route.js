@@ -38,7 +38,7 @@ export async function POST(request) {
 // PUT: Update a sublink's title or url
 export async function PUT(request) {
     const { mainTitle, sublink, oldTitle, newTitle, newUrl, newMainTitle, oldImageUrl, newImage, imageUpdates } = await request.json();
-    console.log(`mainTitle: ${newTitle}, New Image: ${oldTitle}`);
+    //console.log(`Image: ${newImage}`);
     
     try {
   

@@ -1,14 +1,65 @@
 "use client";
 import React, { useState } from "react";
-import app from "@/firebase";
-import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
+import { Client, Storage, ID } from "appwrite";
 import { toast } from "sonner";
 import { BeatLoader } from "react-spinners";
 
-const GeneralForm = ({ api, initialData, storageUrl, onClose }) => {
-  const [image, setImg] = useState("");
-  const [imageB, setImgB] = useState("");
-  const [imageT, setImgT] = useState("");
+// Initialize Appwrite client and storage outside of the component
+const client = new Client()
+  .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_URL)
+  .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID);
+
+const storage = new Storage(client);
+
+// Function to upload an image and get the view URL
+const uploadAndGetUrl = async (file) => {
+  try {
+    // Upload the file
+    const response = await storage.createFile(
+      process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID,
+      ID.unique(),
+      file
+    );
+
+    // Get the view URL for the uploaded file
+    if (response) {
+      const fileUrl = storage.getFileView(
+        process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID,
+        response.$id
+      );
+
+      return fileUrl.href;  // Return the view URL
+    }
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    return null;
+  }
+};
+
+// Function to handle image uploads
+const handleImageUploads = async (image, imageB, imageT) => {
+  let downloadUrl, downloadUrlB, downloadUrlT;
+
+  // Upload images and get their URLs
+  if (image) {
+    downloadUrl = await uploadAndGetUrl(image);
+  }
+
+  if (imageB) {
+    downloadUrlB = await uploadAndGetUrl(imageB);
+  }
+
+  if (imageT) {
+    downloadUrlT = await uploadAndGetUrl(imageT);
+  }
+
+  return { downloadUrl, downloadUrlB, downloadUrlT };
+};
+
+const GeneralForm = ({ api, initialData, onClose }) => {
+  const [image, setImg] = useState(null);
+  const [imageB, setImgB] = useState(null);
+  const [imageT, setImgT] = useState(null);
   const [address, setAddress] = useState(initialData.address || "");
   const [openOn, setOpenon] = useState(initialData.openOn || "");
   const [zipcode, setZipcode] = useState(initialData.zipcode || "");
@@ -26,36 +77,40 @@ const GeneralForm = ({ api, initialData, storageUrl, onClose }) => {
 
     if (title) {
       setSubmitting(true);
-      const storage = getStorage(app);
-      let downloadUrl = initialData.image; // Use existing image URL by default
+      let downloadUrl = initialData.image; 
       let downloadUrlB = initialData.imageB; 
       let downloadUrlT = initialData.imageT; 
 
-      if (image) {
-        const storageRef = ref(storage, `landingPage/${storageUrl}/${image.name}`);
-        await uploadBytes(storageRef, image);
-        downloadUrl = await getDownloadURL(storageRef);
-      }
+      const { downloadUrl: newDownloadUrl, downloadUrlB: newDownloadUrlB, downloadUrlT: newDownloadUrlT } = await handleImageUploads(image, imageB, imageT);
 
-      if (imageB && imageT) {
-        const storageRefB = ref(storage, `landingPage/${storageUrl}/${imageB.name}`);
-        const storageRefT = ref(storage, `landingPage/${storageUrl}/${imageT.name}`);
-        await uploadBytes(storageRefB, imageB);
-        await uploadBytes(storageRefT, imageT);
-        downloadUrlB = await getDownloadURL(storageRefB);
-        downloadUrlT = await getDownloadURL(storageRefT);
-      }
+      // Update URLs if new ones are available
+      if (newDownloadUrl) downloadUrl = newDownloadUrl;
+      if (newDownloadUrlB) downloadUrlB = newDownloadUrlB;
+      if (newDownloadUrlT) downloadUrlT = newDownloadUrlT;
 
-      const updatedItem = { image: downloadUrl, title, url, title2, url2, desc, 
-        name, date, imageB: downloadUrlB, imageT: downloadUrlT, address, zipcode, openOn };
+      const updatedItem = { 
+        image: downloadUrl, 
+        title, 
+        url, 
+        title2, 
+        url2, 
+        desc, 
+        name, 
+        date, 
+        imageB: downloadUrlB, 
+        imageT: downloadUrlT, 
+        address, 
+        zipcode, 
+        openOn 
+      };
 
       try {
         let res = await fetch(api, {
           method: "PUT",
           headers: {
-            "Content-type": "application/json",
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(updatedItem)
+          body: JSON.stringify(updatedItem),
         });
         res = await res.json();
         if (res.ok) {
@@ -76,16 +131,16 @@ const GeneralForm = ({ api, initialData, storageUrl, onClose }) => {
 
   return (
     <div className="absolute top-0 right-1/2 p-5 w-96 bg-black rounded-md text-white z-50">
-     <div className="flex justify-end mb-2">
-     <button className="text-right text-black p-2 bg-white" onClick={() => onClose()}>X</button>
-     </div>
+      <div className="flex justify-end mb-2">
+        <button className="text-right text-black p-2 bg-white" onClick={onClose}>X</button>
+      </div>
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-       {!initialData.imageB && !initialData.imageT &&
-         <div className="flex justify-between">
-         <label>Image</label>
-         <input type="file" onChange={(e) => setImg(e.target.files[0])} />
-       </div>
-       }
+        {!initialData.imageB && !initialData.imageT && (
+          <div className="flex justify-between">
+            <label>Image</label>
+            <input type="file" onChange={(e) => setImg(e.target.files[0])} />
+          </div>
+        )}
         <div className="flex justify-between">
           <label>Title</label>
           <input
@@ -95,8 +150,7 @@ const GeneralForm = ({ api, initialData, storageUrl, onClose }) => {
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
-        {
-          initialData.imageB && initialData.imageT &&
+        {initialData.imageB && initialData.imageT && (
           <>
             <div className="flex justify-between">
               <label>Before IMG</label>
@@ -107,9 +161,9 @@ const GeneralForm = ({ api, initialData, storageUrl, onClose }) => {
               <input type="file" onChange={(e) => setImgT(e.target.files[0])} />
             </div>
           </>
-        }
-        {
-          initialData.title2 && initialData.title2.length > 0 && <div className="flex justify-between">
+        )}
+        {initialData.title2 && initialData.title2.length > 0 && (
+          <div className="flex justify-between">
             <label>Text</label>
             <input
               className="text-black"
@@ -118,50 +172,50 @@ const GeneralForm = ({ api, initialData, storageUrl, onClose }) => {
               onChange={(e) => setTitle2(e.target.value)}
             />
           </div>
-        }
-        {
-          initialData.address && initialData.zipcode && initialData.openOn && <><div className="flex justify-between">
-            <label>Address</label>
-            <input
-              className="text-black"
-              type="text"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-            />
-          </div>
-          <div className="flex justify-between">
-            <label>ZipCode</label>
-            <input
-              className="text-black"
-              type="Number"
-              value={zipcode}
-              onChange={(e) => setZipcode(e.target.value)}
-            />
-          </div>
-          <div className="flex justify-between">
-            <label>Open On</label>
-            <input
-              className="text-black"
-              type="text"
-              value={openOn}
-              onChange={(e) => setOpenon(e.target.value)}
-            />
-          </div>
-          </> 
-        }
+        )}
+        {initialData.address && initialData.zipcode && initialData.openOn && (
+          <>
+            <div className="flex justify-between">
+              <label>Address</label>
+              <input
+                className="text-black"
+                type="text"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+            </div>
+            <div className="flex justify-between">
+              <label>ZipCode</label>
+              <input
+                className="text-black"
+                type="number"
+                value={zipcode}
+                onChange={(e) => setZipcode(e.target.value)}
+              />
+            </div>
+            <div className="flex justify-between">
+              <label>Open On</label>
+              <input
+                className="text-black"
+                type="text"
+                value={openOn}
+                onChange={(e) => setOpenon(e.target.value)}
+              />
+            </div>
+          </>
+        )}
         {initialData.desc && (
           <div className="flex justify-between">
             <label>Description</label>
             <textarea
               className="text-black w-[70%] h-20 p-1"
-              type="text"
               value={desc}
               onChange={(e) => setDesc(e.target.value)}
             />
           </div>
         )}
-        {
-          initialData.url && <div className="flex justify-between">
+        {initialData.url && (
+          <div className="flex justify-between">
             <label>URL</label>
             <input
               className="text-black"
@@ -170,9 +224,9 @@ const GeneralForm = ({ api, initialData, storageUrl, onClose }) => {
               onChange={(e) => setUrl(e.target.value)}
             />
           </div>
-        }
-        {
-          initialData.url2 && initialData.url2.length > 0 && <div className="flex justify-between">
+        )}
+        {initialData.url2 && initialData.url2.length > 0 && (
+          <div className="flex justify-between">
             <label>URL 2</label>
             <input
               className="text-black"
@@ -181,9 +235,9 @@ const GeneralForm = ({ api, initialData, storageUrl, onClose }) => {
               onChange={(e) => setUrl2(e.target.value)}
             />
           </div>
-        }
-        {
-          initialData.name && initialData.name.length > 0 && <div className="flex justify-between">
+        )}
+        {initialData.name && initialData.name.length > 0 && (
+          <div className="flex justify-between">
             <label>Name</label>
             <input
               className="text-black"
@@ -192,10 +246,10 @@ const GeneralForm = ({ api, initialData, storageUrl, onClose }) => {
               onChange={(e) => setName(e.target.value)}
             />
           </div>
-        }
-        {
-          initialData.date && initialData.date.length > 0 && <div className="flex justify-between">
-            <label>Date In(&apos;year-month-day&apos;)</label>
+        )}
+        {initialData.date && initialData.date.length > 0 && (
+          <div className="flex justify-between">
+            <label>Date</label>
             <input
               className="text-black"
               type="text"
@@ -203,23 +257,13 @@ const GeneralForm = ({ api, initialData, storageUrl, onClose }) => {
               onChange={(e) => setDate(e.target.value)}
             />
           </div>
-        }
+        )}
         <button
-          className="bg-white text-black py-1 px-3 mt-2"
           type="submit"
+          className="bg-white text-black px-4 py-2 rounded-md"
           disabled={submitting}
         >
-          {submitting ? (
-            <BeatLoader
-              loading={submitting}
-              size={10}
-              color="black"
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
-          ) : (
-            "Update"
-          )}
+          {submitting ? <BeatLoader size={8} color="#000" /> : "Submit"}
         </button>
       </form>
     </div>

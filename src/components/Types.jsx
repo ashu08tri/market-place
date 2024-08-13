@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import ProductFormModal from './ProductFormModal';
 import EditProductsBanner from './EditProductsBanner';
 import { useSession } from 'next-auth/react';
@@ -128,7 +127,7 @@ function Types({ product, img, title, categories }) {
             <div key={i} className='w-1/2 md:w-1/4 px-2 mb-4 cursor-pointer' onClick={() => router.push(`/types/${title}/${item._id}`)}>
               <div className='rounded overflow-hidden shadow-lg'>
                 <div className='flex justify-center'>
-                <Image src={item.img[0]} alt={item.title} height={150} width={150}/>
+                <img src={item.img[0]} alt={item.title} className='w-48 h-64' loading='lazy'/>
                 </div>
                 <div className='px-6 py-4'>
                   <p className='font-bold text-xl mb-2'>{item.title}</p>

@@ -1,10 +1,8 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import Carousel from 'react-multi-carousel';
-import app from '@/firebase';
-import { getStorage, ref, deleteObject } from 'firebase/storage';
+import { Client, Storage, ID } from "appwrite";
 import FormModal from './FormModal';
 import 'react-multi-carousel/lib/styles.css';
 import { HiArrowLongLeft, HiArrowLongRight } from "react-icons/hi2";
@@ -85,7 +83,7 @@ function HeaderCarousel() {
                 if (decodedToken.exp * 1000 > Date.now()) {
                     setIsAdmin(decodedToken.isAdmin);
                     setMainAdmin(decodedToken.email);
-                } 
+                }
             } catch (error) {
                 console.error("Invalid token:", error);
             }
@@ -95,30 +93,39 @@ function HeaderCarousel() {
         }
     }, [token]);
 
-    const deleteImage = async (imageURL) => {
+
+    const deleteImage = async (imageURL, id) => {
+        console.log(id);
+        
         if (!imageURL) {
             toast.error('No image URL provided!');
             return;
         }
 
-        const storage = getStorage(app);
-        const storageRef = ref(storage, imageURL);
+        const client = new Client()
+            .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_URL)
+            .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID);
 
+        const storage = new Storage(client);
+        const fileIdMatch = imageURL.match(/\/files\/([^\/]*)\//);
+        const fileId = fileIdMatch ? fileIdMatch[1] : null;
+    
         try {
-            // Delete image from Firebase Storage
-            await deleteObject(storageRef);
-
-            // Delete image URL from the database
             let res = await fetch('/api/updates/carousel', {
                 method: "DELETE",
                 headers: {
                     'Content-type': 'application/json'
                 },
-                body: JSON.stringify({ imageURL })
+                body: JSON.stringify({ id })
             });
             res = await res.json();
             if (res.ok) {
-                toast.success('Image deleted!');
+                toast.success('Image deleted from DB!');
+                await storage.deleteFile(
+                    process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID, // bucketId
+                    fileId // fileId
+                );
+                toast.success('Image deleted from bucket!');
                 fetchImages();
             }
         } catch (err) {
@@ -137,7 +144,7 @@ function HeaderCarousel() {
                 autoPlay={true}
                 autoPlaySpeed={3000}
                 transitionDuration={500}
-                
+
                 removeArrowOnDeviceType={["tablet", "mobile"]}
                 customLeftArrow={<CustomLeftArrow />}
                 customRightArrow={<CustomRightArrow />}
@@ -147,8 +154,8 @@ function HeaderCarousel() {
             >
                 {images.length > 0 && images.map((item, i) => (
                     <div key={i} className='h-screen w-screen'>
-                        <Image src={item.images} alt='carousel_images' fill style={{objectFit: 'cover'}} priority quality={75}/>
-                        {mainAdmin === 'alok@admin.com' && <button onClick={() => deleteImage(item.images)} className='p-2 absolute top-40 right-5 bg-black text-white'>Delete Image</button>}
+                        <img src={item.images} alt='carousel_images' className='w-full h-full object-cover' />
+                        {mainAdmin === 'alok@admin.com' && <button onClick={() => deleteImage(item.images, item._id)} className='p-2 absolute top-40 right-5 bg-black text-white'>Delete Image</button>}
                     </div>
                 ))}
 

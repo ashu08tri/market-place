@@ -1,11 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import app from "@/firebase";
-import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
+import { Client, Storage, ID } from "appwrite";
 import { toast } from "sonner";
 import { BeatLoader } from "react-spinners";
 
-const EditProductsBanner= ({ banner, api, storageUrl, onClose }) => {
+const EditProductsBanner= ({ banner, api, onClose }) => {
   const [image, setImg] = useState("");
   const [uploading, setUploading] = useState(false);
 
@@ -15,10 +14,27 @@ const handleSubmit = async (e) => {
       let downloadUrl = banner; 
 
       if (image) {
-        const storage = getStorage(app);
-        const storageRef = ref(storage, `${storageUrl}/${image.name}`);
-        await uploadBytes(storageRef, image);
-        downloadUrl = await getDownloadURL(storageRef);
+        const client = new Client()
+        .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_URL)
+        .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID);
+    
+      const storage = new Storage(client);
+    
+      try {
+        const response = await storage.createFile(
+          process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID,
+          ID.unique(),
+          file
+        );
+        if(response){
+          const fileUrl = storage.getFileView( 
+            process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID ,
+            response.$id);
+          downloadUrl = fileUrl.href;  
+        }
+      } catch (error) {
+        console.log('Error uploading file:', error);
+      }
       }
 
       try {

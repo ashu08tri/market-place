@@ -58,7 +58,7 @@ function BeforeAfterSlider({imgB, imgT}) {
                     }}
                 >
                     {/* Bottom Image */}
-                    <Image src={imgB} alt="sliderImage" fill style={{objectFit: 'cover'}}/>
+                    <img src={imgB} alt="sliderImage" className="w-full h-full object-cover" loading="lazy"/>
                     {/* Top Image with Clipping */}
                     <div
                         style={{
@@ -70,7 +70,7 @@ function BeforeAfterSlider({imgB, imgT}) {
                             clipPath: `inset(0 ${100 - sliderPosition}% 0 0)`,
                         }}
                     >
-                        <Image src={imgT} alt="sliderImage" fill style={{objectFit: 'cover'}}/>
+                        <img src={imgT} alt="sliderImage" className="w-full h-full object-cover" loading="lazy"/>
                     </div>
                     {/* Slider Handle */}
                     <div

@@ -35,7 +35,7 @@ async function Sales() {
 
                                 <Link href={'/featured/best_seller/' + item._id} className="flex flex-col items-center justify-center w-full md:w-full h-full overflow-hidden">
                                     <div className='relative h-full md:h-[88%] w-full'>
-                                        <Image src={item.img[0]} alt={item.title} fill style={{objectFit: 'cover'}}/>
+                                        <img src={item.img[0]} alt={item.title} className='w-full h-full object-cover' loading='lazy'/>
                                     </div>
                                     <div className="flex flex-col items-center mt-3">
                                         <p>{item.title}</p>

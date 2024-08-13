@@ -3,7 +3,6 @@ import Link from 'next/link';
 import ProductsCarousel from '@/components/ProductsCarousel';
 import SizeSelector from '@/components/SizeSelector';
 import ProductPrice from '@/components/ProductPrice';
-import Image from 'next/image';
 import CompleteSet from '@/components/CompleteSet';
 import Faq from '@/components/Faq';
 

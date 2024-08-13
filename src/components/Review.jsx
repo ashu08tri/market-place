@@ -1,7 +1,6 @@
 "use client"
 import {useState, useEffect} from 'react';
 import Carousel from 'react-multi-carousel';
-import Image from 'next/image';
 import Link from 'next/link';
 import EditReview from './landingPage/EditReview';
 import 'react-multi-carousel/lib/styles.css';
@@ -64,7 +63,6 @@ function Review() {
         }
         getData();
     },[]);
-    console.log(data);
 
   return (
     <div className="bg-orange-50 flex flex-col justify-center mt-32 md:mt-0 py-6">
@@ -95,12 +93,11 @@ function Review() {
               </div>
             </div>
             <Link href={item.url} className="relative w-full md:w-2/4 h-[50vh] md:h-[78%] hover:opacity-80 pt-0 order-first md:order-2 mt-4 md:mt-0">
-              <Image
+              <img
                 src={item.image}
                 alt={item.title}
-                layout="fill"
-                objectFit="cover"
-                className="absolute inset-0"
+                
+                className="absolute inset-0 h-full w-full object-cover"
               />
               <p className="absolute bottom-4 md:-bottom-12 right-4 md:right-0 text-white md:text-black p-2 text-xs md:text-xl underline tracking-wide">
                 {item.name}
