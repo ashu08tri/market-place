@@ -175,7 +175,7 @@ function CartModal({ isOpen, onClose }) {
                 <div className='h-72 content-center mx-auto'>
                   <BeatLoader loading={loading} size={20} color='black' aria-label="Loading Spinner" data-testid="loader" />
                 </div>
-              ) : cartData.length > 0 ? (
+              ) : cartData && cartData.length > 0 ? (
                 cartData.map((item, i) => (
                   <div key={i} className="flex items-center p-4 border-b border-gray-200">
                     <img src={item.img} alt={item.title} className="w-20 h-28 object-cover rounded mr-4" loading='lazy'/>
@@ -205,7 +205,7 @@ function CartModal({ isOpen, onClose }) {
               ) : (
                 <p className="py-2">Your cart is empty!</p>
               )}
-              {cartData.length === 0 ? (
+              {cartData && cartData.length === 0 ? (
                 <Link
                   href='/'
                   onClick={onClose}
