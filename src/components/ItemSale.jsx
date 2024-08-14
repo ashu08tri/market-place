@@ -5,20 +5,23 @@ import EditItemSale from './landingPage/EditItemSale';
 
 const {NEXT_PUBLIC_HOST_URL} = process.env;
 
-const getData = async() => {
+export const getServerSideProps = async () => {
   try {
-      let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/itemSale`);
-      res = await res.json();
-      return res;
-  } catch(err) {
-      console.error(err);
-      return [];
+    let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/landingPage/itemSale`, { cache: 'no-store' });
+    res = await res.json();
+    return {
+      props: { data: res },
+    };
+  } catch (err) {
+    console.error(err);
+    return {
+      props: { data: [] },
+    };
   }
-}
+};
 
-async function ItemSale() {
-  const data = await getData();
-
+async function ItemSale({data}) {
+ 
   return (
     <div className='h-[80vh] md:flex text-white gap-1 tracking-wider'>
     {data.length > 0 ? (
