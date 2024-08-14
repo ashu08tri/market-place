@@ -10,7 +10,7 @@ if (!mongoose.connection.readyState) {
     });
   }
 
-export async function GET(){
+export async function GET(request){
     try{
         const banner = await Banner.find();
         return NextResponse.json(banner);

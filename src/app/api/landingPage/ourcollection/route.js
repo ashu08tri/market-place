@@ -10,7 +10,7 @@ if (!mongoose.connection.readyState) {
     });
   }
 
-export async function GET(){
+export async function GET(request){
     try{
         const collection = await OurCollection.find();
         return NextResponse.json(collection);
@@ -19,33 +19,33 @@ export async function GET(){
     }
 } 
 
-// export async function POST(request){
-//     const payload = {
-//         mainTitle: 'Our Collections',
-//         items: [
-//             {
-//                 image: 'https://sahara-theme.myshopify.com/cdn/shop/files/FAE_Hotel_Sages_-834_2_-min.jpg',
-//                 url: '/types/shop_all',
-//                 title: 'Swimwear'
-//             },
-//             {
-//                 image: 'https://sahara-theme.myshopify.com/cdn/shop/files/FAE_Hotel_Sages_-437_4_-min.jpg',
-//                 url: 'types/bikini_tops',
-//                 title: 'Tops'
-//             },
-//             {
-//                 image: 'https://sahara-theme.myshopify.com/cdn/shop/files/fae_-35.jpg',
-//                 url: 'types/bikini_bottoms',
-//                 title: 'Bottoms'
-//             }
-//         ]
-//     };
-//     try{
-//         const collection = new OurCollection(payload);
-//         await collection.save();
-//         return NextResponse.json({ok:true});
-//     }catch(err){
-//         console.log(err);
-//         return NextResponse.json({status: 500})
-//     }
-// }
+export async function POST(request){
+    const payload = {
+        mainTitle: 'Our Collections',
+        items: [
+            {
+                image: 'https://sahara-theme.myshopify.com/cdn/shop/files/FAE_Hotel_Sages_-834_2_-min.jpg',
+                url: '/types/shop_all',
+                title: 'Swimwear'
+            },
+            {
+                image: 'https://sahara-theme.myshopify.com/cdn/shop/files/FAE_Hotel_Sages_-437_4_-min.jpg',
+                url: 'types/bikini_tops',
+                title: 'Tops'
+            },
+            {
+                image: 'https://sahara-theme.myshopify.com/cdn/shop/files/fae_-35.jpg',
+                url: 'types/bikini_bottoms',
+                title: 'Bottoms'
+            }
+        ]
+    };
+    try{
+        const collection = new OurCollection(payload);
+        await collection.save();
+        return NextResponse.json({ok:true});
+    }catch(err){
+        console.log(err);
+        return NextResponse.json({status: 500})
+    }
+}

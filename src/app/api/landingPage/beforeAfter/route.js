@@ -10,7 +10,7 @@ if (!mongoose.connection.readyState) {
     });
   }
 
-export async function GET(){
+export async function GET(request){
     try{
         const beforeAfter = await BeforeAfter.find();
         return NextResponse.json(beforeAfter);
@@ -18,20 +18,3 @@ export async function GET(){
         return NextResponse.json({error: err});
     }
 } 
-
-export async function POST(request){
-    const payload = {
-        imageB: 'https://sahara-theme.myshopify.com/cdn/shop/files/FAEStudioCrop-113_346e848b-5ba0-43d0-a71d-4b05690677dd.jpg',
-        imageT: 'https://sahara-theme.myshopify.com/cdn/shop/products/FAEStudioCrop-113.jpg',
-        title: 'Our solid swimwear is produced using ECONYL®',
-        desc: 'Using ECONYL® instead of sourcing new nylon allows us to recycle waste materials and give them a new life.'
-    }
-    try{
-        const beforeAfter = new BeforeAfter(payload);
-        await beforeAfter.save();
-        return NextResponse.json({ok:true});
-    }catch(err){
-        console.log(err);
-        return NextResponse.json({status: 500})
-    }
-}

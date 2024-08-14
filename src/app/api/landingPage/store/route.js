@@ -10,7 +10,7 @@ if (!mongoose.connection.readyState) {
     });
   }
 
-export async function GET(){
+export async function GET(request){
     try{
         const address = await Address.find();
         return NextResponse.json(address);

@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import EditItemSale from './landingPage/EditItemSale';
 
 
@@ -23,11 +24,11 @@ async function ItemSale() {
     <div className='h-[80vh] md:flex text-white gap-1 tracking-wider'>
     {data.length > 0 ? (
       <div className='relative bg-cover bg-center h-3/4 md:h-full w-full md:w-1/2 flex flex-col justify-end items-center'>
-        <img
+        <Image
           src={data[0].image}
           alt={data[0].title}
-          className='w-full h-full object-cover'
-          loading='lazy'
+          fill
+          style={{objectFit: 'cover'}}
         />
         <div className='absolute bottom-10 w-full flex flex-col items-center text-center'>
           <p className='text-3xl font-semibold uppercase mb-4'>{data[0].title}</p>
