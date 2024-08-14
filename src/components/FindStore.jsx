@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import EditAddress from './landingPage/EditAddress';
+import Image from 'next/image';
 import { FiPhone } from "react-icons/fi";
 
 function FindStore() {
@@ -12,7 +13,7 @@ function FindStore() {
     useEffect(() => {
         const getData = async() => {
             try {
-                let res = await fetch('/api/landingPage/store');
+                let res = await fetch('/api/landingPage/store', {cache: 'no-store'});
                 res = await res.json();
                 setStores(res);
                 setFilteredStores(res);  // Set filteredStores to the fetched stores
@@ -87,7 +88,7 @@ function FindStore() {
                 {selectedStore ? (
                     <div className='relative w-full h-full'>
                         <EditAddress item={selectedStore} api={`/api/landingPage/store`} storageUrl={'stores'}/>
-                        <img src={selectedStore.image} alt="store" className='w-full h-full object-cover' loading='lazy'/>
+                        <Image src={selectedStore.image} alt="stores" fill style={{objectFit: 'cover'}} unoptimized/>
                         <div className='absolute bottom-0 w-full flex flex-col justify-center p-4 md:hidden'>
                             <div className='bg-white p-4'>
                                 <p className='text-lg text-gray-600'>{selectedStore.storeName}</p>

@@ -11,7 +11,7 @@ const {NEXT_PUBLIC_HOST_URL} = process.env;
 
 const getProductData = async (category, id) => {
   try {
-    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/products/${category}/${id}`);
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/products/${category}/${id}`,{cache: 'no-store'});
     res = await res.json();
     return res;
   } catch (err) {
@@ -22,7 +22,7 @@ const getProductData = async (category, id) => {
 
 const getMoreProducts = async() => {
   try {
-    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/products/shop_all`);
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/products/shop_all`, {cache: 'no-store'});
     res = await res.json();
     return res;
   } catch (err) {

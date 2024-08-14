@@ -7,7 +7,7 @@ const { NEXT_PUBLIC_HOST_URL } = process.env;
 
 const getData = async () => {
   try {
-    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/dualTile`);
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/dualTile`, {cache: 'no-store'});
     res = await res.json();
     return res;
   } catch (err) {
@@ -27,7 +27,7 @@ async function DualTiles() {
           {data.map((item, index) => (
             <div
               key={index}
-              className='h-[calc(100vh-6rem)] relative flex flex-col md:flex-row justify-evenly md:justify-between md:items-center px-8 md:p-0'
+              className='h-[65vh] md:h-[calc(100vh-6rem)] relative flex flex-col md:flex-row justify-evenly md:justify-between md:items-center px-8 md:p-0'
             >
               {index % 2 === 0 ? (
                 <>
@@ -51,7 +51,7 @@ async function DualTiles() {
                   </div>
                   <div className='flex justify-center md:w-1/2 h-1/2 md:h-full items-center'>
                     <div className='relative md:ml-10 h-full md:h-5/6 w-full md:w-8/12'>
-                      <img src={item.image} alt={item.title} className='w-full h-full object-cover' loading='lazy'/>
+                    <Image src={item.image} alt={item.title} fill style={{objectFit: 'cover'}} unoptimized/>
                     </div>
                   </div>
                 </>
@@ -59,7 +59,7 @@ async function DualTiles() {
                 <>
                   <div className='flex justify-center md:w-1/2 h-1/2 md:h-full items-center'>
                     <div className='relative md:ml-10 h-full md:h-5/6 w-full md:w-8/12'>
-                      <img src={item.image} alt={item.title} className='w-full h-full object-cover' loading='lazy'/>
+                    <Image src={item.image} alt={item.title} fill style={{objectFit: 'cover'}} unoptimized/>
                     </div>
                   </div>
                   <div className='text-center md:w-1/2 flex flex-col items-center justify-center tracking-widest md:my-12 gap-4'>

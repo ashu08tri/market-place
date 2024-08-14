@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import Carousel from 'react-multi-carousel';
 import { Client, Storage } from "appwrite";
+import Image from 'next/image';
 import FormModal from './FormModal';
 import 'react-multi-carousel/lib/styles.css';
 import { HiArrowLongLeft, HiArrowLongRight } from "react-icons/hi2";
@@ -153,7 +154,7 @@ function HeaderCarousel() {
             >
                 {images.length > 0 && images.map((item, i) => (
                     <div key={i} className='h-screen w-screen'>
-                        <img src={item.images} alt='carousel_images' className='w-full h-full object-cover' />
+                        <Image src={item.images} alt='carousel_images' fill style={{objectFit: 'cover'}} unoptimized/>
                         {mainAdmin === 'alok@admin.com' && <button onClick={() => deleteImage(item.images, item._id)} className='p-2 absolute top-40 right-5 bg-black text-white'>Delete Image</button>}
                     </div>
                 ))}

@@ -1,6 +1,7 @@
 "use client"
 import {useState, useEffect} from 'react';
 import Carousel from 'react-multi-carousel';
+import Image from 'next/image';
 import Link from 'next/link';
 import EditReview from './landingPage/EditReview';
 import 'react-multi-carousel/lib/styles.css';
@@ -52,7 +53,7 @@ function Review() {
     useEffect(() => {
         const getData = async() => {
             try{
-                let res = await fetch('/api/landingPage/reviewSection');
+                let res = await fetch('/api/landingPage/reviewSection', {cache: 'no-cache'});
                 res = await res.json();
                 setData(res);
             }catch(err){
@@ -63,7 +64,7 @@ function Review() {
     },[]);
 
   return (
-    <div className="bg-orange-50 flex flex-col justify-center mt-32 md:mt-0 py-6">
+    <div className="bg-orange-50 flex flex-col justify-center mt-36 md:mt-0 py-6">
   {data ? (
     <>
       <p className="uppercase pl-20 md:mt-8">From the People</p>
@@ -91,12 +92,8 @@ function Review() {
               </div>
             </div>
             <Link href={item.url} className="relative w-full md:w-2/4 h-[50vh] md:h-[78%] hover:opacity-80 pt-0 order-first md:order-2 mt-4 md:mt-0">
-              <img
-                src={item.image}
-                alt={item.title}
-                
-                className="absolute inset-0 h-full w-full object-cover"
-              />
+              <Image src={item.image}
+                alt={item.title} fill className="absolute inset-0 object-cover" unoptimized/>
               <p className="absolute bottom-4 md:-bottom-12 right-4 md:right-0 text-white md:text-black p-2 text-xs md:text-xl underline tracking-wide">
                 {item.name}
               </p>

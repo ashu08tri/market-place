@@ -85,7 +85,7 @@ const videoData = [
 
 function VideoSeenOn() {
     return (
-        <div className='px-6 md:px-12 flex flex-col justify-center h-[98vh] mt-48 md:mt-0'>
+        <div className='px-6 md:px-12 flex flex-col justify-center h-[78vh] md:h-[98vh] mt-10 md:mt-0'>
             <div className='flex justify-between items-center mb-10'>
                 <p className='text-xl md:text-3xl uppercase tracking-wider'>As Seen On</p>
                 <Link href='/' className='px-6 py-3 bg-white border border-black hover:bg-black hover:text-white text-black'>Follow @ Golden Ghaf</Link>

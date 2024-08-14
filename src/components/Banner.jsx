@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import EditBanner from './landingPage/EditBanner';
+import Image from 'next/image';
 
 const {NEXT_PUBLIC_HOST_URL} = process.env;
 
 const getData = async() => {
   try{
-    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/banner`);
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/banner`, {cache: 'no-store'});
     res = await res.json();
     return res;
   }catch(err){
@@ -19,7 +20,7 @@ async function Banner() {
     <>
     {
       data.length > 0 ? data.map((item,i) => <div key={i} className='h-96 relative flex flex-col tracking-wider justify-center text-white gap-5 items-center bg-cover bg-center'>
-      <img src={item.image} alt='banner' className='w-full h-full object-cover' loading='lazy'/>
+      <Image src={item.image} alt='banner' fill style={{objectFit: 'cover'}} unoptimized/>
       <EditBanner item={item} api={`${NEXT_PUBLIC_HOST_URL}/api/landingPage/banner`} storageUrl={'banner'}/>
      <div className='absolute text-center'>
      <p className='text-xs py-2'>{item.title}</p>

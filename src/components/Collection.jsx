@@ -7,6 +7,7 @@ import { useSession } from 'next-auth/react';
 import EditProductsBanner from './EditProductsBanner';
 import { decode } from 'jsonwebtoken';
 import ProductPrice from './ProductPrice';
+import Image from 'next/image';
 
 const {NEXT_PUBLIC_HOST_URL} = process.env;
 
@@ -84,10 +85,12 @@ function Collection({ product, img, title, categories }) {
   return (
     <div className='pt-36'>
       <div className='h-80 relative'>
-        <img
+      <Image
           src={img}
           alt="img"
-          className='h-full w-full object-cover'
+          fill
+          style={{objectFit: 'cover'}}
+          unoptimized
         />
         <p className='text-white text-2xl uppercase font-semibold md:text-4xl tracking-wider absolute top-1/2 left-1/2 transform -translate-x-1/2 translate-y-[100%]'>
           {title.replace(/_/g, ' ')}
@@ -125,7 +128,8 @@ function Collection({ product, img, title, categories }) {
             <div key={i} className='w-1/2 md:w-1/4 px-2 mb-4 cursor-pointer' onClick={() => router.push(`/collections/${title}/${item._id}`)}>
               <div className='rounded overflow-hidden shadow-lg'>
                 <div className='flex justify-center'>
-                <img src={item.img[0]} alt={item.title} className='w-48 h-64' loading='lazy'/>
+                  <Image src={item.img[0]} alt={item.title} unoptimized width={190} height={150}/>
+                
                 </div>
                 <div className='px-6 py-4'>
                   <p className='font-bold text-xl mb-2'>{item.title}</p>

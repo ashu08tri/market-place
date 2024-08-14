@@ -2,6 +2,7 @@
 import React from 'react'
 import Carousel from 'react-multi-carousel';
 import { HiArrowLongLeft, HiArrowLongRight } from 'react-icons/hi2';
+import Image from 'next/image';
 
 const CustomLeftArrow = ({ onClick }) => (
   <button
@@ -42,6 +43,7 @@ const responsive = {
   };
 
 function ProductsCarousel({images}) {
+  
     
   return (
     <div>
@@ -56,11 +58,11 @@ function ProductsCarousel({images}) {
   itemClass="px-2"
 >
 {images.map((img, i) => (
-    <img
+    <Image
       key={i}
       src={img}
-      alt='productImages'
-      className='object-cover w-full h-full'
+      width={350} height={10} 
+      unoptimized
     />
   ))}
 </Carousel>

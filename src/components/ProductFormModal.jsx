@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Client, Storage, ID } from "appwrite";
+import { Client, Storage, ID, ImageFormat } from "appwrite";
 import { toast } from "sonner";
 import { BeatLoader } from "react-spinners";
 
@@ -55,10 +55,12 @@ function ProductFormModal({ onClose, apiRoute, maintitle, method,
               ID.unique(),
               file
             );
+            
+            
             if(response){
-              const fileUrl = storage.getFileView( 
+              const fileUrl = storage.getFilePreview( 
                 process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID ,
-                response.$id);
+                response.$id );
               return fileUrl.href;  
             }
           } catch (error) {

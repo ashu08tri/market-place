@@ -4,7 +4,7 @@ import { Client, Storage, ID } from "appwrite";
 import { Toaster, toast } from "sonner";
 import { BeatLoader } from "react-spinners";
 
-const AddForm = ({ api, storageUrl }) => {
+const AddForm = ({ api }) => {
   const [image, setImg] = useState("");
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");

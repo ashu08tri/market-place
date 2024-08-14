@@ -47,7 +47,7 @@ async function CounterSale() {
                 {
                     data ? data.map((item, i) => (
                         <div key={i} className='bg-cover relative bg-center h-[70vh] w-full md:w-1/2'>
-                            <img src={item.image} alt={item.title} className="w-full h-full object-cover" loading="lazy"/>
+                            <Image unoptimized src={item.image} alt={item.title} fill style={{objectFit: 'cover'}}/>
                             <div className='absolute top-0 flex flex-col h-full justify-end w-full items-center pb-20 gap-4'>
                                 <p className='text-xl md:text-3xl tracking-widest text-white'>
                                     {item.title.split(',').map((part, index) => (

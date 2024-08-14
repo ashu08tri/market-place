@@ -230,7 +230,8 @@ function PaymentForm() {
         const emailPayload = {
             email: updatedFormData.email,
             orderId: updatedFormData.orderID,
-            products: updatedFormData.products
+            products: updatedFormData.products,
+            customerData: formData
         };
     
         // Debug: Check if emailPayload is correctly constructed

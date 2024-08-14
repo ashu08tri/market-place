@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Carousel from 'react-multi-carousel';
 import ProductPrice from './ProductPrice';
+import Image from 'next/image';
 import SinglePageModal from './SinglePageModal';
 import { AnimatePresence } from 'framer-motion';
 import { FaAngleRight } from "react-icons/fa6";
@@ -126,7 +127,7 @@ function CompleteSet({ items, desc, styleTip, modalInfo }) {
                     {items.products.length && items.products.slice(0, 4).map((item, i) => (
                         <Link href={'/featured/shop_all/' + item._id} key={i}>
                             <li>
-                                <img src={item.img[0]} alt={item.title} className='w-72 h-1/2 object-cover' loading='lazy'/>
+                            <Image src={item.img[0]} alt="img" width={300} height={1} unoptimized/>
                             </li>
                             <li className='text-center'>
                                 <li>{item.title}</li>
