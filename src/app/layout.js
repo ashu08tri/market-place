@@ -7,7 +7,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 export const metadata = {
-  title: 'Market Place',
+  title: 'Golden Ghaf',
   description: 'Ecommerce Website for goodies',
 };
 
