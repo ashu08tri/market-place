@@ -13,7 +13,7 @@ function FindStore() {
     useEffect(() => {
         const getData = async() => {
             try {
-                let res = await fetch('/api/landingPage/store', {cache: 'no-store'});
+                let res = await fetch('/api/landingPage/store');
                 res = await res.json();
                 setStores(res);
                 setFilteredStores(res);  // Set filteredStores to the fetched stores
