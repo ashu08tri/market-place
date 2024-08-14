@@ -61,7 +61,7 @@ async function CounterSale() {
                                     shop now
                                 </Link>
                             </div>
-                            <EditCounterSale item={item} api={`${NEXT_PUBLIC_HOST_URL}/api/landingPage/counter/api/landingPage/counterSale`} storageUrl={'couterSale'} />
+                            <EditCounterSale item={item} api={`${NEXT_PUBLIC_HOST_URL}/api/landingPage/counterSale`} storageUrl={'couterSale'} />
                         </div>
                     )) : <p>Failed to load data!</p>
                 }

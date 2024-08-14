@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-const EditDualTile = React.lazy(() => import('./landingPage/EditDualTile'));
+import EditDualTile from './landingPage/EditDualTile';
 
 const { NEXT_PUBLIC_HOST_URL } = process.env;
 

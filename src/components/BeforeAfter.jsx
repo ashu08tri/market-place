@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
-const BeforeAfterSlider = React.lazy(() => import('./BeforeAfterSlider'));
-const EditBeforeAfter = React.lazy(() => import('./landingPage/EditBeforeAfter'));
+import BeforeAfterSlider from './BeforeAfterSlider';
+import EditBeforeAfter from './landingPage/EditBeforeAfter';
 
 const { NEXT_PUBLIC_HOST_URL } = process.env;
 

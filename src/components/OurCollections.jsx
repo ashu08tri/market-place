@@ -4,9 +4,14 @@ import EditItem from './landingPage/EditItem';
 const {NEXT_PUBLIC_HOST_URL} = process.env;
 
 const getData = async () => {
+   try{
     let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/ourcollection`, {cache: 'no-store'});
     res = await res.json();
     return res;
+   }catch(err){
+    console.log(err);
+    return [];
+   }
 }
 
 async function OurCollections() {
