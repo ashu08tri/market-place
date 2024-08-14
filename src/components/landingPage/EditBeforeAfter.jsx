@@ -10,10 +10,10 @@ const EditBeforeAfter = ({ item, api, storageUrl }) => {
   const [token, setToken] = useState(null);
 
   const initialData = {
-    title: item.title,
-    imageB: item.imageB,
-    imageT: item.imageT,
-    desc: item.desc,
+    title: item && item.title,
+    imageB: item && item.imageB,
+    imageT: item && item.imageT,
+    desc: item && item.desc,
   };
 
   const { data } = useSession();

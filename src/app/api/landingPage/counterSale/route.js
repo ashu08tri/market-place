@@ -15,7 +15,7 @@ export async function GET(){
         const count = await CounterSale.find();
         return NextResponse.json(count);
     }catch(err){
-
+        return NextResponse.json(err);
     }
 } 
 
