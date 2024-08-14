@@ -4,23 +4,19 @@ import EditBeforeAfter from './landingPage/EditBeforeAfter';
 
 const { NEXT_PUBLIC_HOST_URL } = process.env;
 
-export const getServerSideProps = async () => {
+const getData = async () => {
   try {
-    let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/landingPage/beforeAfter`, { cache: 'no-store' });
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/beforeAfter`, {cache: 'no-store'});
     res = await res.json();
-    return {
-      props: { data: res },
-    };
+    return res;  
   } catch (err) {
-    console.error(err);
-    return {
-      props: { data: [] },
-    };
+    console.log(err);
+    return [];
   }
 };
 
-
-async function BeforeAfter({data}) {
+async function BeforeAfter() {
+  const data = await getData();
   
   return (
     <main className="relative flex flex-col md:flex-row h-[70vh] md:h-[90vh] items-center gap-6 md:justify-between px-3 md:px-20">

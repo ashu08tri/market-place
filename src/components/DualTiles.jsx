@@ -5,25 +5,21 @@ import EditDualTile from './landingPage/EditDualTile';
 
 const { NEXT_PUBLIC_HOST_URL } = process.env;
 
-export const getServerSideProps = async () => {
+const getData = async () => {
   try {
-    let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/landingPage/dualTile`, { cache: 'no-store' });
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/dualTile`, {cache: 'no-store'});
     res = await res.json();
-    return {
-      props: { data: res },
-    };
+    return res;
   } catch (err) {
     console.error(err);
-    return {
-      props: { data: [] },
-    };
+    return [];
   }
 };
 
-
 // Update DualTiles component with lazy loading
-async function DualTiles({data}) {
-  
+async function DualTiles() {
+  const data = await getData();
+
   return (
     <>
       {data.length > 0 ? (

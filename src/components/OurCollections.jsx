@@ -3,23 +3,19 @@ import EditItem from './landingPage/EditItem';
 
 const {NEXT_PUBLIC_HOST_URL} = process.env;
 
-export const getServerSideProps = async () => {
-    try {
-      let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/landingPage/ourcollection`, { cache: 'no-store' });
-      res = await res.json();
-      return {
-        props: { data: res },
-      };
-    } catch (err) {
-      console.error(err);
-      return {
-        props: { data: [] },
-      };
-    }
-  };
+const getData = async () => {
+   try{
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/ourcollection`, {cache: 'no-cache'});
+    res = await res.json();
+    return res;
+   }catch(err){
+    console.log(err);
+    return [];
+   }
+}
 
-
-async function OurCollections({data}) {
+async function OurCollections() {
+    const data = await getData();
 
     return (
         <div className='h-screen px-12 md:px-24 py-10'>
