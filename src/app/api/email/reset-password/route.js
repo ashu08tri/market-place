@@ -36,8 +36,8 @@ export async function POST(request) {
         const resetUrl = `${process.env.NEXT_PUBLIC_HOST_URL}/resetpassword?token=${token}`;
 
         const response = await resend.emails.send({
-            from: 'Acme <onboarding@resend.dev>',
-            to: ["alok.akrt@gmail.com"],
+            from: 'reset-password@ggccomp.in',
+            to: email,
             subject: 'Password Reset',
             html: `<p>You requested a password reset. Click the link to reset your password: <a href="${resetUrl}">${resetUrl}</a></p>`,
         });

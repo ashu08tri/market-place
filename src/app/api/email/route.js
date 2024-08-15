@@ -20,8 +20,9 @@ export async function POST(request) {
         const emailContent = createEmailHtml(products, orderId, customerData);
 
         const response = await resend.emails.send({
-            from: 'Acme <onboarding@resend.dev>',
-            to: ['alok.akrt@gmail.com'],
+            from: 'no-reply@ggccomp.in',
+            to: email,
+            bcc: 'orders@ggccomp.in',
             subject: 'Order Data',
             html: emailContent
         });

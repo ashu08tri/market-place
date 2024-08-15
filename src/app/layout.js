@@ -16,7 +16,6 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <Head>
         {/* Preload the LCP video */}
-        <link rel="icon" href="/icon.ico" />
         <link
           rel="preload"
           as="video"
