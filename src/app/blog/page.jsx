@@ -21,7 +21,7 @@ async function Page() {
     return (
         <div className='px-2 pt-36'>
            <p className='text-center text-sm py-2'> <Link href='/'>HOME</Link></p>
-            <div className='h-56 md:h-64 text-center content-center'>
+            <div className='h-16 text-center content-center'>
                 <h1 className='text-bold text-2xl'>NEWS</h1>
                 <AddBlog api={`${NEXT_PUBLIC_HOST_URL}/api/landingPage/blog`} storageUrl={'blog'} />
             </div>

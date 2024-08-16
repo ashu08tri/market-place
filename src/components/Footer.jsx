@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { PiPackage } from "react-icons/pi";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { CiCreditCard1 } from "react-icons/ci";
+import Image from 'next/image';
 
 const Footer = () => {
   return (
@@ -58,7 +59,10 @@ const Footer = () => {
           </div>
           <div>
             <p className='text-lg font-semibold mb-4'>Connect</p>
-            {/* Add your social media icons or links here */}
+            <div className='flex gap-2'>
+              <Link href='https://www.instagram.com/'><Image src='/instagram.png' alt='instagram' width={25} height={20}/></Link>
+              <Link href='https://www.linkedin.com/'><Image src='/linkedin.png' alt='instagram' width={25} height={20}/></Link>
+            </div>
           </div>
         </div>
       </div>

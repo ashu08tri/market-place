@@ -324,7 +324,7 @@ function Navbar() {
             </ul>
           </li>
           <li className={`${dynamicStyles.menuItem} group relative`}>{links.length > 0 ? links[1].title : 'Swimwear'}
-            <ul className='w-[calc(90.7vw)] bg-white text-black h-80 hidden group-hover:flex absolute top-[86%] -left-[calc(115px)] mt-4 justify-evenly px-4 pt-4'>
+            <ul className='w-[calc(90.7vw)] bg-white text-black h-80 hidden group-hover:flex absolute top-[86%] -left-[calc(115px)] mt-4 gap-10 px-4 pt-4'>
               {links.length > 0 && links[1].images.map((img, i) => (
                 <div key={i} className='relative'>
                   {isAdmin && (

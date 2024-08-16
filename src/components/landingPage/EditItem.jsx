@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useSession } from 'next-auth/react';
 import GeneralForm from "../GeneralForm";
 import Image from "next/image";
+import Link from "next/link";
 import { decode } from 'jsonwebtoken';
 
 const EditItem = ({ item, api, storageUrl }) => {
@@ -51,9 +52,9 @@ const EditItem = ({ item, api, storageUrl }) => {
     <Image src={item.image} alt={item.title} fill objectFit="cover" unoptimized/>
     <div className="pb-10 absolute left-1/2 transform -translate-x-1/2 group-hover:pb-20 text-center">
       <p className="text-xl">{item.title}</p>
-      <p className="py-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-0 group-hover:-translate-y-2">
-        Explore
-      </p>
+      <Link href={item.url} className="py-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-0 group-hover:-translate-y-2">
+      Explore
+      </Link>
     </div>
   </div>
   {isAdmin && (

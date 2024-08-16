@@ -70,8 +70,10 @@ const GeneralForm = ({ api, initialData, onClose }) => {
   const [url2, setUrl2] = useState(initialData.url2 || "");
   const [name, setName] = useState(initialData.name || "");
   const [date, setDate] = useState(initialData.date || "");
+  const [counter, setCounter] = useState(initialData.count || "");
   const [submitting, setSubmitting] = useState(false);
 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -97,6 +99,7 @@ const GeneralForm = ({ api, initialData, onClose }) => {
         desc, 
         name, 
         date, 
+        counter,
         imageB: downloadUrlB, 
         imageT: downloadUrlT, 
         address, 
@@ -135,7 +138,7 @@ const GeneralForm = ({ api, initialData, onClose }) => {
         <button className="text-right text-black p-2 bg-white" onClick={onClose}>X</button>
       </div>
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-        {!initialData.imageB && !initialData.imageT && (
+        {!initialData.imageB && !initialData.imageT && initialData.image && (
           <div className="flex justify-between">
             <label>Image</label>
             <input type="file" onChange={(e) => setImg(e.target.files[0])} />
@@ -255,6 +258,17 @@ const GeneralForm = ({ api, initialData, onClose }) => {
               type="text"
               value={date}
               onChange={(e) => setDate(e.target.value)}
+            />
+          </div>
+        )}
+         {initialData.count && initialData.count.length > 0 && (
+          <div className="flex justify-between">
+            <label>Date</label>
+            <input
+              className="text-black"
+              type="date"
+              value={counter}
+              onChange={(e) => setCounter(e.target.value)}
             />
           </div>
         )}

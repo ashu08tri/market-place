@@ -50,17 +50,17 @@ async function DualTiles() {
                     </Link>
                   </div>
                   <div className='flex justify-center md:w-1/2 h-1/2 md:h-full items-center'>
-                    <div className='relative md:ml-10 h-full md:h-5/6 w-full md:w-8/12'>
+                    <Link href={item.url} className='relative md:ml-10 h-full md:h-5/6 w-full md:w-8/12'>
                     <Image src={item.image} alt={item.title} fill style={{objectFit: 'cover'}} unoptimized/>
-                    </div>
+                    </Link>
                   </div>
                 </>
               ) : (
                 <>
                   <div className='flex justify-center md:w-1/2 h-1/2 md:h-full items-center'>
-                    <div className='relative md:ml-10 h-full md:h-5/6 w-full md:w-8/12'>
+                    <Link href={item.url} className='relative md:ml-10 h-full md:h-5/6 w-full md:w-8/12'>
                     <Image src={item.image} alt={item.title} fill style={{objectFit: 'cover'}} unoptimized/>
-                    </div>
+                    </Link>
                   </div>
                   <div className='text-center md:w-1/2 flex flex-col items-center justify-center tracking-widest md:my-12 gap-4'>
                     <Suspense fallback={<div>Loading EditDualTile...</div>}>
