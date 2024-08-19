@@ -6,7 +6,7 @@ const { NEXT_PUBLIC_HOST_URL } = process.env;
 
 const getData = async () => {
     try {
-        let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/blog`);
+        let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/blog`,{cache: 'no-store'});
         res = await res.json();
         return res;
     } catch (err) {
@@ -32,10 +32,10 @@ async function Page() {
             <div className='grid grid-cols-1 md:grid-cols-3 gap-3'>
                 {data.length > 0 ? data.map((item, i) => (
                     <Link href={`blog/${item._id}`} key={i} className='flex flex-col items-center justify-center gap-2 group'>
-                        <img src={item.image} alt={item.title} className="object-cover w-full h-60 md:h-96 group-hover:opacity-75" loading='lazy'/>
+                        <img src={item.image} alt={item.title} className="object-cover w-full h-60 md:h-[330px] group-hover:opacity-75" loading='lazy'/>
                         <div className="flex flex-col items-start gap-1 p-4 h-full">
                             <p className="text-lg font-semibold group-hover:underline underline-offset-2">{item.title}</p>
-                            <p className="text-xs">{item.desc}</p>
+                            <p className="text-xs">{item.desc.split('').slice(0,160)}...</p>
                         </div>
                     </Link>
                 )) : <p>Failed to load data!</p>}

@@ -61,7 +61,7 @@ function ShopAll({ product, img, title, url, categories }) {
           {(product.length > 10 ? product.slice(0, visibleItems) : product).map((item, i) => (
             <div key={i} className='w-1/2 md:w-1/4 px-2 mb-4 cursor-pointer' onClick={() => router.push(`/${url}/shop_all/${item._id}`)}>
               <div className='rounded overflow-hidden shadow-lg'>
-                <Image src={item.img[0]} alt={item.title} width={350} height={10} style={{objectFit: 'cover'}} unoptimized/>
+                <Image src={item.img[0]} alt={item.title} width={0} height={0} className='w-64 h-80' style={{objectFit: 'cover'}} unoptimized/>
                 <div className='px-6 py-4'>
                   <p className='font-bold text-xl mb-2'>{item.title}</p>
                   <p className='text-gray-700 text-base'><ProductPrice price={item.amount}/></p>

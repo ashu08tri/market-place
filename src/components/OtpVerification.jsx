@@ -1,5 +1,5 @@
-"use client"
-import { useState } from "react";
+"use client";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Client, Account, ID } from "appwrite";
 import { toast } from "sonner";
@@ -29,9 +29,9 @@ const OtpVerification = ({ onSubmit }) => {
   const [otp, setOtp] = useState("");
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [userId, setUserId] = useState(null);
-  const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [timer, setTimer] = useState(0);
   const currency = useSelector((state) => state.currency.currency);
 
   const client = new Client()
@@ -40,25 +40,44 @@ const OtpVerification = ({ onSubmit }) => {
 
   const account = new Account(client);
 
+  // Timer effect
+  useEffect(() => {
+    let interval = null;
+    if (timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prevTime) => prevTime - 1);
+      }, 1000);
+    } else if (timer === 0) {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [timer]);
+
   const onSignInSubmit = async () => {
     const phoneNumberString = `+${phoneNumber.replace(/\D/g, '')}`;
     if (phoneNumber === "") {
       return toast.warning('Please enter the phone number first');
     }
     try {
-      setLoading(true)
+      setLoading(true);
 
+      // const sessions = await account.getSession('current');
+      // if (sessions.total > 0) {
+      //   // Delete the current session
+      //   await account.deleteSession('current');
+      // }
 
+      // Generate a new OTP
       const token = await account.createPhoneToken(
         ID.unique(),
         phoneNumberString
       );
 
-      setUserId(token.userId);
-      if (userId) {
+      if (token.userId) {
+        setUserId(token.userId);
         toast.success('Otp Sent!');
         setConfirmationResult(true);
-        setOtpSent("");
+        setTimer(120); // Set timer for 2 minutes (120 seconds)
       }
 
     } catch (err) {
@@ -75,11 +94,11 @@ const OtpVerification = ({ onSubmit }) => {
       const session = await account.createSession(
         userId,
         otp
-      )
+      );
       onSubmit();
       setOtp('');
       if (session) {
-        toast.success('OTP verified!')
+        toast.success('OTP verified!');
       }
 
     } catch (err) {
@@ -105,11 +124,14 @@ const OtpVerification = ({ onSubmit }) => {
         }}
         onlyCountries={allowedCountries}
       />
-      <button disabled={loading} type="button" onClick={onSignInSubmit} className=" my-4 w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-        {loading ? <BeatLoader loading={loading} size={15} color='white' aria-label="Loading Spinner" data-testid="loader" /> : 'Send OTP'}
+      <button
+        disabled={loading || timer > 0}
+        type="button"
+        onClick={onSignInSubmit}
+        className="my-4 w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      >
+        {loading ? <BeatLoader loading={loading} size={15} color='white' aria-label="Loading Spinner" data-testid="loader" /> : `Send OTP ${timer > 0 ? `(${timer}s)` : ''}`}
       </button>
-
-
 
       {confirmationResult && <>
         <h3>Enter the OTP</h3>
@@ -124,7 +146,6 @@ const OtpVerification = ({ onSubmit }) => {
           className="my-4 w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >Verify OTP</button>
       </>}
-
 
       {error && <p>{error}</p>}
     </div>

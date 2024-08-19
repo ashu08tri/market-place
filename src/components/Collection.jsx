@@ -128,7 +128,7 @@ function Collection({ product, img, title, categories }) {
             <div key={i} className='w-1/2 md:w-1/4 px-2 mb-4 cursor-pointer' onClick={() => router.push(`/collections/${title}/${item._id}`)}>
               <div className='rounded overflow-hidden shadow-lg'>
                 <div className='flex justify-center'>
-                  <Image src={item.img[0]} alt={item.title} unoptimized width={190} height={150}/>
+                  <Image src={item.img[0]} alt={item.title} unoptimized width={0} height={0} className='w-64 h-80'/>
                 
                 </div>
                 <div className='px-6 py-4'>
