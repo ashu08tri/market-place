@@ -23,7 +23,7 @@ const Footer = () => {
         <div className='w-full md:w-1/3 h-full flex-shrink-0 flex flex-col justify-center items-center gap-5'>
           <div className='rounded-full bg-gray-300 text-gray-600 text-4xl p-4'><CiCreditCard1 /></div>
           <p className='text-3xl text-center'>100% Secure <br /> payments</p>
-          <Link href='/FAQ' className='underline underline-offset-2'>Learn More</Link>
+          <Link href='/secure-payment' className='underline underline-offset-2'>Learn More</Link>
         </div>
       </div>
     </div>
