@@ -11,13 +11,15 @@ if (!mongoose.connection.readyState) {
 }
 
 export async function POST(request) {
-    const { email, isAdmin, filter, orderID } = await request.json();
+    const { email, phone, isAdmin, filter, orderID } = await request.json();
+    
     try {
         let query = {};
 
         // If the user is an admin, query all orders, otherwise query based on email
-        if (!isAdmin && email) {
+        if (!isAdmin && email || phone) {
             query.email = email;
+            query.phoneNumber = phone;
         }
 
         // Apply additional filters if provided
@@ -38,7 +40,6 @@ export async function POST(request) {
         if (orderID) {
             query.orderID = orderID;
         }
-        console.log(query);
         
         Object.keys(query).forEach(key => {
             if (query[key] === '') {
@@ -54,7 +55,7 @@ export async function POST(request) {
         } else {
             const message = isAdmin
                 ? 'No orders are placed yet!'
-                : `No order is associated with ${orderID}!`;
+                : `No order is associated with given details!`;
             return NextResponse.json({ ok: false, message });
         }
     } catch (err) {

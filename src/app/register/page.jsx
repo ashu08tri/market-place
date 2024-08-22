@@ -4,7 +4,7 @@ import Link from "next/link";
 function Register() {
 
   return (
-    <div className="h-[calc(107.7vh)] flex pt-36">
+    <div className="h-[calc(114.3vh)] flex pt-36">
         <div className='hidden md:block h-full w-1/2'>
             <img src="https://sahara-theme.myshopify.com/cdn/shop/files/account3.jpg" alt="" />
         </div>

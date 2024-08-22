@@ -27,7 +27,8 @@ const uploadAndGetUrl = async (file) => {
         process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID,
         response.$id
       );
-
+      console.log(fileUrl.href);
+      
       return fileUrl.href;  // Return the view URL
     }
   } catch (error) {
@@ -47,14 +48,19 @@ const handleImageUploads = async (image, imageB, imageT) => {
 
   if (imageB) {
     downloadUrlB = await uploadAndGetUrl(imageB);
+    console.log(downloadUrlB);
+    
   }
 
   if (imageT) {
     downloadUrlT = await uploadAndGetUrl(imageT);
+    console.log(downloadUrlT);
   }
 
   return { downloadUrl, downloadUrlB, downloadUrlT };
 };
+
+
 
 const GeneralForm = ({ api, initialData, onClose }) => {
   const [image, setImg] = useState(null);

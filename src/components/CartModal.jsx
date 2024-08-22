@@ -222,6 +222,9 @@ function CartModal({ isOpen, onClose }) {
                 </button>
               )}
             </div>
+            <div className='mt-4 flex justify-center' onClick={paymentPage}>
+            <Link href='/payment' className="bg-black text-white py-2 px-36 ">Go to payment page</Link>
+            </div>
           </motion.div>
         </div>
       )}

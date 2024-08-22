@@ -10,10 +10,12 @@ import MissionnNews from "@/components/MissionnNews";
 import BeforeAfter from "@/components/BeforeAfter";
 import VideoSeenOn from "@/components/VideoSeenOn";
 import FindStore from "@/components/FindStore";
+import SubscribeModal from "@/components/SubscribeModal";
 
 export default function Home() {
   return (
     <>
+      <SubscribeModal />
       <HeaderCarousal />
       <OurCollections />
       <Banner />
@@ -22,7 +24,7 @@ export default function Home() {
       <ItemSale />
       <CounterSale />
       <Review />
-      <BeforeAfter/>
+      <BeforeAfter />
       <VideoSeenOn />
       <FindStore />
       <MissionnNews />

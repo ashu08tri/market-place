@@ -1,21 +1,20 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useSession } from 'next-auth/react';
-import { useRouter } from "next/navigation";
-import EditForms from "./EditForms";
+import EditLookbookForm from "./EditLookbookForm";
 import { decode } from 'jsonwebtoken';
 
-const EditBlog = ({ item, api, storageUrl }) => {
+const EditBlog = ({ item, api }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [mainAdmin, setMainAdmin] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [token, setToken] = useState(null);
 
-  const router = useRouter();
 
   const initialData = {
+    banner: item.banner,
     title: item.title,
-    image: item.image,
+    imageL: item.imageL,
+    imageR: item.imageR,
     desc: item.desc
   };
 
@@ -46,6 +45,7 @@ const EditBlog = ({ item, api, storageUrl }) => {
     setIsEditing(!isEditing);
   };
 
+
   return (
     <>
     {isAdmin && <div className="flex gap-3">
@@ -56,9 +56,10 @@ const EditBlog = ({ item, api, storageUrl }) => {
         Edit
       </button>
       {isEditing && (
-        <EditForms
+        <EditLookbookForm
         api={`${api}/${item._id}`}
         initialData={initialData}
+        onClose={handleEditClick}
     />
       )}
     </div>}

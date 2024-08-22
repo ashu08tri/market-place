@@ -3,7 +3,7 @@ import LoginForm from '@/components/LoginForm';
 
 function Login() {
   return (
-    <div className="h-[calc(110.6vh)] flex pt-36">
+    <div className="h-[calc(117.3vh)] flex pt-36">
         <div className='hidden md:block h-full w-1/2'>
             <img src="https://sahara-theme.myshopify.com/cdn/shop/files/bg_4a93eafd-a31f-4d25-a585-6c3aea1db6a4.jpg" alt="" />
         </div>

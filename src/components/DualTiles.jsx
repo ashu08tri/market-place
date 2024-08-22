@@ -27,7 +27,7 @@ async function DualTiles() {
           {data.map((item, index) => (
             <div
               key={index}
-              className='h-[65vh] md:h-[calc(100vh-6rem)] relative flex flex-col md:flex-row justify-evenly md:justify-between md:items-center px-8 md:p-0'
+              className='h-[100vh] md:h-[calc(120vh-6rem)] relative flex flex-col md:flex-row justify-evenly md:justify-between md:items-center px-8 md:p-0'
             >
               {index % 2 === 0 ? (
                 <>
@@ -45,7 +45,7 @@ async function DualTiles() {
                     </h1>
                     <p className='uppercase'>{item.desc}</p>
                     <div className='hidden md:block w-[calc(.7px)] h-20 bg-gray-400 my-8'></div>
-                    <Link href={item.url} className='px-10 py-3 tracking-wide text-sm border border-black hover:bg-black hover:text-white mb-5'>
+                    <Link href='/blog/66a7343b111e2f1182d2c6d5' className='px-10 py-3 tracking-wide text-sm border border-black hover:bg-black hover:text-white mb-5'>
                       Learn More
                     </Link>
                   </div>
@@ -76,7 +76,7 @@ async function DualTiles() {
                     </h1>
                     <p className='uppercase'>{item.desc}</p>
                     <div className='hidden md:block w-[calc(.7px)] h-20 bg-gray-400 my-8'></div>
-                    <Link href={item.url} className='px-10 py-3 tracking-wide text-sm border border-black hover:bg-black hover:text-white mb-5'>
+                    <Link href='/blog/66a7343b111e2f1182d2c6d4' className='px-10 py-3 tracking-wide text-sm border border-black hover:bg-black hover:text-white mb-5'>
                       Learn More
                     </Link>
                   </div>

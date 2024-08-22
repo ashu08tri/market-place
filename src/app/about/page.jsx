@@ -1,67 +1,24 @@
+import Link from "next/link";
+
 function page() {
-    return (
-        <div className="pt-36 px-4 sm:px-6 lg:px-8">
-          {/* First Section */}
-          <section className="bg-[#f5ebdf] flex flex-col items-center text-center py-12">
-            <div className="space-y-4 max-w-2xl mx-auto">
-              <span className="text-sm font-normal">
-                AUSTRALIAN SWIMWEAR BRAND
-              </span>
-              <span className="text-4xl font-serif">
-                THANK YOU FAE 🖤
-              </span>
-              <span className="text-lg font-serif font-normal">
-                We would like to give a special shout-out to FAE for allowing us to use their incredible content for our Sahara theme.
-              </span>
-              <span className="text-lg font-serif font-normal">
-                Follow @FAE on Instagram and visit their website via this link.
-              </span>
-              <span className="text-lg font-serif font-normal">---</span>
-              <span className="text-lg font-serif font-normal">
-                Sahara theme is made with 🖤 by Shopify agency DigiFist.
-              </span>
-              <button className="block mx-auto mt-12 py-2 px-6 bg-black text-white text-lg font-bold rounded-md border border-black transition-colors duration-300 hover:bg-white hover:text-gray-700">
-                View More
-              </button>
-            </div>
-            <div className="relative mt-8">
-              <img
-                src="https://sahara-theme.myshopify.com/cdn/shop/files/faestory.jpg?v=1674920320&width=2160"
-                alt="FAE Story"
-                className="w-full max-w-[1000px] mx-auto"
-              />
-            </div>
-          </section>
-    
-          {/* Second Section */}
-          <section className="my-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-3xl mx-auto space-y-6">
-              <h1 className="text-4xl font-serif font-bold text-center bg-white py-4">
-                FAE&apos;S STORY
-              </h1>
-              <h2 className="text-lg text-gray-600 font-serif text-center">
-                FAE started as a love story between founders Bianca and Adam Bennetts, who met in Bali in 2015. A holiday romance quickly turned into a forever kind of love, and as they planned their future they realised they shared a similar vision in the fashion world.
-              </h2>
-              <div className="h-4 bg-gray-200"></div>
-              <h2 className="text-lg text-gray-600 font-serif text-center">
-                Bianca and Adam started chatting business plans over cocktails in the Bali sun, with a focus on creating high-end yet sustainable swimwear. Bianca began designing bikinis in their villa in Seminyak, countless samples were produced in Denpasar, and before too long they realised they were onto a special product worthy of taking to the world. FAE was born.
-              </h2>
-              <div className="h-4 bg-gray-200"></div>
-              <h2 className="text-lg text-gray-600 font-serif text-center">
-                Now worn and loved by beachgoers and celebrities worldwide, FAE established its name quickly, with every range more progressive than the one before and the Essence of FAE apparent in every piece. Each collection has been carefully curated to blend, so FAE girls can mix-and-match their favourite pieces and can pair block-coloured separates with carefully-curated prints.
-              </h2>
-              <div className="h-4 bg-gray-200"></div>
-              <h2 className="text-lg text-gray-600 font-serif text-center">
-                Bianca delves into the past with her inspiration pulled from the &apos;80s and &apos;90s, but never forgets FAE&apos;s place as a forward-thinking brand of the future. Sustainability, durability and luxury are always at the front of her mind when choosing the highest quality Italian fabrics.
-              </h2>
-              <div className="h-4 bg-gray-200"></div>
-              <h2 className="text-lg text-gray-600 font-serif text-center">
-                After eight years the FAE team remains tight with Bianca working as Creative Director and Adam as CEO, while the Bennetts clan continues to grow, with six-year-old Ziggy recently joined by baby sister Honey.
-              </h2>
-            </div>
-          </section>
+  return (
+    <>
+      <div className='pt-36 bg-orange-50'>
+        <div className='flex flex-col-reverse md:flex-row justify-between items-center gap-5 md:gap-10 p-10 md:p-20'>
+          <div className='w-full md:w-1/2 text-center'>
+            <p className='text-3xl md:text-6xl py-2'>ABOUT US</p>
+            <p className='py-2 text-xl'>Sustainability is at the core of our brand, with a strong emphasis on using biodegradable fabrics made from natural raw materials. These bio fabrics significantly reduce environmental impact, as they break down more easily compared to synthetic materials, minimizing waste and pollution. By choosing biodegradable options, we not only lessen our carbon footprint but also contribute to a healthier ecosystem. This commitment to sustainable practices positively impacts society by promoting environmental stewardship and fostering a more sustainable future.</p>
+            <p className='py-2 text-xl '>We prioritize an exceptional customer experience by utilizing sustainable fabric and offering couture designs with easy customization options. Our hassle-free customer engagement is rooted in actively listening to customers and addressing them personally. This individualized approach not only resolves issues swiftly but also fosters deeper connections. By maintaining a strong focus on building brand loyalty and trust, we ensure that every interaction reinforces our commitment to quality, sustainability, and customer satisfaction.</p>
+            <p className='py-2 text-xl '>Our company prides itself on brand adaptability, committed to continuous improvement and seamlessly adapting to new fashion trends while steadfastly maintaining our brand mission. We not only follow but also create new fashion trends, setting path-breaking standards in the industry. By adhering to global manufacturing and quality standards, we ensure our products meet the highest benchmarks. Our proactive approach in trendsetting showcases our dedication to innovation and excellence in the global fashion arena.</p>
+          </div>
+          <div className='w-full md:w-1/2 flex justify-center mb-5 md:m-0'>
+            <img src="/GGC_About.webp" loading='lazy' alt="about_image" className='w-full md:w-3/4 h-3/6 object-cover' />
+          </div>
         </div>
-      );
+      </div>
+
+    </>
+  )
 }
 
-export default page
+export default page;

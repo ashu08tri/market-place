@@ -61,11 +61,11 @@ const OtpVerification = ({ onSubmit }) => {
     try {
       setLoading(true);
 
-      // const sessions = await account.getSession('current');
-      // if (sessions.total > 0) {
-      //   // Delete the current session
-      //   await account.deleteSession('current');
-      // }
+      const sessions = await account.getSession('current');
+      if (sessions) {
+        // Delete the current session
+        await account.deleteSession('current');
+      }
 
       // Generate a new OTP
       const token = await account.createPhoneToken(

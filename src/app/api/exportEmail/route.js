@@ -14,8 +14,8 @@ export async function POST(req) {
     const bufferData = Buffer.from(excelBuffer, 'base64');
 
     await resend.emails.send({
-      from: 'Acme <onboarding@resend.dev>',
-      to: ["vani.s.30012001@gmail.com"],
+      from: 'order_history@ggccomp.in',
+      to: ["alok.akrt@gmail.com"],
       subject: 'Monthly Orders Report',
       html: '<p>Please find attached the monthly orders report.</p>',
       attachments: [

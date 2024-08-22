@@ -95,3 +95,13 @@ const addressSchema = new mongoose.Schema({
 })
 
 export const Address = mongoose.models.Address || mongoose.model('Address', addressSchema);
+
+const lookbookSchema = new mongoose.Schema({
+    banner: String,
+    title: String,
+    imageL: String,
+    imageR: String,
+    desc: String,
+})
+
+export const Lookbook = mongoose.models.Lookbook || mongoose.model('Lookbook', lookbookSchema);

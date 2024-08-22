@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { PiPackage } from "react-icons/pi";
-import { MdOutlineShoppingCart } from "react-icons/md";
 import { CiCreditCard1 } from "react-icons/ci";
 import Image from 'next/image';
 
@@ -18,9 +17,7 @@ const Footer = () => {
         </div>
 
         <div className='w-full md:w-1/3 h-full flex-shrink-0 flex flex-col justify-center border-x items-center gap-5'>
-          <div className='rounded-full bg-gray-300 text-gray-600 text-4xl p-4'><MdOutlineShoppingCart /></div>
-          <p className='text-3xl text-center'>30 days <br /> return policy</p>
-          <Link href='/refund-policy' className='underline underline-offset-2'>Learn More</Link>
+         <img src="/box.gif" alt="contact_img" className='w-8/12 object-cover'/>
         </div>
 
         <div className='w-full md:w-1/3 h-full flex-shrink-0 flex flex-col justify-center items-center gap-5'>
@@ -67,8 +64,8 @@ const Footer = () => {
         </div>
       </div>
       <div className='h-full flex flex-col justify-center items-center'>
-        <div className='h-full flex flex-col justify-center gap-4 items-center w-1/2'>
-        <img src="/banner.png" alt="banner" className='w-full' loading='lazy'/>
+        <div className='h-full flex flex-col justify-center gap-4 items-center w-10/12'>
+        <img src="/banner.webp" alt="banner" className='w-full object-cover' loading='lazy'/>
         <p className='text-2xl text-center'>LUCKNOW</p>
         </div>
         <p className='self-start p-4 text-sm'>© 2024 GOLDEN GHAF, All rights reserved.</p>

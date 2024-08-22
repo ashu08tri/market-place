@@ -1,36 +1,35 @@
 import mongoose from "mongoose";
+import { Lookbook } from "@/utils/Modal/LandingPageSchema";
 import { NextResponse } from "next/server";
-import { BeforeAfter } from "@/utils/Modal/LandingPageSchema";
 
 if (!mongoose.connection.readyState) {
-    mongoose.connect(process.env.MONGODB_URI).then(() => {
-      console.log('Connected to MongoDB');
-    }).catch((err) => {
-      console.error('Connection to MongoDB failed:', err);
-    });
+    mongoose.connect(process.env.MONGODB_URI)
+    .then(() => console.log("Connected to MongoDB"))
+    .catch((err) => console.error("Connection to MongoDB failed:", err));
   }
-  
 
-  export async function PUT(request, { params }) {
-    const {id} = params; 
-    console.log(id);
+export async function PUT(request, { params }) {
+    const id = params.id; 
+  
     try {
-        const { imageB, imageT, title, desc } = await request.json();
+        const { banner, imageR, imageL, title, desc } = await request.json();
+  
         // Find and update the specific item within the collection
-        const updated = await BeforeAfter.findOneAndUpdate(
+        const updatedItem = await Lookbook.findOneAndUpdate(
             { _id: id },
             { 
                 $set: {
-                    imageB,
-                    imageT,
+                    banner,
+                    imageR,
+                    imageL,
                     title,
-                    desc,
+                    desc
                 }
             },
             { new: true, runValidators: true }
         );
-
-        if (updated) {
+  
+        if (updatedItem) {
             return NextResponse.json({ ok: true });
         } else {
             console.log('Item not found:', id);
@@ -40,4 +39,4 @@ if (!mongoose.connection.readyState) {
         console.log('Error:', err);
         return NextResponse.json({ status: 500, error: err.message });
     }
-}
+  }

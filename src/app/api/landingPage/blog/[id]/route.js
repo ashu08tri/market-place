@@ -50,13 +50,3 @@ export async function PUT(request, { params }) {
       return NextResponse.json({ status: 500, error: err.message });
   }
 }
-
-export async function DELETE(request, {params}){
-  const {id} = params;
-  try{
-      const blog = await Blog.deleteOne({_id: id});
-      return NextResponse.json({ok: true});
-  }catch(err){
-      return NextResponse.json({error: err});
-  }
-} 

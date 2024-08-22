@@ -29,6 +29,7 @@ async function ItemSale() {
           alt={data[0].title}
           fill
           style={{objectFit: 'cover'}}
+          unoptimized
         />
         <div className='absolute bottom-10 w-full flex flex-col items-center text-center'>
           <p className='text-3xl font-semibold uppercase mb-4'>{data[0].title}</p>

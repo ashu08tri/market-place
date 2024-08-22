@@ -10,6 +10,20 @@
     font-family: 'Fanwood Text', serif;
   }
 
+  @keyframes scaleAnimation {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2); /* Adjust the scaling factor as needed */
+    }
+  }
+  
+  .animate-scale {
+    animation: scaleAnimation 1s infinite;
+  }
+  
+
 .animated-underline {
     position: relative;
     cursor: pointer;

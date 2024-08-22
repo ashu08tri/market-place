@@ -14,6 +14,7 @@ import { IoBagOutline } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { LuUserX2 } from "react-icons/lu";
+import { Client, Account } from "appwrite";
 import BeatLoader from "react-spinners/BeatLoader";
 import NavFormModal from './NavFormModal';
 
@@ -42,12 +43,40 @@ function Navbar() {
   const [oldTitle, setOldTitle] = useState('');
   const [oldImage, setOldImage] = useState({});
   const [imageEdit, setImageEdit] = useState(false);
+  const [otpSessions, setOtpSessions] = useState(false);
 
 
 
   const path = usePathname();
   const router = useRouter();
 
+  const client = new Client()
+    .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_URL)
+    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID);
+
+  const account = new Account(client);
+
+  useEffect(() => {
+    const otpSession = async () => {
+      try {
+        const sessions = await account.getSession('current');
+        if (sessions) {
+          setOtpSessions(true);
+          setUser(sessions.userId);
+        }
+      } catch (err) {
+        if (err.message === 'User (role: guests) missing scope (account)') {
+          // Handle the case where there's no active session
+          console.log('No active session found. The user might be logged out.');
+          setOtpSessions(false);
+        } else {
+          console.error('Error fetching session:', err);
+        }
+      }
+    };
+
+    otpSession();
+  }, []);
 
   const getData = async () => {
     try {
@@ -82,6 +111,11 @@ function Navbar() {
     try {
       await signOut({ redirect: '/' });
       setUser(null); // Clear client-side state
+      if (otpSessions) {
+        await account.deleteSession('current');
+        setUser(null);
+        router.push('/')
+      }
       toast.success('User logged out successfully!');
     } catch (error) {
       console.error('Error logging out:', error);
@@ -188,7 +222,7 @@ function Navbar() {
       return (
         uniqueProducts.length > 0 && (
           <div key={index} className="p-2">
-            {uniqueProducts.map((item,i) => (
+            {uniqueProducts.map((item, i) => (
               <div className='flex items-center cursor-pointer my-2' key={i} onClick={() => {
                 router.push(`/${category}/${items.mainTitle}/${item._id}`);
                 setResults({ featured: [], type: [], collection: [] });
@@ -210,9 +244,8 @@ function Navbar() {
   const uniqueTitles = new Set();
 
   const dynamicStyles = {
-    navbar: `fixed top-0 md:flex justify-center w-full transition-colors duration-300 z-50 ${
-      isMainPage ? (isScrolled ? 'bg-white' : 'bg-transparent') : 'bg-white'
-    }`,
+    navbar: `fixed top-0 md:flex justify-center w-full transition-colors duration-300 z-50 ${isMainPage ? (isScrolled ? 'bg-white' : 'bg-transparent') : 'bg-white'
+      }`,
     menuItem: `${isScrolled ? 'underline-black' : ''} animated-underline py-16`,
     drawerContainer: "h-screen bg-white md:hidden text-black overscroll-none no-doc-scroll z-50",
     searchInput: "p-4 w-80 border-r-0 focus:outline-none",
@@ -304,16 +337,16 @@ function Navbar() {
                 {links.length > 0 && links[0].images.map((img, i) => (
                   <div key={i} className='relative'>
                     {isAdmin && (
-                      
-                        <button
-                          className='absolute py-1 px-2 bg-black text-white'
-                          onClick={() => handleImageEdit(links[0].title , img)}
-                        >
-                          Edit Image
-                        </button>
-                      
+
+                      <button
+                        className='absolute py-1 px-2 bg-black text-white'
+                        onClick={() => handleImageEdit(links[0].title, img)}
+                      >
+                        Edit Image
+                      </button>
+
                     )}
-                    <Link href={img.url}><img src={img.img} alt='navbar_Images' className='w-64 h-full object-cover' loading='lazy'/></Link>
+                    <Link href={img.url}><img src={img.img} alt='navbar_Images' className='w-64 h-full object-cover' loading='lazy' /></Link>
                     <p className='absolute bottom-0 left-0 right-0 text-center text-white bg-black bg-opacity-50 py-2'>
                       {img.text}
                     </p>
@@ -328,16 +361,16 @@ function Navbar() {
               {links.length > 0 && links[1].images.map((img, i) => (
                 <div key={i} className='relative'>
                   {isAdmin && (
-                      
-                      <button
-                        className='absolute py-1 px-2 bg-black text-white'
-                        onClick={() => handleImageEdit(links[1].title, img)}
-                      >
-                        Edit Image
-                      </button>
-                    
+
+                    <button
+                      className='absolute py-1 px-2 bg-black text-white'
+                      onClick={() => handleImageEdit(links[1].title, img)}
+                    >
+                      Edit Image
+                    </button>
+
                   )}
-                   <Link href={img.url}><img src={img.img} alt='navbar_Images' className='w-64 h-[95%] object-cover' loading='lazy'/></Link>
+                  <Link href={img.url}><img src={img.img} alt='navbar_Images' className='w-64 h-[95%] object-cover' loading='lazy' /></Link>
                   <p className='absolute bottom-4 left-0 right-0 text-center text-white bg-black bg-opacity-50 py-2'>
                     {img.text}
                   </p>
@@ -345,7 +378,7 @@ function Navbar() {
               ))}
             </ul>
           </li>
-          <li className={dynamicStyles.menuItem}><Link href='/blog'>Blogs</Link></li>
+          <li className={dynamicStyles.menuItem}><Link href='/lookbook'>Lookbooks</Link></li>
           <li className={dynamicStyles.menuItem}><CurrencySwitcher /></li>
         </ul>
 
@@ -359,17 +392,21 @@ function Navbar() {
             setIsOpen(false)
           }
           router.push('/')
-        }} className='text-3xl font-semibold cursor-pointer flex flex-col items-center'><img src="/nav_logo.webp" alt="logo" className='w-28 h-16'/><img src="/GGC.webp" alt="" className='w-52 h-12'/><p className='text-sm text-center'>LUCKNOW</p></div>
+        }} className='text-3xl font-semibold cursor-pointer flex flex-col items-center'><img src="/nav_logo.webp" alt="logo" className='w-28 h-16' /><img src="/GGC.webp" alt="" className='w-52 h-12' /><p className='text-sm text-center'>LUCKNOW</p></div>
 
         <div className='md:hidden text-2xl cursor-pointer' onClick={toggleCartDrawer}><IoBagOutline /></div>
 
         <ul className="hidden md:flex gap-6 group cursor-pointer">
           <li className={dynamicStyles.menuItem}><Link href='/orders'>Order</Link></li>
-          <li className={dynamicStyles.menuItem}><Link href='/payment'>Payment</Link></li>
+          <li className={dynamicStyles.menuItem}><Link href='/ethics'>Ethics</Link></li>
           <li className={dynamicStyles.menuItem}><Link href='/about'>About</Link></li>
           <li className="text-2xl py-16" onClick={toggleDrawer}><CiSearch /></li>
 
-          {user ? <li className="text-2xl py-16" onClick={logOutHandler}><LuUserX2 /></li> :
+          {user ? <li className="relative text-2xl py-16 flex" onClick={logOutHandler}>
+            <CiUser />
+            <span className="absolute -right-1 w-2 h-2 rounded-full bg-green-500 animate-scale"></span>
+          </li>
+            :
             <li className="text-2xl py-16"><Link href='/login' aria-label="Go to login page"><CiUser /></Link></li>}
 
           <li className="text-2xl py-16" onClick={toggleCartDrawer}><IoBagOutline /></li>
@@ -516,36 +553,36 @@ function Navbar() {
               </ul>
               <ul className='mt-8'>
                 <li className={dynamicStyles.footerLink} onClick={() => {
-          if (isOpen) {
-            setIsOpen(false)
-          }
-          router.push('/about')
-        }}>About</li>
+                  if (isOpen) {
+                    setIsOpen(false)
+                  }
+                  router.push('/about')
+                }}>About</li>
                 {user ? <li className={dynamicStyles.footerLink} onClick={logOutHandler}>Logout</li> :
+                  <li className={dynamicStyles.footerLink} onClick={() => {
+                    if (isOpen) {
+                      setIsOpen(false)
+                    }
+                    router.push('/login')
+                  }}>Login</li>}
                 <li className={dynamicStyles.footerLink} onClick={() => {
-          if (isOpen) {
-            setIsOpen(false)
-          }
-          router.push('/login')
-        }}>Login</li>}
+                  if (isOpen) {
+                    setIsOpen(false)
+                  }
+                  router.push('/orders')
+                }}>Order</li>
                 <li className={dynamicStyles.footerLink} onClick={() => {
-          if (isOpen) {
-            setIsOpen(false)
-          }
-          router.push('/orders')
-        }}>Order</li>
-        <li className={dynamicStyles.footerLink} onClick={() => {
-          if (isOpen) {
-            setIsOpen(false)
-          }
-          router.push('/payment')
-        }}>Payment</li>
+                  if (isOpen) {
+                    setIsOpen(false)
+                  }
+                  router.push('/payment')
+                }}>Payment</li>
                 <li className={dynamicStyles.footerLink} onClick={() => {
-          if (isOpen) {
-            setIsOpen(false)
-          }
-          router.push('/refund-policy')
-        }}>Return Policy</li>
+                  if (isOpen) {
+                    setIsOpen(false)
+                  }
+                  router.push('/refund-policy')
+                }}>Return Policy</li>
               </ul>
             </div>
           </div>
