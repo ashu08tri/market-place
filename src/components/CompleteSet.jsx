@@ -70,9 +70,9 @@ function CompleteSet({ items, desc, styleTip, modalInfo }) {
     const contents = [
         { title: 'Description', body: descriptionContent },
         {
-            title: 'Delivery & Returns', body: (
+            title: 'Delivery', body: (
                 <div>
-                    <p>Shipping & Returns</p>
+                    <p>Shipping</p>
                     <ul>
                         <li>Free shipping on US orders over $150</li>
                         <li>US Flat Rate Shipping $5</li>
@@ -80,12 +80,12 @@ function CompleteSet({ items, desc, styleTip, modalInfo }) {
                         <li>Carbon-Neutral Shipping</li>
                         <li>All of our packaging is plastic-free and recyclable...</li>
                     </ul>
-                    <p>For more info on shipping, returns, & international orders swing by our FAQs</p>
+                    <p>For more info on shipping, & international orders swing by our FAQs</p>
                 </div>
             )
         },
-        { title: 'Stylist tip', body: styleTip ? styleTip : 'Stylist tip for the product.' },
-        { title: 'Model Measurements', body: modalInfo ? modalInfo : 'Measurements of the model.' },
+        { title: 'Stylist Tip', body: styleTip ? styleTip : 'Stylist tip for the product.' },
+        { title: 'Model Info', body: modalInfo ? modalInfo : 'Info of the model.' },
     ];
 
     return (

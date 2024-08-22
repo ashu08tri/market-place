@@ -149,6 +149,7 @@ function ProductFormModal({ onClose, apiRoute, maintitle, method,
                             <span className="border border-black p-1 rounded-md">{q.size}</span>
                             <input
                                 type="number"
+                                min={0}
                                 className="border border-black p-1 rounded-md"
                                 placeholder="Quantity"
                                 value={q.quantity}

@@ -10,7 +10,7 @@ const {NEXT_PUBLIC_HOST_URL} = process.env;
 
 const getProductData = async (category, id) => {
   try {
-    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/collections/${category}/${id}`);
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/collections/${category}/${id}`,{cache: 'no-store'});
     res = await res.json();
     return res;
   } catch (err) {
@@ -21,7 +21,7 @@ const getProductData = async (category, id) => {
 
 const getMoreProducts = async() => {
   try {
-    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/products/shop_all`);
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/products/shop_all`,{cache: 'no-store'});
     res = await res.json();
     return res;
   } catch (err) {
@@ -54,12 +54,14 @@ async function page({ params }) {
           <p className='text-xs py-1 md:text-sm'>Tax included. Shipping calculated at checkout.</p>
           <div className='py-4'>
             <p className='text-sm pb-2'>SIZE:</p>
-            <SizeSelector id={item[0]._id} sizes={item[0].quantity.size} amount={item[0].amount} title={item[0].title} img={item[0].img} category={category} productType={'collections'} />
+            <SizeSelector id={item[0]._id} sizes={item[0].quantity.size} amount={item[0].amount} title={item[0].title} img={item[0].img} category={category} productType={'collections'} 
+             desc={item[0].desc} styleTip={item[0].styleTip} modalInfo={item[0].modalInfo}
+            />
           </div>
           </div>
           </div>
           <div>
-          <CompleteSet items={allData} />
+          <CompleteSet items={allData} desc={item[0].desc} styleTip={item[0].styleTip} modalInfo={item[0].modalInfo}/>
           <Faq/>
           <div className='flex flex-col justify-center items-center px-20'>
           <p className='text-xl md:text-3xl tracking-widest pb-10 mt-16'>EXPLORE THE SEASON</p>

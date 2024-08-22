@@ -43,7 +43,6 @@ const Footer = () => {
             <ul className='space-y-2'>
               <li><Link href='/FAQ'>FAQ</Link></li>
               <li><Link href='/terms-of-service'>Terms of Service</Link></li>
-              <li><Link href='/refund-policy'>Return And Refund</Link></li>
               <li><Link href='/shipping'>Shipping Info</Link></li>
             </ul>
           </div>
@@ -57,14 +56,14 @@ const Footer = () => {
           <div>
             <p className='text-lg font-semibold mb-4'>Connect</p>
             <div className='flex gap-2'>
-              <Link href='https://www.instagram.com/'><Image src='/instagram.png' alt='instagram' width={25} height={20}/></Link>
+              <Link href='https://www.instagram.com/golden_ghaf_clothing_company?igsh=MWpvemJja3EwbGp5dw%3D%3D&utm_source=qr'><Image src='/instagram.png' alt='instagram' width={25} height={20}/></Link>
               <Link href='https://www.linkedin.com/'><Image src='/linkedin.png' alt='instagram' width={25} height={20}/></Link>
             </div>
           </div>
         </div>
       </div>
       <div className='h-full flex flex-col justify-center items-center'>
-        <div className='h-full flex flex-col justify-center gap-4 items-center w-10/12'>
+        <div className='h-full flex flex-col justify-center gap-4 items-center w-7/12'>
         <img src="/banner.webp" alt="banner" className='w-full object-cover' loading='lazy'/>
         <p className='text-2xl text-center'>LUCKNOW</p>
         </div>
