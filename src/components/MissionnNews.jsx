@@ -18,7 +18,7 @@ async function MissionnNews() {
   const items = await getBlog();
 
   return (
-    <div className='px-8 md:px-20 h-[160vh] md:h-[130vh] mt-32 md:mt-10'>
+    <div className='px-8 md:px-20 mt-16 md:mt-10'>
       
        <div className='flex flex-col justify-center px-8 py-10 items-center bg-yellow-50 text-center h-3/6 md:h-2/6'>
        <div className='md:w-3/4'>
@@ -28,7 +28,7 @@ async function MissionnNews() {
      </div>
   
 
-      <div className='py-10'>
+      <div className='pt-10 md:py-10'>
         <div className='py-6 flex justify-between'>
           <h1 className='text-3xl font-semibold uppercase'>News</h1>
           <div className='hidden md:block'>

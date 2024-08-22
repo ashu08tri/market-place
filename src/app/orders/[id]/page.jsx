@@ -63,7 +63,7 @@ async function page({ params }) {
             data.products.map((item,i) => <div key={i} className="rounded-3xl p-6 bg-gray-100 border border-gray-100 flex flex-col md:flex-row md:items-center gap-5 transition-all duration-500 hover:border-gray-400">
             <div className="flex justify-center">
               <img
-                src={item.img}
+                src={item.img[0]}
                 alt={item.title}
                 className="w-2/4 md:max-w-[122px]"
               />

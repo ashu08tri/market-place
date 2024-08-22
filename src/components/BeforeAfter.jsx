@@ -19,7 +19,7 @@ async function BeforeAfter() {
   const data = await getData();
   
   return (
-    <main className="relative flex flex-col md:flex-row h-[70vh] md:h-[90vh] items-center gap-6 md:justify-between px-3 md:px-20">
+    <main className="relative flex flex-col md:flex-row items-center gap-6 md:justify-between px-3 md:px-20">
       <Suspense fallback={<div>Loading EditBeforeAfter...</div>}>
         <EditBeforeAfter item={data[0]} api={`${NEXT_PUBLIC_HOST_URL}/api/landingPage/beforeAfter`} storageUrl={'before-after'} />
       </Suspense>

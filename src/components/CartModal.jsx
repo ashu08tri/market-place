@@ -161,7 +161,7 @@ function CartModal({ isOpen, onClose }) {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ duration: 0.3 }}
-            className="fixed right-0 top-0 h-full w-8/12 md:w-4/12 bg-white shadow-xl z-50 p-6 overflow-y-scroll scrollbar-hide"
+            className="fixed right-0 top-0 h-full w-9/12 md:w-4/12 bg-white shadow-xl z-50 p-6 overflow-y-scroll scrollbar-hide"
           >
             <button
               onClick={onClose}
@@ -178,7 +178,7 @@ function CartModal({ isOpen, onClose }) {
               ) : cartData && cartData.length > 0 ? (
                 cartData.map((item, i) => (
                   <div key={i} className="flex items-center p-4 border-b border-gray-200">
-                    <img src={item.img} alt={item.title} className="w-20 h-28 object-cover rounded mr-4" loading='lazy'/>
+                    <img src={item.img[0]} alt={item.title} className="w-20 h-28 object-cover rounded mr-4" />
                     <div className='flex justify-between w-full'>
                       <ul className="flex-1">
                         <li className="mb-2">
@@ -223,7 +223,7 @@ function CartModal({ isOpen, onClose }) {
               )}
             </div>
             <div className='mt-4 flex justify-center' onClick={paymentPage}>
-            <Link href='/payment' className="bg-black text-white py-2 px-36 ">Go to payment page</Link>
+            <Link href='/payment' className="hover:underline underline-offset-4">Go to payment page</Link>
             </div>
           </motion.div>
         </div>

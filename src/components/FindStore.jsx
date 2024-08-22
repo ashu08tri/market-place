@@ -48,7 +48,7 @@ function FindStore() {
     };
 
     return (
-        <div className='h-screen md:flex justify-center items-center px-4 md:px-20 mt-28 md:mt-0'>
+        <div className='h-screen md:flex justify-center items-center px-4 md:px-20'>
             {/* address and search container */}
             
             <div className='w-full md:w-1/4 h-1/4 md:h-3/4 flex flex-col justify-end md:justify-start'>

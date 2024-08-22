@@ -37,7 +37,7 @@ async function CounterSale() {
         <div className='uppercase h-[120vh] w-screen md:w-auto pb-10'>
 
             {count && <div className='relative h-1/4 md:h-[20%] flex flex-col md:flex-row justify-between items-center px-12 mt-10 md:m-0 md:border-b'>
-                <h1 className='text-3xl tracking-widest font-semibold my-4 uppercase'>{count[0].title}</h1>
+                <h1 className='text-2xl md:text-3xl tracking-widest font-semibold my-4 uppercase'>{count[0].title}</h1>
                 <div className="md:border-x border-y md:border-y-0 px-20 md:px-48 py-4 md:py-8">
                     <CounDown date={count[0].count} />
                 </div>
