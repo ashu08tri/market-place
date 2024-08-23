@@ -575,14 +575,14 @@ function Navbar() {
                   if (isOpen) {
                     setIsOpen(false)
                   }
-                  router.push('/payment')
-                }}>Payment</li>
+                  router.push('/lookbook')
+                }}>Lookbook</li>
                 <li className={dynamicStyles.footerLink} onClick={() => {
                   if (isOpen) {
                     setIsOpen(false)
                   }
-                  router.push('/refund-policy')
-                }}>Return Policy</li>
+                  router.push('/ethics')
+                }}>Ethics</li>
               </ul>
             </div>
           </div>
