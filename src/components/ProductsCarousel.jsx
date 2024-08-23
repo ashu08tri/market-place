@@ -61,7 +61,8 @@ function ProductsCarousel({images}) {
     <Image
       key={i}
       src={img}
-      width={0} height={0} className='w-full h-[400px]'
+      alt='products_img'
+      width={0} height={0} className='w-full h-[380px] md:h-[460px]'
       unoptimized
     />
   ))}
