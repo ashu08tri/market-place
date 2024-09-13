@@ -47,7 +47,7 @@ async function page({ params }) {
         <>
         <div>
           <div className='md:flex justify-evenly'>
-          <div className='md:w-5/12 md:mr-10'>
+          <div className='md:w-6/12 md:mr-10'>
           <p className='text-xs p-5 text-gray-400'><Link href='/' className='hover:underline pr-2'>Home</Link>/ <span className='pl-1 cursor-pointer'>{item[0].title}</span></p>
          
           <ProductsCarousel images={item[0].img}/>
