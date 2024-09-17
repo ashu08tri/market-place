@@ -16,7 +16,7 @@ function page() {
                         </div>
                     </div>
                     <div className='relative w-full md:w-4/12 order-1 md:order-2'>
-                        <img src='https://sahara-theme.myshopify.com/cdn/shop/files/020669F0-FCDC-4BC2-9D4C-2B088632B61C_1.jpg' alt='ethic_img'
+                        <img src="./Ethics1.webp" alt='ethic_img'
                             className='w-full h-full object-cover object-left' />
                     </div>
                 </div>
