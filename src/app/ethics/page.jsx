@@ -25,8 +25,8 @@ function page() {
             <div className='p-10 md:p-16'>
                 <div className='md:flex justify-between md:h-[80vh] md:gap-12'>
                     <div className='w-full md:w-1/2 h-full mb-8 md:m-0'>
-                        <img src="https://sahara-theme.myshopify.com/cdn/shop/files/90E5559E-6708-4871-AF24-5C044C6D487A.jpg" alt="ethics_img"
-                            className='w-full h-full object-cover' loading='lazy'
+                        <img src="./CSR Golden Ghaf.webp" alt="ethics_img"
+                            className='w-full h-full object-cover object-top' loading='lazy'
                         />
                     </div>
                     <div className='bg-orange-50 p-6 w-full md:w-1/2 h-full flex items-center'>
