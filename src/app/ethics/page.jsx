@@ -94,9 +94,9 @@ function page() {
                     alt="banner"
                     className='w-full h-full object-cover'
                 />
-                <div className='absolute inset-0 flex flex-col items-center justify-center text-white text-center'>
-                    <p className='text-xl md:text-3xl'>OUR GOAL</p>
-                    <p className='text-lg pt-2 w-1/2'>To become a sustainable and fashionable women clothing brand with focus on ethinic and semi modern clothing for women providing wider clothing options at single point.</p>
+                <div className='absolute inset-0 flex flex-col items-center justify-center text-center text-orange-200'>
+                    <p className='text-2xl md:text-3xl'>OUR GOAL</p>
+                    <p className='text-xl pt-2 w-1/2'>To become a sustainable and fashionable women clothing brand with focus on ethinic and semi modern clothing for women providing wider clothing options at single point.</p>
                 </div>
             </div>
 
