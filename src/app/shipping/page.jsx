@@ -7,7 +7,7 @@ const page = () => {
 
       <h2 className="text-xl font-semibold mt-6">GENERAL</h2>
 
-      <p className="mt-4">1.1 Golden Ghaf Trading & Consultancy Private Limited, having its registered addressed at Kotle Patil Estate Phase 2, Hinjewadi, Pune, Maharastra, India (&#34;Golden Ghaf&#34;, &#34;we&#34;, &#34;us&#34; or &#34;our&#34;) is managing and operating the mobile application/website https://goldenghaf.com (collectively referred to as the &#34;Golden Ghaf Platform&#34;), through which it inter alia facilitates the sale of apparels, accessories and other products under the brand name &#34;Golden Ghaf&#34; (&#34;Products&#34;) to the users of the Golden Ghaf Platform (&#34;User&#34; or &#34;Users&#34; or &#34;you&#34; or &#34;your&#34;).</p>
+      <p className="mt-4">1.1 Golden Ghaf Trading & Consultancy LLP, having its registered addressed at Kotle Patil Estate Phase 2, Hinjewadi, Pune, Maharastra, India (&#34;Golden Ghaf&#34;, &#34;we&#34;, &#34;us&#34; or &#34;our&#34;) is managing and operating the mobile application/website https://goldenghaf.com (collectively referred to as the &#34;Golden Ghaf Platform&#34;), through which it inter alia facilitates the sale of apparels, accessories and other products under the brand name &#34;Golden Ghaf&#34; (&#34;Products&#34;) to the users of the Golden Ghaf Platform (&#34;User&#34; or &#34;Users&#34; or &#34;you&#34; or &#34;your&#34;).</p>
 
       <p className="mt-4">1.2 This delivery and shipping policy (&#34;Policy&#34;), together with the Terms (accessible here: [https://www.goldenghaf.com/in/terms-and-conditions]) sets out our policies and procedures towards delivery and shipping of Products purchased on the Golden Ghaf Platform.</p>
 

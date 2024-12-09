@@ -5,7 +5,7 @@ const page = () => {
         <div className="p-8 pt-36">
             <h1 className="text-2xl font-semibold mb-6">Terms and Conditions</h1>
 
-            <p className="mt-4">Welcome to Golden Ghaf Trading & Consultancy Private Limited!</p>
+            <p className="mt-4">Welcome to Golden Ghaf Trading & Consultancy LLP!</p>
 
             <p className="mt-4">The terms and conditions as set out herein (&#34;Terms&#34;) constitute an agreement between Golden Ghaf Trading & Consultancy Private Limited (&#34;we&#34;, &#34;us&#34; or &#34;our&#34;), which operates the Golden Ghaf Website&#39;s (defined below) and a natural or legal person who accesses and/or uses Golden Ghaf websites in any manner (&#34;you&#34; or &#34;your&#34;) or uses any current or future service or functionality or offer made available on Golden Ghaf websites (&#34;Service(s)&#34;), as updated from time to time.</p>
 

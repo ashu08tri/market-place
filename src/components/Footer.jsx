@@ -68,7 +68,7 @@ const Footer = () => {
         <img src="/banner.webp" alt="banner" className='w-full object-cover' loading='lazy'/>
         <p className='text-2xl text-center'>LUCKNOW</p>
         </div>
-        <p className='self-start p-4 text-sm'>© 2024 GOLDEN GHAF Trading & Consultancy Private Limited, All rights reserved.</p>
+        <p className='self-start p-4 text-sm'>© 2024 GOLDEN GHAF Trading & Consultancy LLP, All rights reserved.</p>
       </div>
     </div>
 

@@ -5,7 +5,7 @@ const page = () => {
     <div className="return-refund-policy p-8 pt-36">
       <h1 className="text-3xl font-bold mb-4">Cancellation, Return, and Refund Policy</h1>
       
-      <p>Golden Ghaf, having its registered address at <a href="https://ggccomp.in" className="text-blue-500 underline">https://ggccomp.in</a>, Kotle Patil Estate Phase 2, Hinjewadi, Pune, Maharastra, India (&#34;Golden Ghaf&#34;, &#34;we&#34;, &#34;us&#34; or &#34;our&#34;) is managing and operating the website <a href="https://ggccomp.in" className="text-blue-500 underline">https://ggccomp.in</a> through which it inter alia facilitates the sale and purchase of Golden Ghaf (&#34;Products&#34;) to the users of the Golden Ghaf platform (&#34;User&#34; or &#34;Users&#34; or &#34;you&#34; or &#34;your&#34;).</p>
+      <p>Golden Ghaf Trading & Consultancy LLP, having its registered address at <a href="https://ggccomp.in" className="text-blue-500 underline">https://ggccomp.in</a>, Kotle Patil Estate Phase 2, Hinjewadi, Pune, Maharastra, India (&#34;Golden Ghaf&#34;, &#34;we&#34;, &#34;us&#34; or &#34;our&#34;) is managing and operating the website <a href="https://ggccomp.in" className="text-blue-500 underline">https://ggccomp.in</a> through which it inter alia facilitates the sale and purchase of Golden Ghaf (&#34;Products&#34;) to the users of the Golden Ghaf platform (&#34;User&#34; or &#34;Users&#34; or &#34;you&#34; or &#34;your&#34;).</p>
 
       <p className="mt-4">We aim to provide the best customer experience to our Users beginning from placing an order to initiating a return. While transacting on the Golden Ghaf Platform, you can expect a hassle-free experience in returning the Product that you have ordered and can rely on us as your preferred shopping destination.</p>
 
