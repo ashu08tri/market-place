@@ -7,7 +7,7 @@ const page = () => {
 
       <h2 className="text-xl font-semibold mt-6">GENERAL</h2>
 
-      <p className="mt-4">1.1 Golden Ghaf Private Limited, having its registered addressed at Kotle Patil Estate Phase 2, Hinjewadi, Pune, Maharastra, India (&#34;Golden Ghaf&#34;, &#34;we&#34;, &#34;us&#34; or &#34;our&#34;) is managing and operating the mobile application/website https://goldenghaf.com (collectively referred to as the &#34;Golden Ghaf Platform&#34;), through which it inter alia facilitates the sale of apparels, accessories and other products under the brand name &#34;Golden Ghaf&#34; (&#34;Products&#34;) to the users of the Golden Ghaf Platform (&#34;User&#34; or &#34;Users&#34; or &#34;you&#34; or &#34;your&#34;).</p>
+      <p className="mt-4">1.1 Golden Ghaf Trading & Consultancy Private Limited, having its registered addressed at Kotle Patil Estate Phase 2, Hinjewadi, Pune, Maharastra, India (&#34;Golden Ghaf&#34;, &#34;we&#34;, &#34;us&#34; or &#34;our&#34;) is managing and operating the mobile application/website https://goldenghaf.com (collectively referred to as the &#34;Golden Ghaf Platform&#34;), through which it inter alia facilitates the sale of apparels, accessories and other products under the brand name &#34;Golden Ghaf&#34; (&#34;Products&#34;) to the users of the Golden Ghaf Platform (&#34;User&#34; or &#34;Users&#34; or &#34;you&#34; or &#34;your&#34;).</p>
 
       <p className="mt-4">1.2 This delivery and shipping policy (&#34;Policy&#34;), together with the Terms (accessible here: [https://www.goldenghaf.com/in/terms-and-conditions]) sets out our policies and procedures towards delivery and shipping of Products purchased on the Golden Ghaf Platform.</p>
 
@@ -43,7 +43,7 @@ const page = () => {
 
       <p className="mt-4">2.8. We endeavour to ensure that the Products are delivered to you in a timely manner and in a condition without any damage or defect. However, in the event of any damage to the packaging of the Product or any defect in the Product at the time of delivery, we request you to immediately inform our customer service team at Care@ggccomp.in. We will ensure that your issue is resolved on priority.</p>
 
-      <p className="mt-4">2.9. In case of a cancellation, we will make a maximum of 2 attempts to collect the product from the user. If the reverse pick up is not executed in the second attempt, user shall return the package to Golden Ghaf’s warehouse failing which a refund would not be processed.</p>
+      <p className="mt-4">2.9. In case of a cancellation, we will make a maximum of 2 attempts to collect the product from the user. If the reverse pick up is not executed in the second attempt, user shall return the package to Golden Ghaf&rsquo;s warehouse failing which a refund would not be processed.</p>
 
       <p className="mt-4">2.10. We shall not be held responsible and/or liable for any delay or failure to deliver the Products to you, and for any resultant inconvenience, loss or damage caused to you due to reasons attributable to third party vendors and suppliers. We shall also not be liable for any delay or failure to deliver the Products to you, and for any resultant inconvenience, loss or damage caused to you due to force majeure events including but not limited to floods, fire, acts of God, civil disturbances, strikes, wars, and any other acts beyond our reasonable control. </p>
 

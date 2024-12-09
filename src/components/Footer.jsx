@@ -42,6 +42,7 @@ const Footer = () => {
             <p className='text-lg font-semibold mb-4'>Get Help</p>
             <ul className='space-y-2'>
               <li><Link href='/FAQ'>FAQ</Link></li>
+              <li><Link href='/privacy-policy'>Privacy Policy</Link></li>
               <li><Link href='/terms-of-service'>Terms of Service</Link></li>
               <li><Link href='/shipping'>Shipping Info</Link></li>
             </ul>
@@ -67,7 +68,7 @@ const Footer = () => {
         <img src="/banner.webp" alt="banner" className='w-full object-cover' loading='lazy'/>
         <p className='text-2xl text-center'>LUCKNOW</p>
         </div>
-        <p className='self-start p-4 text-sm'>© 2024 GOLDEN GHAF, All rights reserved.</p>
+        <p className='self-start p-4 text-sm'>© 2024 GOLDEN GHAF Trading & Consultancy Private Limited, All rights reserved.</p>
       </div>
     </div>
 
