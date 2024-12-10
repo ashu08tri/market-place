@@ -10,7 +10,7 @@ export async function POST(request) {
         const { email, orderId, products, customerData } = await request.json();
 
         // Debug: Check the received payload
-        console.log('Received payload (Backend):', { email, orderId, products, customerData });
+        //console.log('Received payload (Backend):', { email, orderId, products, customerData });
 
         // Validate the required fields
         if (!orderId || !products) {

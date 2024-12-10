@@ -219,7 +219,9 @@ function PaymentForm() {
             orderID: shortid.generate(),
             products: data.map(product => ({
                 img: product.img,
-                amount: finalAmount,
+                amount: product.amount,
+                size: product.size,
+                quantity: product.quantity,
                 title: product.title,
                 currency: currencySymbols[currency]
             }))

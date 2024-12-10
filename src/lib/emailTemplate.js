@@ -6,6 +6,8 @@ export function createEmailHtml(products, orderID, customerData) {
       <img src="${product.img[0]}" alt="${product.title}" style="width: 25%; height: 25%; object-fit: cover; border-radius: 8px;"/>
       </div>
       <p style="font-size: 18px; color: #1a8a27; font-weight: bold;">${product.currency} ${product.amount}</p>
+      <p style="font-size: 16px;">size: ${product.size}</p>
+      <p style="font-size: 16px;">qty: ${product.quantity}</p>
     </div>
   `).join('');
 

@@ -3,18 +3,16 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { decode } from 'jsonwebtoken';
 import { useSession } from 'next-auth/react';
-import OtpVerification from '@/components/OtpVerification';
 import { BeatLoader } from 'react-spinners';
-import { Client, Account } from "appwrite";
 
-const getData = async (email, phone, isAdmin, filter, orderID) => {
+const getData = async (email, isAdmin, filter, orderID) => {
     try {
         const res = await fetch('/api/email_verify', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify({ email, phone, isAdmin, filter, orderID }),
+            body: JSON.stringify({ email, isAdmin, filter, orderID }),
         });
         return await res.json();
     } catch (err) {
@@ -42,42 +40,14 @@ const Page = () => {
     const [selectedEmail, setSelectedEmail] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
     const [showOtpVerification, setShowOtpVerification] = useState(false);
-    const [phone, setPhone] = useState('');
 
     const { data } = useSession();
-
-    const client = new Client()
-        .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_URL)
-        .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID);
-
-    const account = new Account(client);
 
     useEffect(() => {
         if (data) {
             setToken(data.user.accessToken);
         }
     }, [data]);
-
-    useEffect(() => {
-        const otpSession = async () => {
-          try {
-            const sessions = await account.get();
-            if (sessions) {
-              setPhone(sessions.phone);
-            }
-          } catch (err) {
-            if (err.message === 'User (role: guests) missing scope (account)') {
-              // Handle the case where there's no active session
-              console.log('No active session found. The user might be logged out.');
-              setPhone('');
-            } else {
-              console.error('Error fetching session:', err);
-            }
-          }
-        };
-      
-        otpSession();
-      }, []);
 
     useEffect(() => {
         if (token) {
@@ -105,8 +75,8 @@ const Page = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            if (userEmail || phone) {
-                const data = await getData(userEmail, phone, isAdmin, { email: selectedEmail, date: selectedDate });
+            if (userEmail) {
+                const data = await getData(userEmail, isAdmin, { email: selectedEmail, date: selectedDate });
                 if (data.ok === false) {
                     toast.error(data.message);
                 } else {
@@ -115,7 +85,7 @@ const Page = () => {
             }
         };
         fetchData();
-    }, [userEmail, phone, isAdmin, selectedEmail, selectedDate]);
+    }, [userEmail, isAdmin, selectedEmail, selectedDate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -272,6 +242,7 @@ const Page = () => {
                         </>
                     ) : (
                         <>
+                            <form onSubmit={handleSubmit}>
                             <div className="mb-4">
                                 <label
                                     htmlFor="email"
@@ -292,7 +263,8 @@ const Page = () => {
                                 />
 
                             </div>
-                            <OtpVerification onSubmit={handleSubmitAfterOTP} />
+                            <button className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-4">View All Orders</button>
+                            </form>
                             <button
                                 onClick={() => setShowOtpVerification(false)}
                                 className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-4"

@@ -11,15 +11,14 @@ if (!mongoose.connection.readyState) {
 }
 
 export async function POST(request) {
-    const { email, phone, isAdmin, filter, orderID } = await request.json();
-    
+    const { email, isAdmin, filter, orderID } = await request.json();
+
     try {
         let query = {};
 
-        // If the user is an admin, query all orders, otherwise query based on email
-        if (!isAdmin && email || phone) {
-            query.email = email;
-            query.phoneNumber = phone;
+        // Validate and include email for non-admin users
+        if (!isAdmin && (email)) {
+            if (email) query.email = email;
         }
 
         // Apply additional filters if provided
@@ -36,18 +35,24 @@ export async function POST(request) {
             }
         }
 
-        // Include orderId in the query if provided
+        // Validate and include orderID if provided
         if (orderID) {
-            query.orderID = orderID;
+            // Ensure orderID is valid and not an empty string
+            if (typeof orderID === "string" && orderID.trim() !== "") {
+                query.orderID = orderID.trim();
+            } else {
+                return NextResponse.json({ ok: false, message: "Invalid Order ID" });
+            }
         }
-        
+
+        // Remove any empty query fields
         Object.keys(query).forEach(key => {
             if (query[key] === '') {
                 delete query[key];
             }
         });
 
-        // Fetch orders based on the query
+        // Fetch orders based on the constructed query
         const orders = await Order.find(query).populate('products');
 
         if (orders.length > 0) {
@@ -55,7 +60,7 @@ export async function POST(request) {
         } else {
             const message = isAdmin
                 ? 'No orders are placed yet!'
-                : `No order is associated with given details!`;
+                : `No order is associated with the given details!`;
             return NextResponse.json({ ok: false, message });
         }
     } catch (err) {
@@ -63,6 +68,7 @@ export async function POST(request) {
         return NextResponse.json({ ok: false, message: "Internal Server Error" });
     }
 }
+
 
 export async function GET() {
     try {
