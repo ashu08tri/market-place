@@ -22,7 +22,7 @@ export async function POST(request) {
         const response = await resend.emails.send({
             from: 'no-reply@ggccomp.in',
             to: email,
-            bcc: 'orders@ggccomp.in',
+            bcc: 'orderggcin@gmail.com',
             subject: 'Order Data',
             html: emailContent
         });
