@@ -34,8 +34,9 @@ const Footer = () => {
           <div>
             <p className='text-lg font-semibold mb-4'>Company</p>
             <ul className='space-y-2'>
-              <li><Link href='/contact'>Contact Us</Link></li>
               <li><Link href='/blog'>Blog</Link></li>
+              <li><Link href='/contact'>Contact Us</Link></li>
+              <li><Link href='/founder'>Founder</Link></li>
             </ul>
           </div>
           <div>
