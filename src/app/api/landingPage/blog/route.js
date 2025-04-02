@@ -10,7 +10,7 @@ if (!mongoose.connection.readyState) {
     });
   }
 
-export async function GET(){
+export async function GET(req){
     try{
         const blog = await Blog.find();
         return NextResponse.json(blog);
