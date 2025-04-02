@@ -5,15 +5,21 @@ import AddBlog from '@/components/routepages/AddBlog';
 const { NEXT_PUBLIC_HOST_URL } = process.env;
 
 const getData = async () => {
-    try {
-        let res = await fetch('/api/landingPage/blog');
-        res = await res.json();
-        return res;
-    } catch (err) {
-        console.log(err);
-        return [];
-    }
+  try {
+      const baseUrl = process.env.NEXT_PUBLIC_HOST_URL || 'http://localhost:3000';
+      const url = typeof window === 'undefined' 
+          ? `${baseUrl}/api/landingPage/blog`  // Use absolute URL on the server
+          : '/api/landingPage/blog';            // Use relative URL on the client
+      
+      let res = await fetch(url, { cache: 'no-store' });
+      res = await res.json();
+      return res;
+  } catch (err) {
+      console.log('Error fetching blog data:', err);
+      return [];
+  }
 }
+
 
 async function Page() {
     const data = await getData();
