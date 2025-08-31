@@ -9,6 +9,9 @@ import 'react-multi-carousel/lib/styles.css';
 import { HiArrowLongLeft, HiArrowLongRight } from "react-icons/hi2";
 import { decode } from 'jsonwebtoken';
 import { toast } from 'sonner';
+import header1 from '../../public/assets/header1.webp';
+import header2 from '../../public/assets/header2.jpg';
+import header3 from '../../public/assets/header3.webp';
 
 const responsive = {
     desktop: {
@@ -50,7 +53,7 @@ const CustomRightArrow = ({ onClick }) => (
 
 function HeaderCarousel() {
     const [isFormOpen, setIsFormOpen] = useState(false);
-    const [images, setImages] = useState([]);
+    // const [images, setImages] = useState([]);
     const [mainAdmin, setMainAdmin] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
     const [token, setToken] = useState(null);
@@ -67,15 +70,21 @@ function HeaderCarousel() {
         setIsFormOpen(!isFormOpen);
     };
 
-    const fetchImages = async () => {
-        let res = await fetch('/api/updates/carousel');
-        res = await res.json();
-        setImages(res);
-    };
+    // const fetchImages = async () => {
+    //     let res = await fetch('/api/updates/carousel');
+    //     res = await res.json();
+    //     setImages(res);
+    // };
 
-    useEffect(() => {
-        fetchImages();
-    }, []);
+    // useEffect(() => {
+    //     fetchImages();
+    // }, []);
+
+    const images = [
+        {images: header1},
+        {images: header2},
+        {images: header3},
+    ]
 
     useEffect(() => {
         if (token) {
@@ -155,11 +164,11 @@ function HeaderCarousel() {
                 {images.length > 0 && images.map((item, i) => (
                     <div key={i} className='h-screen w-screen'>
                         <Image src={item.images} alt='carousel_images' fill style={{objectFit: 'cover'}} unoptimized/>
-                        {mainAdmin === 'alok@admin.com' && <button onClick={() => deleteImage(item.images, item._id)} className='p-2 absolute top-40 right-5 bg-black text-white'>Delete Image</button>}
+                        {isAdmin && <button onClick={() => deleteImage(item.images, item._id)} className='p-2 absolute top-40 right-5 bg-black text-white'>Delete Image</button>}
                     </div>
                 ))}
 
-                <div className='h-screen w-screen'>
+                {/* <div className='h-screen w-screen'>
                     <video
                         src="https://sahara-theme.myshopify.com/cdn/shop/videos/c/vp/58b76d3b993a49dda787c082767e6ecf/58b76d3b993a49dda787c082767e6ecf.HD-1080p-4.8Mbps-12867843.mp4?v=0"
                         muted
@@ -168,7 +177,7 @@ function HeaderCarousel() {
                         loop
                         className='h-full w-full object-cover'
                     ></video>
-                </div>
+                </div> */}
             </Carousel>
             {isAdmin && (
                 <div className='absolute top-40 p-5'>

@@ -4,19 +4,21 @@ import Image from "next/image";
 import CounDown from "./CountDown";
 import EditCounter from "./landingPage/EditCounter";
 import EditCounterSale from "./landingPage/EditCounterSale";
+import shoe2 from '../../public/assets/shoe2.jpg';
+import shoe3 from '../../public/assets/shoe3.jpg';
 
 const { NEXT_PUBLIC_HOST_URL } = process.env;
 
-const getData = async () => {
-    try {
-        let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/counterSale`);
-        res = await res.json();
-        return res;
-    } catch (err) {
-        console.log(err);
-        return [];
-    }
-}
+// const getData = async () => {
+//     try {
+//         let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/counterSale`);
+//         res = await res.json();
+//         return res;
+//     } catch (err) {
+//         console.log(err);
+//         return [];
+//     }
+// }
 
 const getCounter = async () => {
     try {
@@ -29,8 +31,21 @@ const getCounter = async () => {
     }
 }
 
+const data = [
+    {
+        title: "DISCOVER URBAN's,CASUAL SHOES",
+        image: shoe2,
+        url: ''
+    },
+    {
+        title: "URBAN'S GENTS,SHOE COLLECTION",
+        image: shoe3,
+        url: ''
+    }
+]
+
 async function CounterSale() {
-    const data = await getData();
+    // const data = await getData();
     const count = await getCounter();
 
     return (

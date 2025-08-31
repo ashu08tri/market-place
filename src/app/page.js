@@ -25,7 +25,7 @@ export default function Home() {
       <CounterSale />
       <Review />
       <BeforeAfter />
-      <VideoSeenOn />
+      {/* <VideoSeenOn /> */}
       <FindStore />
       <MissionnNews />
     </>

@@ -23,7 +23,7 @@ async function MissionnNews() {
        <div className='flex flex-col justify-center px-8 py-10 items-center bg-yellow-50 text-center h-3/6 md:h-2/6'>
        <div className='md:w-3/4'>
          <p className='text-3xl font-semibold py-6'>OUR MISSION</p>
-         <p>At GOLDEN GHAF, our mission is to redefine fashion by providing high-quality, stylish, and sustainable clothing that caters to diverse tastes and lifestyles. We believe in empowering our customers to express their unique identities through fashion while making a positive impact on the environment. Our commitment to ethical practices, innovative designs, and exceptional customer service drives us to create a shopping experience that is both enjoyable and responsible. Join us on our journey to transform the fashion industry, one stylish step at a time.</p>
+         <p>At URBAN GENTS, our mission is to redefine fashion by providing high-quality, stylish, and sustainable clothing that caters to diverse tastes and lifestyles. We believe in empowering our customers to express their unique identities through fashion while making a positive impact on the environment. Our commitment to ethical practices, innovative designs, and exceptional customer service drives us to create a shopping experience that is both enjoyable and responsible. Join us on our journey to transform the fashion industry, one stylish step at a time.</p>
        </div>
      </div>
   

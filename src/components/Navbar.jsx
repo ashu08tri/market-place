@@ -13,7 +13,6 @@ import { CiSearch, CiUser, CiMenuBurger } from "react-icons/ci";
 import { IoBagOutline } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
-import { LuUserX2 } from "react-icons/lu";
 import { Client, Account } from "appwrite";
 import BeatLoader from "react-spinners/BeatLoader";
 import NavFormModal from './NavFormModal';
@@ -244,7 +243,7 @@ function Navbar() {
   const uniqueTitles = new Set();
 
   const dynamicStyles = {
-    navbar: `fixed top-0 md:flex justify-center w-full transition-colors duration-300 z-50 ${isMainPage ? (isScrolled ? 'bg-white' : 'bg-transparent') : 'bg-white'
+    navbar: `fixed top-0 md:flex justify-center w-full transition-colors duration-300 z-50 ${isMainPage ? (isScrolled ? 'bg-white text-black' : 'bg-transparent text-white') : 'bg-white text-black'
       }`,
     menuItem: `${isScrolled ? 'underline-black' : ''} animated-underline py-16`,
     drawerContainer: "h-screen bg-white md:hidden text-black overscroll-none no-doc-scroll z-50",
@@ -392,7 +391,7 @@ function Navbar() {
             setIsOpen(false)
           }
           router.push('/')
-        }} className='text-3xl font-semibold cursor-pointer flex flex-col items-center'><img src="/nav_logo.webp" alt="logo" className='w-28 h-16' /><img src="/GGC.webp" alt="" className='w-52 h-12' /><p className='text-sm text-center'>LUCKNOW</p></div>
+        }} className='text-3xl font-semibold cursor-pointer flex flex-col items-center'><p className='flex flex-col'><span>URBAN</span><span>GENTS</span></p></div>
 
         <div className='md:hidden text-2xl cursor-pointer' onClick={toggleCartDrawer}><IoBagOutline /></div>
 

@@ -1,31 +1,33 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import EditAddress from './landingPage/EditAddress';
 import Image from 'next/image';
 import { FiPhone } from "react-icons/fi";
+import store1 from '../../public/assets/our_shop1.webp';
+import store2 from '../../public/assets/our_shop2.jpg';
 
 function FindStore() {
-    const [stores, setStores] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [filteredStores, setFilteredStores] = useState([]);
-    const [selectedStore, setSelectedStore] = useState(null);
-
-    useEffect(() => {
-        const getData = async() => {
-            try {
-                let res = await fetch('/api/landingPage/store', {cache: 'no-store'});
-                res = await res.json();
-                setStores(res);
-                setFilteredStores(res);  // Set filteredStores to the fetched stores
-                if (res.length > 0) {
-                    setSelectedStore(res[0]);  // Set the first store as selected by default
-                }
-            } catch (err) {
-                console.log(err);
-            }
+    const staticStores = [
+        {
+            storeName: "Urban Gent - Downtown",
+            address: "123 Fashion Street, Mumbai, 400001",
+            zipcode: 400001,
+            openOn: "Mon - Sat: 10AM - 8PM",
+            image: store1
+        },
+        {
+            storeName: "Urban Gent - Uptown",
+            address: "456 Style Avenue, Delhi, 110001",
+            zipcode: 110001,
+            openOn: "Mon - Sun: 11AM - 9PM",
+            image: store2
         }
-        getData();
-    }, []);
+    ];
+
+    const [stores] = useState(staticStores);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredStores, setFilteredStores] = useState(staticStores);
+    const [selectedStore, setSelectedStore] = useState(staticStores[0]);
 
     const handleSearch = (event) => {
         const term = event.target.value.toLowerCase();
@@ -36,11 +38,7 @@ function FindStore() {
             store.zipcode.toString().includes(term)
         );
         setFilteredStores(filtered);
-        if (filtered.length > 0) {
-            setSelectedStore(filtered[0]);
-        } else {
-            setSelectedStore(null);
-        }
+        setSelectedStore(filtered.length > 0 ? filtered[0] : null);
     };
 
     const handleStoreClick = (store) => {
@@ -50,7 +48,6 @@ function FindStore() {
     return (
         <div className='h-screen md:flex justify-center items-center px-4 md:px-20'>
             {/* address and search container */}
-            
             <div className='w-full md:w-1/4 h-1/4 md:h-3/4 flex flex-col justify-end md:justify-start'>
                 <div className='px-5 h-full md:h-1/4 bg-emerald-50 p-10 flex flex-col justify-center'>
                     <p className='text-2xl tracking-wide'>Find Store</p>
@@ -74,7 +71,9 @@ function FindStore() {
                             <p className='text-gray-500 text-sm'>{store.openOn}</p>
                             <div className='py-3 flex gap-4'>
                                 <button className='px-4 py-1 text-sm bg-white hover:bg-black text-gray-500 hover:text-white border border-gray-400'>Directions</button>
-                                <button className='px-4 py-1 text-sm bg-white hover:bg-black text-gray-500 hover:text-white border border-gray-400 flex gap-2 items-center'><span><FiPhone size={15} /></span><span>+919930005234</span></button>
+                                <button className='px-4 py-1 text-sm bg-white hover:bg-black text-gray-500 hover:text-white border border-gray-400 flex gap-2 items-center'>
+                                    <span><FiPhone size={15} /></span><span>+9199XXXXXXXX</span>
+                                </button>
                             </div>
                         </div>
                     ))}
@@ -83,13 +82,14 @@ function FindStore() {
                     )}
                 </div>
             </div>
+
             {/* image display */}
             <div className='w-full md:w-3/4 h-3/4 z-0'>
                 {selectedStore ? (
                     <div className='relative w-full h-full'>
-                        <Image src={selectedStore.image} alt="stores" fill style={{objectFit: 'cover'}} unoptimized/>
-                        <EditAddress item={selectedStore} api={`/api/landingPage/store`} storageUrl={'stores'}/>
-                        
+                        <Image src={selectedStore.image} alt="stores" fill style={{ objectFit: 'cover' }} unoptimized />
+                        <EditAddress item={selectedStore} api={`/api/landingPage/store`} storageUrl={'stores'} />
+
                         <div className='absolute bottom-0 w-full flex flex-col justify-center p-4 md:hidden'>
                             <div className='bg-white p-4'>
                                 <p className='text-lg text-gray-600'>{selectedStore.storeName}</p>
@@ -97,7 +97,9 @@ function FindStore() {
                                 <p className='text-gray-500 text-sm'>{selectedStore.openOn}</p>
                                 <div className='py-3 flex gap-4'>
                                     <button className='px-4 py-1 text-sm bg-white hover:bg-black text-gray-500 hover:text-white border border-gray-400'>Directions</button>
-                                    <button className='px-4 py-1 text-sm bg-white hover:bg-black text-gray-500 hover:text-white border border-gray-400 flex gap-2 items-center'><span><FiPhone size={15} /></span><span>+919930005234</span></button>
+                                    <button className='px-4 py-1 text-sm bg-white hover:bg-black text-gray-500 hover:text-white border border-gray-400 flex gap-2 items-center'>
+                                        <span><FiPhone size={15} /></span><span>+9199XXXXXXXX</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>

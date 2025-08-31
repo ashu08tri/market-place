@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import EditItemSale from './landingPage/EditItemSale';
+import itemSale from '../../public/assets/itemsale.jpg';
 
 
 const {NEXT_PUBLIC_HOST_URL} = process.env;
@@ -25,8 +26,8 @@ async function ItemSale() {
     {data.length > 0 ? (
       <div className='relative bg-cover bg-center h-3/4 md:h-full w-full md:w-1/2 flex flex-col justify-end items-center'>
         <Image
-          src={data[0].image}
-          alt={data[0].title}
+          src={itemSale}
+          alt='sale'
           fill
           style={{objectFit: 'cover'}}
           unoptimized

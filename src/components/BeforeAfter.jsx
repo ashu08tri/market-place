@@ -1,6 +1,8 @@
 import React, { Suspense } from 'react';
 import BeforeAfterSlider from './BeforeAfterSlider';
 import EditBeforeAfter from './landingPage/EditBeforeAfter';
+import before from '../../public/assets/before.jpg';
+import after from '../../public/assets/after.jpg';
 
 const { NEXT_PUBLIC_HOST_URL } = process.env;
 
@@ -31,7 +33,7 @@ async function BeforeAfter() {
           </div>
           <Suspense fallback={<div>Loading BeforeAfterSlider...</div>}>
             <div className="w-full md:w-7/12">
-              <BeforeAfterSlider imgB={data[0].imageB} imgT={data[0].imageT} />
+              <BeforeAfterSlider imgB={after} imgT={before} />
             </div>
           </Suspense>
         </>

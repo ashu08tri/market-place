@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Urban Gents – Men’s Shopping E-Commerce Platform
 
-## Getting Started
+This is a Next.js
+ project bootstrapped with create-next-app
+.
 
-First, run the development server:
+Urban Gents is a full-stack e-commerce application designed exclusively for men’s shopping needs.
+Built with Next.js 14, it offers a modern, fast, and secure shopping experience, integrated with NextAuth for seamless authentication and MongoDB Atlas for scalable data storage.
 
-```bash
+🚀 Tech Stack
+Layer	Technology Used
+Frontend	Next.js 14, React, Tailwind CSS
+Backend	Next.js API Routes
+Authentication	NextAuth.js (Email/Google login)
+Database	MongoDB Atlas with Mongoose ORM
+State	React Hooks / Context API
+Deployment	Vercel (Frontend + Backend)
+✨ Features
+
+🛒 Product Catalog – Browse men’s fashion, accessories, and grooming products.
+
+🔍 Search & Filter – Quickly find products by category, price, or keyword.
+
+👤 User Authentication – Secure login/signup via NextAuth.
+
+❤️ Wishlist – Save favorite products for later.
+
+🛍 Cart & Checkout – Smooth cart management and order placement.
+
+📦 Order Management – Track and manage past orders.
+
+📱 Responsive Design – Fully optimized for all devices.
+
+🔐 Secure Sessions – Encrypted tokens and session storage in MongoDB.
+
+📂 Project Structure
+urban-gents/
+├── app/               # App Router Pages (Next.js 14)
+├── components/        # Reusable UI components
+├── lib/               # Configurations and utility functions
+├── models/            # MongoDB Mongoose models
+├── pages/api/         # API routes (Next.js backend)
+├── public/            # Static assets (images, icons, etc.)
+├── styles/            # Tailwind global styles
+└── .env.local         # Environment variables
+
+🛠 Getting Started
+1️⃣ Clone the repository
+git clone https://github.com/your-username/urban-gents.git
+cd urban-gents
+
+2️⃣ Install dependencies
+npm install
+
+
+or use
+
+yarn install
+
+3️⃣ Configure environment variables
+
+Create a .env.local file in the root directory with:
+
+# MongoDB
+MONGODB_URI=your_mongodb_atlas_connection_string
+
+# NextAuth
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_secret_key
+
+# Google Auth (optional)
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+
+4️⃣ Run the development server
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Open http://localhost:3000
+ in your browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+🧠 Learn More
 
-## Learn More
+Next.js Documentation
+ – Explore advanced features and APIs.
 
-To learn more about Next.js, take a look at the following resources:
+Learn Next.js
+ – Interactive tutorials for beginners.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+NextAuth Documentation
+ – Authentication details.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+MongoDB Atlas Documentation
+ – Database management and integration.
 
-## Deploy on Vercel
+🚀 Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Deploy seamlessly using Vercel:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Push your code to GitHub.
+
+Import the project into Vercel
+.
+
+Add the required environment variables in Vercel’s dashboard.
+
+Deploy and get your production-ready URL.
