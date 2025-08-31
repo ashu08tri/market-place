@@ -11,7 +11,7 @@ const getData = async () => {
           ? `${baseUrl}/api/landingPage/blog`  // Use absolute URL on the server
           : '/api/landingPage/blog';            // Use relative URL on the client
       
-      let res = await fetch(url, { cache: 'no-store' });
+      let res = await fetch(url);
       res = await res.json();
       return res;
   } catch (err) {

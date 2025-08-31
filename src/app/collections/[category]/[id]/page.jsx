@@ -21,7 +21,7 @@ const getProductData = async (category, id) => {
 
 const getMoreProducts = async() => {
   try {
-    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/products/shop_all`,{cache: 'no-store'});
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/products/shop_all`);
     res = await res.json();
     return res;
   } catch (err) {

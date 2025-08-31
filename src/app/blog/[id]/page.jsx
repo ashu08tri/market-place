@@ -5,9 +5,7 @@ const {NEXT_PUBLIC_HOST_URL} = process.env;
 
 const getData = async (id) => {
   try {
-      let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/blog/${id}`, {
-        cache: 'no-store'
-      });
+      let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/landingPage/blog/${id}`);
       res = await res.json();
       return res;
   } catch (err) {
