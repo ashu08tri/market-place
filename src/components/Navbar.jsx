@@ -49,33 +49,33 @@ function Navbar() {
   const path = usePathname();
   const router = useRouter();
 
-  const client = new Client()
-    .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_URL)
-    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID);
+  // const client = new Client()
+  //   .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_URL)
+  //   .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID);
 
-  const account = new Account(client);
+  // const account = new Account(client);
 
-  useEffect(() => {
-    const otpSession = async () => {
-      try {
-        const sessions = await account.getSession('current');
-        if (sessions) {
-          setOtpSessions(true);
-          setUser(sessions.userId);
-        }
-      } catch (err) {
-        if (err.message === 'User (role: guests) missing scope (account)') {
-          // Handle the case where there's no active session
-          console.log('No active session found. The user might be logged out.');
-          setOtpSessions(false);
-        } else {
-          console.error('Error fetching session:', err);
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const otpSession = async () => {
+  //     try {
+  //       const sessions = await account.getSession('current');
+  //       if (sessions) {
+  //         setOtpSessions(true);
+  //         setUser(sessions.userId);
+  //       }
+  //     } catch (err) {
+  //       if (err.message === 'User (role: guests) missing scope (account)') {
+  //         // Handle the case where there's no active session
+  //         console.log('No active session found. The user might be logged out.');
+  //         setOtpSessions(false);
+  //       } else {
+  //         console.error('Error fetching session:', err);
+  //       }
+  //     }
+  //   };
 
-    otpSession();
-  }, []);
+  //   otpSession();
+  // }, []);
 
   const getData = async () => {
     try {
