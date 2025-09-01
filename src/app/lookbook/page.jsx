@@ -5,7 +5,7 @@ import EditLookbook from '@/components/routepages/EditLookbook';
 
 const getData = async () => {
   try {
-    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/lookbook`, { cache: 'no-store' });
+    let res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/lookbook`);
     res = await res.json();
     return res;
   } catch (err) {
