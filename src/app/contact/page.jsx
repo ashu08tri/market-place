@@ -1,4 +1,6 @@
 import React from 'react';
+import Logo from '../../../public/assets/U.png';
+import Image from 'next/image';
 
 const ContactUs = () => {
   return (
@@ -9,20 +11,20 @@ const ContactUs = () => {
       <p className="mb-2">For any inquiries or support, please reach out to us using the following contact details:</p>
       <div className="mb-4">
         <h2 className="text-xl font-semibold">Email</h2>
-        <p className="text-gray-700">Customer Care Email: <a href="mailto:Care@ggccomp.in" className="text-blue-500">Care@ggccomp.in</a></p>
+        <p className="text-gray-700">Customer Care Email: <a href="mailto:Care@urbangents.in" className="text-blue-500">Care@urbangents.in</a></p>
       </div>
       <div>
         <h2 className="text-xl font-semibold">Phone</h2>
-        <p className="text-gray-700">Contact No & WhatsApp No: <a href="tel:+919930005234" className="text-blue-500">+91 9930005234</a></p>
+        <p className="text-gray-700">Contact No & WhatsApp No: <a href="tel:+9199XXXXXXXX" className="text-blue-500">+91 99XXXXXXXX</a></p>
       </div>
       <div className="mt-6">
         <h2 className="text-xl font-semibold">Website</h2>
-        <p className="text-gray-700">Visit us at: <a href="https://ggccomp.in" className="text-blue-500" target="_blank" rel="noopener noreferrer">ggccomp.in</a></p>
+        <p className="text-gray-700">Visit us at: <a href="https://market-five-mu.vercel.app/" className="text-blue-500" target="_blank" rel="noopener noreferrer">Urban Gents</a></p>
       </div>
       </div>
       </div>
       <div className='w-full md:w-1/2 flex justify-center mb-4 md:m-0'>
-        <img src="/GGC_Contact.webp" alt="ggc_contact" className='w-8/12 object-cover'/>
+        <Image src={Logo} alt="logo" className='w-8/12 object-cover'/>
       </div>
     </div>
   );

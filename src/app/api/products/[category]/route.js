@@ -14,20 +14,34 @@ if (!mongoose.connection.readyState) {
 export async function GET(request, { params }) {
   try {
     const { category } = params;
-    const banner = await Featured.find().select('banner -_id');
+
     const categories = await Featured.find().select('mainTitle -_id');
     const uniqueCategories = categories.map(cat => cat.mainTitle);
 
     if (category === 'shop_all') {
+      // For shop_all: return ALL products, but maybe no single banner
       const Products = await Featured.find();
       const allProduct = Products.flatMap(item => item.product);
-      return NextResponse.json({ products: allProduct, categories: uniqueCategories, img: banner[0] });
+
+      return NextResponse.json({ 
+        products: allProduct, 
+        categories: uniqueCategories, 
+        banner: null // or pick a default image
+      });
     } else {
       const product = await Featured.findOne({ mainTitle: category });
+
       if (product) {
-        return NextResponse.json({ products: product.product, categories: uniqueCategories, img: banner[0] });
+        return NextResponse.json({ 
+          products: product.product, 
+          categories: uniqueCategories, 
+          banner: product.banner 
+        });
       } else {
-        return NextResponse.json({ status: 404, categories: uniqueCategories });
+        return NextResponse.json({ 
+          status: 404, 
+          categories: uniqueCategories 
+        });
       }
     }
   } catch (err) {

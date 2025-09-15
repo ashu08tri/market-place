@@ -19,7 +19,7 @@ const Page = () => {
     },
     {
       question: 'Are there any charges for international shipping?',
-      answer: "Yes, we levy a minimal shipping fee to deliver goods internationally. Information on the same can be found by following this link - https://ggccomp.in/shipping"
+      answer: "Yes, we levy a minimal shipping fee to deliver goods internationally. Information on the same can be found by following this link - https://market-five-mu.vercel.app//shipping"
     },
     {
       question: "What are the charges for shipping in India?",
@@ -37,7 +37,7 @@ const Page = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg pt-36">
-      <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">Frequently Asked Questions - Golden Ghaf</h1>
+      <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">Frequently Asked Questions - Urban Gents</h1>
       {faqs.map((faq, index) => (
         <div key={index} className="mb-4">
           <button
@@ -58,7 +58,7 @@ const Page = () => {
       ))}
       <div className="mt-8 text-center">
         <p className="text-lg font-semibold text-gray-700">
-          For any enquiries, complaints or concerns email us on <a href="mailto:Care@ggccomp.in" className="text-blue-500">Care@ggccomp.in</a> or call us on <a href="tel:+919930005234" className="text-blue-500">+91 9930005234</a> from Monday to Friday between 9.00 AM - 6.00 PM.
+          For any enquiries, complaints or concerns email us on <a href="mailto:Care@urbangents.in" className="text-blue-500">Care@urbangents.in</a> or call us on <a href="tel:+9199XXXXXXXX" className="text-blue-500">+91 99XXXXXXXX</a> from Monday to Friday between 9.00 AM - 6.00 PM.
         </p>
       </div>
     </div>

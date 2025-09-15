@@ -1,5 +1,6 @@
 "use client"
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname, useRouter } from 'next/navigation';
@@ -391,7 +392,7 @@ function Navbar() {
             setIsOpen(false)
           }
           router.push('/')
-        }} className='text-3xl font-semibold cursor-pointer flex flex-col items-center'><p className='flex flex-col'><span>URBAN</span><span>GENTS</span></p></div>
+        }} className='font-semibold cursor-pointer flex flex-col items-center'><Image src='/logo1.png' alt='logo' width={150} height={10}/></div>
 
         <div className='md:hidden text-2xl cursor-pointer' onClick={toggleCartDrawer}><IoBagOutline /></div>
 

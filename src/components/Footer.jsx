@@ -36,7 +36,7 @@ const Footer = () => {
             <ul className='space-y-2'>
               <li><Link href='/blog'>Blog</Link></li>
               <li><Link href='/contact'>Contact Us</Link></li>
-              <li><Link href='/founder'>Founder</Link></li>
+              {/* <li><Link href='/founder'>Founder</Link></li> */}
             </ul>
           </div>
           <div>
@@ -66,10 +66,9 @@ const Footer = () => {
       </div>
       <div className='h-full flex flex-col justify-center items-center'>
         <div className='h-full flex flex-col justify-center gap-4 items-center w-7/12'>
-        <img src="/banner.webp" alt="banner" className='w-full object-cover' loading='lazy'/>
-        <p className='text-2xl text-center'>LUCKNOW</p>
+        <p className='text-8xl text-center'>URBAN GENTS</p>
         </div>
-        <p className='self-start p-4 text-sm'>© 2024 GOLDEN GHAF Trading & Consultancy LLP, All rights reserved.</p>
+        <p className='self-start p-4 text-sm'>© 2025 URBAN GENTS LLP, All rights reserved.</p>
       </div>
     </div>
 

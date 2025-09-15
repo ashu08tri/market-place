@@ -163,7 +163,7 @@ function HeaderCarousel() {
             >
                 {images.length > 0 && images.map((item, i) => (
                     <div key={i} className='h-screen w-screen'>
-                        <Image src={item.images} alt='carousel_images' fill style={{objectFit: 'cover'}} unoptimized/>
+                        <Image src={item.images} alt='carousel_images' fill style={{objectFit: 'cover'}}/>
                         {isAdmin && <button onClick={() => deleteImage(item.images, item._id)} className='p-2 absolute top-40 right-5 bg-black text-white'>Delete Image</button>}
                     </div>
                 ))}

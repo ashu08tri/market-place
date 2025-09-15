@@ -17,15 +17,15 @@ const getData = async (category) => {
 async function Page({ params }) {
   const { category } = params;
   const data = await getData(category);
-  const imgSrc = data?.img.banner || '/no-pictures.png';
-
+  const imgSrc = data?.banner || '/no-pictures.png';
+  
   return (
     <>
       {category === 'shop_all' ? (
         <ShopAll
           product={data.products}
           categories={data.categories}
-          img={imgSrc}
+          img="https://fra.cloud.appwrite.io/v1/storage/buckets/66baf56e003b65dd4be1/files/68b3df30003aa0d50c5c/view?project=66baf406000f81a719ca"
           title={'Shop All'}
           url={'featured'}
         />

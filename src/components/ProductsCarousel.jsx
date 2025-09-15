@@ -62,7 +62,7 @@ function ProductsCarousel({images}) {
       key={i}
       src={img}
       alt='products_img'
-      width={0} height={0} className='w-full h-[380px] md:h-[520px]'
+      width={0} height={0} className='w-full h-[380px] md:h-[450px]'
       unoptimized
     />
   ))}

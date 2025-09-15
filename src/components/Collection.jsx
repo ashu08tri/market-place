@@ -89,7 +89,7 @@ function Collection({ product, img, title, categories }) {
           src={img}
           alt="img"
           fill
-          style={{objectFit: 'cover'}}
+          style={{objectFit: 'cover', objectPosition: 'bottom'}}
           unoptimized
         />
         <p className='text-white text-2xl uppercase font-semibold md:text-4xl tracking-wider absolute top-1/2 left-1/2 transform -translate-x-1/2 translate-y-[100%]'>

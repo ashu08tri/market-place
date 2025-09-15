@@ -5,13 +5,17 @@ const {NEXT_PUBLIC_HOST_URL} = process.env;
 
 const getData = async (category) => {
   try {
-    const res = await fetch(`${NEXT_PUBLIC_HOST_URL}/api/collections/${category}`);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_HOST_URL}/api/collections/${category}`,
+      { cache: "no-store" }
+    );
     const data = await res.json();
     return data;
   } catch (err) {
     console.log(err);
   }
 };
+
 
 async function Page({ params }) {
   const { category } = params;
