@@ -74,7 +74,7 @@ async function page({ params }) {
                 Discover our latest menswear collection that blends timeless style with modern comfort.
                 From sharp tailoring to laid-back casuals, each piece is crafted to elevate your everyday look.
                 Designed with premium fabrics and attention to detail, our collection ensures you stay confident and stylish,
-                whether you're at work, out with friends, or enjoying a relaxed weekend.
+                whether you&apos;re at work, out with friends, or enjoying a relaxed weekend.
               </div>
               <div className='px-12 md:px-28 mt-20 h-[75vh] flex justify-center gap-20'>
                 <div className='bg-cover bg-center w-full h-5/6  md:w-4/12' style={{ backgroundImage: 'url(https://fra.cloud.appwrite.io/v1/storage/buckets/66baf56e003b65dd4be1/files/68b3f5ed00151ccb0e0f/view?project=66baf406000f81a719ca)' }}>
