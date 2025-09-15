@@ -11,12 +11,12 @@ const data = [
   {
     title: "DISCOVER URBAN's,CASUAL SHOES",
     image: shoe2,
-    url: ""
+    url: "/types/shoes"
   },
   {
     title: "URBAN'S GENTS,SHOE COLLECTION",
     image: shoe3,
-    url: ""
+    url: "/types/shoes"
   }
 ];
 
@@ -40,15 +40,15 @@ function CounterSale() {
 
         <div className="relative">
           <Link
-            href="/shop"
+            href="/featured/sale"
             className="px-10 py-4 text-sm bg-black border text-white border-black hover:bg-white hover:text-black mt-4"
           >
             Sale
           </Link>
-          <EditCounter
+          {/* <EditCounter
             item={{ title: "Flash Sale Ends In", url: "/shop" }}
             api={`${process.env.NEXT_PUBLIC_HOST_URL}/api/landingPage/counter`}
-          />
+          /> */}
         </div>
       </div>
 

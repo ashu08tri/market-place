@@ -20,7 +20,7 @@ function ItemSale() {
         <div className='absolute bottom-10 w-full flex flex-col items-center text-center'>
           <p className='text-3xl font-semibold uppercase mb-4'>Beautiful Bottoms</p>
           <Link
-            href='/collections/bottoms'
+            href='/types/bottoms'
             className='border border-white bg-transparent hover:bg-white hover:text-black px-5 py-2 md:px-8 md:py-3'
           >
             Shop Our Collection
