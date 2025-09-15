@@ -34,7 +34,7 @@ const SubscribeModal = () => {
   <div className="bg-white rounded shadow-lg w-[70%] md:w-[40%] lg:w-[33%] xl:w-[30%] h-[75%] md:h-[90%] overflow-y-scroll">
     <div className="relative h-60 md:h-72 lg:h-80 w-full"> {/* Adjust height as needed */}
       <Image
-        src="https://sahara-theme.myshopify.com/cdn/shop/files/FAE_Hotel_Sages_-809.jpg?v=1674918082&width=360"
+        src="https://fra.cloud.appwrite.io/v1/storage/buckets/66baf56e003b65dd4be1/files/68c7b09d001488e2f704/view?project=66baf406000f81a719ca&mode=admin"
         alt="subscribe modal image"
         fill
         style={{ objectFit: 'cover', objectPosition: 'top' }}

@@ -127,7 +127,7 @@ function CompleteSet({ items, desc, styleTip, modalInfo }) {
                     {items.products.length && items.products.slice(0, 4).map((item, i) => (
                         <Link href={'/featured/shop_all/' + item._id} key={i}>
                             <li>
-                            <Image src={item.img[0]} alt="img" width={300} height={1} unoptimized/>
+                            <Image src={item.img[0]} alt="img" width={0} height={0} className='w-72 h-96' unoptimized/>
                             </li>
                             <li className='text-center'>
                                 <li>{item.title}</li>

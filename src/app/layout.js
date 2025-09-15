@@ -7,8 +7,8 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 export const metadata = {
-  title: 'Golden Ghaf',
-  description: 'Ecommerce Website for goodies',
+  title: 'Urban Gents',
+  description: 'Ecommerce Website for Men Goodies',
 };
 
 export default function RootLayout({ children }) {
@@ -16,11 +16,11 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <Head>
         {/* Preload the LCP video */}
-        <link
+        {/* <link
           rel="preload"
           as="video"
           href="https://sahara-theme.myshopify.com/cdn/shop/videos/c/vp/58b76d3b993a49dda787c082767e6ecf/58b76d3b993a49dda787c082767e6ecf.HD-1080p-4.8Mbps-12867843.mp4?v=0"
-        />
+        /> */}
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Fanwood+Text:wght@400;700&display=swap"
